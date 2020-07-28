@@ -1,7 +1,7 @@
 let resConfig = {
-    altasArr: ['main', 'bg'],
-    jsonArr: ['global'],
-    prefabArr: ['common'],
+    altasArr: ['main'],
+    jsonArr: [],
+    prefabArr: ['bul'],
 }
 let uiName = {
     messageBox: 'messagebox_ui'

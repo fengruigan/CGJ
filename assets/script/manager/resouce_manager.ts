@@ -101,6 +101,8 @@ export default class ResourceManager extends cc.Component {
                         //自定义帧事件
                         clip.events.push(...param.funcs)
                     }
+                    this._Animation[name] = clip
+                    resolve(clip)
                 })
             }
         })
