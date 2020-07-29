@@ -14,21 +14,23 @@ export default class Zergling extends cc.Component {
     @property(cc.Animation)
     monsterAnima: cc.Animation = null
     onLoad() {
-        Emitter.register("collision", this.checkCollision, this);
-
+        // Emitter.register("collision", this.checkCollision, this);
     }
-    speed: number = 0
+    speed: number = 200
+    edge: number = 580
     update(dt) {
         this.node.x += this.speed * dt
     }
     init(arr: boolean = false) {
         this.playAnima('monster_run')
         if (arr) {
-            this.node.x = 0
-            this.speed = 10
+            this.node.x = this.edge
+            this.node.scaleX = -1
+            this.speed = -this.speed
         } else {
-            this.node.x = 0
-            this.speed = -10
+            this.node.x = -this.edge
+            this.node.scaleX = 1
+            this.speed = this.speed
         }
     }
     onDie() {
@@ -45,25 +47,19 @@ export default class Zergling extends cc.Component {
             })
         }
     }
-    checkCollision(obj: cc.Node) {
-        if (obj) {
-            switch (obj.name) {
-                case "player":
-                    this.endGame();
-                    break
-            }
-        }
-    }
+    // checkCollision(obj: cc.Node) {
+    //     if (obj) {
+    //         switch (obj.name) {
+    //             case "player":
+    //                 this.endGame();
+    //                 break
+    //         }
+    //     }
+    // }
     putInPool() {
         PoolManager.instance.removeObjectByName('zergling', this.node)
     }
-    endGame() {
-        //MainManager.instance.onFail();
-    }
-
-
-
-
-
-    // update (dt) {}
+    // endGame() {
+    //     //MainManager.instance.onFail();
+    // }
 }

@@ -27,9 +27,9 @@ export default class Player extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     playerStatus: PlayerStatus = null
     onLoad() {
-        // Emitter.register("rightArrowDown", this.moveRight, this);
-        // Emitter.register("leftArrowDown", this.moveLeft, this);
-        // Emitter.register("rightArrowUp", this.onStay, this);
+        Emitter.register("moveRight", this.moveRight, this);
+        Emitter.register("moveLeft", this.moveLeft, this);
+        Emitter.register("standStill", this.onStay, this);
         // Emitter.register("leftArrowUp", this.onStay, this);
         this.playerStatus = PlayerStatus.stay
     }
@@ -38,10 +38,14 @@ export default class Player extends cc.Component {
             case PlayerStatus.stay:
                 break
             case PlayerStatus.moveLeft:
-                this.node.x -= dt * this.movementSpeed
+                if (this.node.x >= -550){
+                    this.node.x -= dt * this.movementSpeed
+                }
                 break
             case PlayerStatus.moveRight:
-                this.node.x += dt * this.movementSpeed
+                if (this.node.x <= 550) {
+                    this.node.x += dt * this.movementSpeed
+                }
                 break
         }
     }

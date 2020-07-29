@@ -1,6 +1,5 @@
 import { GameStatus } from "../utils/enum"
 import Player from "../actor/player"
-import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager";
 import { Utils } from "../utils/utils";
 import PoolManager from "../manager/pool_manager";
@@ -12,7 +11,7 @@ const { ccclass, property } = cc._decorator;
 export default class MainUIManager extends cc.Component {
 
     static instance: MainUIManager = null;
-    emitter: Emitter = null;
+    // emitter: Emitter = null;
 
     @property(Player)
     player: Player = null;
@@ -28,8 +27,6 @@ export default class MainUIManager extends cc.Component {
     onLoad() {
         MainUIManager.instance = this;
         this.player.node.setPosition(0, -135);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
 
     init() {
@@ -37,33 +34,13 @@ export default class MainUIManager extends cc.Component {
         // this.label.string = Utils.getTimeFormat(MainManager.instance.time);
         this.status = GameStatus.running;
     }
-    createMonster() {
+    createMonster(arr: boolean = true) {
         let mosnter = PoolManager.instance.createObjectByName('zergling', this.monsterContainer)
-        mosnter.getComponent(Zergling).init(false)
-    }
-    onKeyDown(event) {
-        switch (event.keyCode) {
-            case cc.macro.KEY.right:
-                // console.log("right arrow pressed");
-                // Emitter.fire("rightArrowDown");
-                this.player.moveRight();
-                break;
-            case cc.macro.KEY.left:  // left arrow
-                // console.log("left arrow pressed");
-                // Emitter.fire("leftArrowDown");
-                this.player.moveLeft();
-                break;
-            case cc.macro.KEY.a:
-                break;
-        }
+        mosnter.getComponent(Zergling).init(arr)
     }
 
-    onKeyUp(event) {
-        switch (event.keyCode) {
-            case cc.macro.KEY.right:
-                this.player.onStay();
-            case cc.macro.KEY.left:
-                this.player.onStay();
-        }
-    }
+    // createBullet() {
+
+    // }
+
 }

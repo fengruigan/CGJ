@@ -6,6 +6,8 @@ import WinUIManager from "../ui/win_ui_manager";
 import UIManager from "./ui_manager";
 import config from "../../config";
 import PoolManager from "./pool_manager";
+import { Emitter } from "../utils/emmiter"
+import { Utils } from "../utils/utils";
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -25,10 +27,14 @@ export default class MainManager extends cc.Component {
     // Game timer duration
     @property(cc.Integer)
     time: number = 120;
+    @property(cc.Integer)
+    monsterSpawnRate: number = 1  // number of monsters per second
 
     onLoad() {
         MainManager.instance = this;
         this.setDesignResolution();
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
     }
     //适配
     setDesignResolution() {
@@ -47,14 +53,49 @@ export default class MainManager extends cc.Component {
     startGame() {
         // AudioManager.instance.playBGMByID(0)
         MainUIManager.instance.init();
-
-        //TODO: 修改刷怪逻辑
-        setInterval(() => {
-            MainUIManager.instance.createMonster()
-        }, 2000);
         // timer()
+        var interval = 200;  // trigger interval for spawning monsters (unit: millisecond)
+        setInterval( () =>{
+            var spawnChance = Utils.getRandomNumber(100);
+            if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
+                var side = Utils.getRandomNumber(1);
+                if (side === 1) {
+                    MainUIManager.instance.createMonster(true);
+                } else if (side === 0) {
+                    MainUIManager.instance.createMonster(false);
+                }
+            }
+        }, interval)
+
     }
 
+    onKeyDown(event) {
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
+                // console.log("right arrow pressed");
+                Emitter.fire("moveRight");
+                // this.player.moveRight();
+                break;
+            case cc.macro.KEY.left:  // left arrow
+                // console.log("left arrow pressed");
+                Emitter.fire("moveLeft");
+                // this.player.moveLeft();
+                break;
+            case cc.macro.KEY.a:
+                break;
+        }
+    }
+
+    onKeyUp(event) {
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
+                Emitter.fire("standStill");
+                // this.player.onStay();
+            case cc.macro.KEY.left:
+                // this.player.onStay();
+                Emitter.fire("standStill");
+        }
+    }
 
 
     onWin() {
