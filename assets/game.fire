@@ -186,7 +186,7 @@
       "array": [
         0,
         0,
-        376.7210506462308,
+        541.2658773652742,
         0,
         0,
         0,
@@ -989,7 +989,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        -135,
         0,
         0,
         0,
@@ -1011,7 +1011,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "98jE6HlFVAvadupKSyfqBZ"
+    "_id": "9a/ctMxZBDlKIRCG/6JyAS"
   },
   {
     "__type__": "cc.Node",
@@ -1034,8 +1034,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 0,
-      "height": 0
+      "width": 52,
+      "height": 66
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -1047,7 +1047,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        -135,
         0,
         0,
         0,
@@ -1275,7 +1275,7 @@
     "monsterContainer": {
       "__id__": 20
     },
-    "bulContainer": {
+    "bulletContainer": {
       "__id__": 19
     },
     "_id": "c2kN1f88hDxo7rj4H9EmAF"
@@ -1574,6 +1574,7 @@
     },
     "_enabled": true,
     "time": 120,
+    "monsterSpawnRate": 1,
     "_id": "64SiN7HVdJ8a7K+QTZpG+w"
   },
   {

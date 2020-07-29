@@ -4,6 +4,7 @@ import { Utils } from "../utils/utils";
 import ResourceManager from "../manager/resouce_manager";
 import { ResType } from "../utils/enum";
 import config from "../../config";
+import MainUIManager from "../ui/main_ui_manager";
 
 const { ccclass, property } = cc._decorator;
 enum PlayerStatus {
@@ -15,7 +16,7 @@ enum PlayerStatus {
 export default class Player extends cc.Component {
 
     @property(cc.Integer)
-    movementSpeed: number = 1;
+    movementSpeed: number = 200;
     @property(cc.Sprite)
     playerSprite: cc.Sprite = null
     @property(cc.Animation)
@@ -30,6 +31,7 @@ export default class Player extends cc.Component {
         Emitter.register("moveRight", this.moveRight, this);
         Emitter.register("moveLeft", this.moveLeft, this);
         Emitter.register("standStill", this.onStay, this);
+        Emitter.register("fireBullet", this.onAtk, this);
         // Emitter.register("leftArrowUp", this.onStay, this);
         this.playerStatus = PlayerStatus.stay
     }
@@ -85,11 +87,17 @@ export default class Player extends cc.Component {
                 break
         }
     }
-    onAtk() {
-        Utils.throttle(() => {
-            //防止用户按键太快
 
-        }, 100)
+    onAtk() {
+        console.log("onAtk triggered");
+        MainUIManager.instance.createBullet();
+        AudioManager.instance.playAudio("fire");
+        //TODO: fix throttle
+        // Utils.throttle(() => {
+        //     //防止用户按键太快
+        //     MainUIManager.instance.createBullet();
+        //     
+        // }, 100)
     }
 
     playAnima(aniName: string) {

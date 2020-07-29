@@ -60,9 +60,9 @@ export default class MainManager extends cc.Component {
             if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
                 var side = Utils.getRandomNumber(1);
                 if (side === 1) {
-                    MainUIManager.instance.createMonster(true);
+                    MainUIManager.instance.createMonster("right");
                 } else if (side === 0) {
-                    MainUIManager.instance.createMonster(false);
+                    MainUIManager.instance.createMonster("left");
                 }
             }
         }, interval)
@@ -76,12 +76,15 @@ export default class MainManager extends cc.Component {
                 Emitter.fire("moveRight");
                 // this.player.moveRight();
                 break;
-            case cc.macro.KEY.left:  // left arrow
+            case cc.macro.KEY.left: 
                 // console.log("left arrow pressed");
                 Emitter.fire("moveLeft");
                 // this.player.moveLeft();
                 break;
             case cc.macro.KEY.a:
+                console.log("attacking");
+                // Emitter.fire("standStill");
+                Emitter.fire("fireBullet");
                 break;
         }
     }
@@ -96,7 +99,6 @@ export default class MainManager extends cc.Component {
                 Emitter.fire("standStill");
         }
     }
-
 
     onWin() {
         // FailUIManager.instance.node.active = true;

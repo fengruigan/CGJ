@@ -15,8 +15,6 @@ export default class AudioManager extends cc.Component {
 
     onLoad() {
         AudioManager.instance = this
-        this.loadBGMClip("bgm_1")
-
     }
     DEFAULT_VOLUME: number = 1
     BGM_VOLUME: number = 0.8
@@ -38,7 +36,7 @@ export default class AudioManager extends cc.Component {
             // console.log('bgm', name, err)
             this.sourceMaps[name] = audioClip
             cc.audioEngine.setMusicVolume(volume)
-            // cc.audioEngine.playMusic(audioClip, true)
+            cc.audioEngine.playMusic(audioClip, true)
         })
     }
 

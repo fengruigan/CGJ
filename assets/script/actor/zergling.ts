@@ -13,28 +13,39 @@ export default class Zergling extends cc.Component {
 
     @property(cc.Animation)
     monsterAnima: cc.Animation = null
-    onLoad() {
-        // Emitter.register("collision", this.checkCollision, this);
-    }
-    speed: number = 200
+
+    // onLoad() {
+        
+    // }
+
+    speed: number = 300
     edge: number = 580
     update(dt) {
+        // destory on edge (mostly unnecessary)
+        if (this.node.x >= 650 || this.node.x <= -650) {
+            this.putInPool();
+        }
         this.node.x += this.speed * dt
     }
-    init(arr: boolean = false) {
+    init(side: string="right") {
         this.playAnima('monster_run')
-        if (arr) {
-            this.node.x = this.edge
-            this.node.scaleX = -1
-            this.speed = -this.speed
-        } else {
-            this.node.x = -this.edge
-            this.node.scaleX = 1
-            this.speed = this.speed
+        switch (side){
+            case "right":
+                this.node.x = this.edge
+                this.node.scaleX = -1
+                this.speed = -this.speed
+                break;
+            case "left":
+                this.node.x = -this.edge
+                this.node.scaleX = 1
+                this.speed = this.speed
+                break;
         }
+        cc.director.getCollisionManager().enabled = true; // enable collision manager
+        // Emitter.register("collision", this.checkCollision, this);
     }
     onDie() {
-        this.playAnima('monster_die')
+        this.playAnima('monster_die');
     }
     playAnima(aniName: string) {
         let clips = this.monsterAnima.getClips()
@@ -47,15 +58,11 @@ export default class Zergling extends cc.Component {
             })
         }
     }
-    // checkCollision(obj: cc.Node) {
-    //     if (obj) {
-    //         switch (obj.name) {
-    //             case "player":
-    //                 this.endGame();
-    //                 break
-    //         }
-    //     }
-    // }
+
+    onCollisionEnter(other, self) {
+        console.log("from zergling");
+    }
+
     putInPool() {
         PoolManager.instance.removeObjectByName('zergling', this.node)
     }

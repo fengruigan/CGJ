@@ -4,6 +4,7 @@ import MainManager from "../manager/main_manager";
 import { Utils } from "../utils/utils";
 import PoolManager from "../manager/pool_manager";
 import Zergling from "../actor/zergling";
+import Bullet from "../actor/bullet";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,7 +22,7 @@ export default class MainUIManager extends cc.Component {
     @property(cc.Node)
     monsterContainer: cc.Node = null
     @property(cc.Node)
-    bulContainer: cc.Node = null
+    bulletContainer: cc.Node = null
     status = 0;
 
     onLoad() {
@@ -34,13 +35,14 @@ export default class MainUIManager extends cc.Component {
         // this.label.string = Utils.getTimeFormat(MainManager.instance.time);
         this.status = GameStatus.running;
     }
-    createMonster(arr: boolean = true) {
-        let mosnter = PoolManager.instance.createObjectByName('zergling', this.monsterContainer)
-        mosnter.getComponent(Zergling).init(arr)
+    createMonster(side: string="right") {
+        let monster = PoolManager.instance.createObjectByName('zergling', this.monsterContainer);
+        monster.getComponent(Zergling).init(side);
     }
 
-    // createBullet() {
-
-    // }
+    createBullet() {
+        let bullet = PoolManager.instance.createObjectByName('bullet', this.bulletContainer);
+        bullet.getComponent(Bullet).init(this.player.node.scaleX, this.player.node.x);
+    }
 
 }
