@@ -27,16 +27,15 @@ export default class Player extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     playerStatus: PlayerStatus = null
     onLoad() {
-        Emitter.register("rightArrowDown", this.moveRight, this);
-        Emitter.register("leftArrowDown", this.moveLeft, this);
-        Emitter.register("rightArrowUp", this.onStay, this);
-        Emitter.register("leftArrowUp", this.onStay, this);
+        // Emitter.register("rightArrowDown", this.moveRight, this);
+        // Emitter.register("leftArrowDown", this.moveLeft, this);
+        // Emitter.register("rightArrowUp", this.onStay, this);
+        // Emitter.register("leftArrowUp", this.onStay, this);
         this.playerStatus = PlayerStatus.stay
     }
     update(dt) {
         switch (this.playerStatus) {
             case PlayerStatus.stay:
-
                 break
             case PlayerStatus.moveLeft:
                 this.node.x -= dt * this.movementSpeed
@@ -48,23 +47,47 @@ export default class Player extends cc.Component {
     }
 
     onStay() {
-        this.playerAnima.stop()
-        this.playerSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.common, 'player')
+        this.playerAnima.stop();
+        this.playerSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.common, 'player');
+        this.playerStatus = PlayerStatus.stay;
     }
     moveRight() {
         switch (this.playerStatus) {
             case PlayerStatus.stay:
-                this.playerStatus = PlayerStatus.moveLeft
+                this.node.scaleX = 1;
+                this.playerStatus = PlayerStatus.moveRight;
                 this.playAnima('player_run')
                 break
             case PlayerStatus.moveLeft:
                 this.node.scaleX = 1
+                this.playerStatus = PlayerStatus.moveRight;
                 break
             case PlayerStatus.moveRight:
-
                 break
         }
     }
+    moveLeft() {
+        switch (this.playerStatus) {
+            case PlayerStatus.stay:
+                this.node.scaleX = -1
+                this.playerStatus = PlayerStatus.moveLeft;
+                this.playAnima('player_run')
+                break
+            case PlayerStatus.moveLeft:
+                break
+            case PlayerStatus.moveRight:
+                this.playerStatus = PlayerStatus.moveLeft;
+                this.node.scaleX = -1;
+                break
+        }
+    }
+    onAtk() {
+        Utils.throttle(() => {
+            //防止用户按键太快
+
+        }, 100)
+    }
+
     playAnima(aniName: string) {
         let clips = this.playerAnima.getClips()
         if (clips.some((item: cc.AnimationClip) => { return aniName == item.name })) {
@@ -76,12 +99,5 @@ export default class Player extends cc.Component {
             })
         }
     }
-    moveLeft() {
-    }
-    onAtk() {
-        Utils.throttle(() => {
-            //防止用户按键太快
 
-        }, 100)
-    }
 }
