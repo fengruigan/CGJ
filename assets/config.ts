@@ -1,7 +1,7 @@
 let resConfig = {
     altasArr: ['main'],
     jsonArr: [],
-    prefabArr: ['bul'],
+    prefabArr: ['bul', 'zergling'],
 }
 let uiName = {
     messageBox: 'messagebox_ui',
@@ -13,6 +13,23 @@ let animaParams = {
         sample: 3,
         speed: 3,
         wrapMode: cc.WrapMode.Loop
+    },
+    'monster_run': {
+        sample: 2,
+        speed: 3,
+        wrapMode: cc.WrapMode.Loop
+    },
+    'monster_die': {
+        sample: 3,
+        speed: 3,
+        wrapMode: cc.WrapMode.Loop,
+        funcs: [
+            {
+                frame: 3,
+                func: 'putInPool',
+                param: []
+            }
+        ]
     }
 }
 export default { animaParams, uiName, resConfig }

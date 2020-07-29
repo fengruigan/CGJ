@@ -3,6 +3,8 @@ import Player from "../actor/player"
 import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager";
 import { Utils } from "../utils/utils";
+import PoolManager from "../manager/pool_manager";
+import Zergling from "../actor/zergling";
 
 const { ccclass, property } = cc._decorator;
 
@@ -17,6 +19,10 @@ export default class MainUIManager extends cc.Component {
     // @property(cc.Label)
     // label: cc.Label = null;
 
+    @property(cc.Node)
+    monsterContainer: cc.Node = null
+    @property(cc.Node)
+    bulContainer: cc.Node = null
     status = 0;
 
     onLoad() {
@@ -31,10 +37,13 @@ export default class MainUIManager extends cc.Component {
         // this.label.string = Utils.getTimeFormat(MainManager.instance.time);
         this.status = GameStatus.running;
     }
-
+    createMonster() {
+        let mosnter = PoolManager.instance.createObjectByName('zergling', this.monsterContainer)
+        mosnter.getComponent(Zergling).init(false)
+    }
     onKeyDown(event) {
         switch (event.keyCode) {
-            case cc.macro.KEY.right: 
+            case cc.macro.KEY.right:
                 // console.log("right arrow pressed");
                 // Emitter.fire("rightArrowDown");
                 this.player.moveRight();
@@ -50,8 +59,8 @@ export default class MainUIManager extends cc.Component {
     }
 
     onKeyUp(event) {
-        switch(event.keyCode) {
-            case cc.macro.KEY.right: 
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
                 this.player.onStay();
             case cc.macro.KEY.left:
                 this.player.onStay();

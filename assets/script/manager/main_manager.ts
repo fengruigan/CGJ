@@ -5,6 +5,7 @@ import AudioManager from "./audio_manager"
 import WinUIManager from "../ui/win_ui_manager";
 import UIManager from "./ui_manager";
 import config from "../../config";
+import PoolManager from "./pool_manager";
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -46,8 +47,15 @@ export default class MainManager extends cc.Component {
     startGame() {
         // AudioManager.instance.playBGMByID(0)
         MainUIManager.instance.init();
+
+        //TODO: 修改刷怪逻辑
+        setInterval(() => {
+            MainUIManager.instance.createMonster()
+        }, 2000);
         // timer()
     }
+
+
 
     onWin() {
         // FailUIManager.instance.node.active = true;

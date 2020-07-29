@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bul",
+    "_name": "zergling",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -21,10 +21,16 @@
     "_components": [
       {
         "__id__": 2
+      },
+      {
+        "__id__": 3
+      },
+      {
+        "__id__": 4
       }
     ],
     "_prefab": {
-      "__id__": 3
+      "__id__": 5
     },
     "_opacity": 255,
     "_color": {
@@ -36,8 +42,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50,
-      "height": 28
+      "width": 68,
+      "height": 60
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -89,7 +95,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "9335f08f-b33d-48c5-8160-5766bf802705"
+      "__uuid__": "98c326ca-274b-418e-a838-2d488e784299"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -103,8 +109,34 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": {
-      "__uuid__": "56755008-98cc-4353-9c50-02612d5c886c"
+      "__uuid__": "9f120e6a-fb2a-4937-b681-a669ae80f3d0"
     },
+    "_id": ""
+  },
+  {
+    "__type__": "01edfc8vC9A2L5le2IqMv3L",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "monsterAnima": {
+      "__id__": 4
+    },
+    "_id": ""
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "_defaultClip": null,
+    "_clips": [],
+    "playOnLoad": false,
     "_id": ""
   },
   {
@@ -113,7 +145,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "12b0c9fd-2a33-4928-93f0-44a64a64604d"
+      "__uuid__": "ebe0afbc-b8e3-4241-a370-828c17ff48bf"
     },
     "fileId": "0cWHRnhm1NCr7Kp+twVSlm",
     "sync": false
