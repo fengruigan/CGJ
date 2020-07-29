@@ -2,6 +2,9 @@ import { GameStatus } from "../utils/enum"
 import MainUIManager from "../ui/main_ui_manager";
 import FailUIManager from "../ui/fail_ui_manager";
 import AudioManager from "./audio_manager"
+import WinUIManager from "../ui/win_ui_manager";
+import UIManager from "./ui_manager";
+import config from "../../config";
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -48,11 +51,11 @@ export default class MainManager extends cc.Component {
 
     onWin() {
         // FailUIManager.instance.node.active = true;
-        FailUIManager.instance.winPage.active = true;
+        UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage })
     }
 
     onFail() {
         // FailUIManager.instance.node.active = true;
-        FailUIManager.instance.failPage.active = true;
+        UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
     }
 }

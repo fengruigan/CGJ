@@ -83,7 +83,7 @@ export default class ResourceManager extends cc.Component {
      * @param name 
      * @param param smaple funcs
      */
-    getAnimation(name: string, param) {
+    getAnimation(name: string, param: { sample: number, speed: number, funcs?, wrapMode: cc.WrapMode }) {
         return new Promise((resolve, reject) => {
             if (this._Animation[name]) {
                 resolve(this._Animation[name])
@@ -97,6 +97,8 @@ export default class ResourceManager extends cc.Component {
                     let clip: cc.AnimationClip = cc.AnimationClip.createWithSpriteFrames(frames, frames.length)
                     clip.name = name
                     clip.sample = param.sample
+                    clip.speed = param.speed
+                    clip.wrapMode = param.wrapMode
                     if (param.funcs) {
                         //自定义帧事件
                         clip.events.push(...param.funcs)

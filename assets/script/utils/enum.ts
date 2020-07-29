@@ -16,3 +16,4 @@ export enum GameStatus {
     pause = 0,
     running = 1
 }
+

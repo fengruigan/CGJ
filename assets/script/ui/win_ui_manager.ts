@@ -2,23 +2,23 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class FailUIManager extends cc.Component {
+export default class WinUIManager extends cc.Component {
 
-    static instance: FailUIManager = null;
+    static instance: WinUIManager = null;
 
     // LIFE-CYCLE CALLBACKS:
     @property(cc.Button)
     restartBtn: cc.Button = null
     onLoad() {
-        FailUIManager.instance = this;
+        WinUIManager.instance = this;
         this.node.active = false
         this.bindEvent()
     }
     bindEvent() {
-        // this.restartBtn.node.on('click', () => { }, this)
+        //this.restartBtn.node.on('click', () => { }, this)
     }
+
     showUI() {
         this.node.active = true
     }
-
 }

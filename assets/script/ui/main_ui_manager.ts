@@ -1,10 +1,10 @@
 import { GameStatus } from "../utils/enum"
-import Player  from "../actor/player"
+import Player from "../actor/player"
 import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager";
 import { Utils } from "../utils/utils";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class MainUIManager extends cc.Component {
@@ -19,7 +19,7 @@ export default class MainUIManager extends cc.Component {
 
     status = 0;
 
-    onLoad () {
+    onLoad() {
         MainUIManager.instance = this;
         this.player.node.setPosition(0, -135);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
@@ -33,12 +33,12 @@ export default class MainUIManager extends cc.Component {
     }
 
     onKeyDown(event) {
-        switch(event.keyCode){
-            case 39: 
+        switch (event.keyCode) {
+            case 39:
                 console.log("right arrow pressed");
                 Emitter.fire("rightArrowDown");
                 break;
-            case 37: 
+            case 37:
                 console.log("left arrow pressed");
                 Emitter.fire("leftArrowDown");
                 break;
