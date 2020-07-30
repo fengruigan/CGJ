@@ -88,6 +88,7 @@ export default class MainManager extends cc.Component {
                 break;
             case cc.macro.KEY.r:
                 Emitter.fire("reload");
+                AudioManager.instance.playAudio('reload');
                 break;
         }
     }

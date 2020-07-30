@@ -1,7 +1,7 @@
 let resConfig = {//填写Resrouce下需要自动加载的资源
     altasArr: ['main'],//自动图集加载 altas/下的图集名字 然后在ResType的enum下新增一个枚举，使用的时候使用ResouceManager.instance.getSprite(新的枚举,图集中图片的名字字符串)
     jsonArr: [],//自动加载json配表 填写文件名 使用时使用JsonManager.instance.getDataByName(名字)
-    prefabArr: ['bullet', 'zergling'],//自动图集加载预制体 使用时用PoolManager.instance.create/removeObjectByName(预制体名字，父节点/当前节点)
+    prefabArr: ['bullet', 'zergling', 'flash'],//自动图集加载预制体 使用时用PoolManager.instance.create/removeObjectByName(预制体名字，父节点/当前节点)
 }
 let uiName = {//填写Resrouce/ui下需要自动加载的ui 动态打开实例代码:UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage })
     messageBox: 'messagebox_ui',
@@ -17,10 +17,10 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
     'player_reload': {
         sample: 2,
         speed: 2,
-        wrapMode: cc.WrapMode.Normal,
+        wrapMode: cc.WrapMode.Loop,
         funcs:[
             {
-                frame: 1,
+                frame: 2,
                 func: 'onStay',
                 param: []
             }
@@ -34,7 +34,7 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
     'monster_die': {
         sample: 3,
         speed: 3,
-        wrapMode: cc.WrapMode.Default,
+        wrapMode: cc.WrapMode.Loop,
         funcs: [//动画回调函数
             {
                 frame: 3,//第几帧的时候调用

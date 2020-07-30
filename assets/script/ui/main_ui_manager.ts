@@ -5,6 +5,7 @@ import { Utils } from "../utils/utils";
 import PoolManager from "../manager/pool_manager";
 import Zergling from "../actor/zergling";
 import Bullet from "../actor/bullet";
+import Flash from "../actor/flash";
 
 const { ccclass, property } = cc._decorator;
 
@@ -43,6 +44,11 @@ export default class MainUIManager extends cc.Component {
     createBullet() {
         let bullet = PoolManager.instance.createObjectByName('bullet', this.bulletContainer);
         bullet.getComponent(Bullet).init(this.player.node.scaleX, this.player.node.x);
+    }
+
+    createMuzzleFlash() {
+        let flash = PoolManager.instance.createObjectByName('flash', this.bulletContainer);
+        flash.getComponent(Flash).init(this.player.node.scaleX, this.player.node.x, this.player.playerStatus);
     }
 
 }

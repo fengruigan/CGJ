@@ -33,7 +33,6 @@ export default class Player extends cc.Component {
         Emitter.register("standStill", this.onStay, this);
         Emitter.register("fireBullet", this.onAtk, this);
         Emitter.register("reload", this.onReload, this);
-        // Emitter.register("leftArrowUp", this.onStay, this);
         this.playerStatus = PlayerStatus.stay;
         this.ammunition = this.magazineSize;
     }
@@ -78,7 +77,7 @@ export default class Player extends cc.Component {
                 break;
         }
     }
-    
+
     moveLeft() {
         switch (this.playerStatus) {
             case PlayerStatus.stay:
@@ -100,8 +99,8 @@ export default class Player extends cc.Component {
     onAtk() {
         if (this.ammunition > 0 && this.playerStatus != PlayerStatus.reload) {
             this.ammunition -= 1;
-            console.log("ammo left: " + String(this.ammunition))
             MainUIManager.instance.createBullet();
+            MainUIManager.instance.createMuzzleFlash();
             AudioManager.instance.playAudio("fire");
         }
         //TODO: fix throttle
@@ -115,10 +114,10 @@ export default class Player extends cc.Component {
     onReload() {
         if (this.playerStatus != PlayerStatus.reload){
             this.playerStatus = PlayerStatus.reload;
-            AudioManager.instance.playAudio('reload')
+            // AudioManager.instance.playAudio('reload');
             this.ammunition = this.magazineSize;
             this.playAnima('player_reload')
-            console.log('reload complete')
+            // console.log('reload complete')
         }
     }
 

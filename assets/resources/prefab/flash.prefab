@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "bul",
+    "_name": "flash",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -21,10 +21,13 @@
     "_components": [
       {
         "__id__": 2
+      },
+      {
+        "__id__": 3
       }
     ],
     "_prefab": {
-      "__id__": 3
+      "__id__": 4
     },
     "_opacity": 255,
     "_color": {
@@ -108,14 +111,25 @@
     "_id": ""
   },
   {
+    "__type__": "09fcd3h0F9Ato0i+cvWKDao",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "lifetime": 100,
+    "_id": ""
+  },
+  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "12b0c9fd-2a33-4928-93f0-44a64a64604d"
+      "__id__": 0
     },
-    "fileId": "0cWHRnhm1NCr7Kp+twVSlm",
+    "fileId": "ca1SeuGplFqLCzxltPtp44",
     "sync": false
   }
 ]
