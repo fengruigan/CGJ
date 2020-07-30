@@ -28,7 +28,7 @@ export default class MainManager extends cc.Component {
     @property(cc.Integer)
     time: number = 120;
     @property(cc.Integer)
-    monsterSpawnRate: number = 1  // number of monsters per second
+    monsterSpawnRate: number = 3  // number of monsters per second
 
     onLoad() {
         MainManager.instance = this;
@@ -52,7 +52,8 @@ export default class MainManager extends cc.Component {
     }
 
     startGame() {
-        // AudioManager.instance.playBGMByID(0)
+        AudioManager.instance.playBGMByID(0)
+        AudioManager.instance.playAudio("marine-start")
         MainUIManager.instance.init();
         // timer()
         var interval = 200;  // trigger interval for spawning monsters (unit: millisecond)
@@ -67,7 +68,6 @@ export default class MainManager extends cc.Component {
                 }
             }
         }, interval)
-
     }
 
     onKeyDown(event) {
@@ -85,6 +85,9 @@ export default class MainManager extends cc.Component {
             case cc.macro.KEY.a:
                 // Emitter.fire("standStill");
                 Emitter.fire("fireBullet");
+                break;
+            case cc.macro.KEY.r:
+                Emitter.fire("reload");
                 break;
         }
     }

@@ -186,7 +186,7 @@
       "array": [
         0,
         0,
-        527.4094709047232,
+        541.2658773652742,
         0,
         0,
         0,
@@ -1191,6 +1191,7 @@
     "playerAnima": {
       "__id__": 24
     },
+    "magazineSize": 15,
     "_id": "fa/mQAK45FFbZ8EHApOn1S"
   },
   {
@@ -1598,7 +1599,7 @@
     },
     "_enabled": true,
     "time": 120,
-    "monsterSpawnRate": 1,
+    "monsterSpawnRate": 2,
     "_id": "64SiN7HVdJ8a7K+QTZpG+w"
   },
   {
