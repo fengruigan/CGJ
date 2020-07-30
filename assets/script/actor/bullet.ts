@@ -30,6 +30,7 @@ export default class Bullet extends cc.Component {
     }
 
     putInPool() {
+        this.speed = 750;
         PoolManager.instance.removeObjectByName("bullet", this.node)
     }
 

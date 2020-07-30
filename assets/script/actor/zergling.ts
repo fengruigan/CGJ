@@ -27,6 +27,7 @@ export default class Zergling extends cc.Component {
         }
         this.node.x += this.speed * dt
     }
+    
     init(side: string="right") {
         this.playAnima('monster_run')
         switch (side){
