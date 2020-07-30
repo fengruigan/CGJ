@@ -35,6 +35,7 @@ export default class MainManager extends cc.Component {
         this.setDesignResolution();
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+        cc.director.getCollisionManager().enabled = true;
     }
     //适配
     setDesignResolution() {
@@ -82,7 +83,6 @@ export default class MainManager extends cc.Component {
                 // this.player.moveLeft();
                 break;
             case cc.macro.KEY.a:
-                console.log("attacking");
                 // Emitter.fire("standStill");
                 Emitter.fire("fireBullet");
                 break;

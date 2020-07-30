@@ -41,10 +41,11 @@ export default class Zergling extends cc.Component {
                 this.speed = this.speed
                 break;
         }
-        cc.director.getCollisionManager().enabled = true; // enable collision manager
+        // cc.director.getCollisionManager().enabled = true; // enable collision manager
         // Emitter.register("collision", this.checkCollision, this);
     }
     onDie() {
+        this.speed = 0;
         this.playAnima('monster_die');
     }
     playAnima(aniName: string) {
@@ -60,13 +61,18 @@ export default class Zergling extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        console.log("from zergling");
+        if (other.node.name === "bullet") {
+            this.onDie();
+        } else if (other.node.name === "player") {
+            this.endGame();
+        }
     }
 
     putInPool() {
         PoolManager.instance.removeObjectByName('zergling', this.node)
     }
-    // endGame() {
-    //     //MainManager.instance.onFail();
-    // }
+    endGame() {
+        console.log("ending game")
+        // MainManager.instance.onFail();
+    }
 }

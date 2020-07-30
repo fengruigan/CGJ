@@ -89,7 +89,6 @@ export default class Player extends cc.Component {
     }
 
     onAtk() {
-        console.log("onAtk triggered");
         MainUIManager.instance.createBullet();
         AudioManager.instance.playAudio("fire");
         //TODO: fix throttle

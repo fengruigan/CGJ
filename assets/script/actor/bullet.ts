@@ -19,7 +19,6 @@ export default class Bullet extends cc.Component {
         //     this.putInPool();
         // }
 
-        //TODO: check collision
         this.node.x += this.speed * dt;
     }
 
@@ -28,15 +27,14 @@ export default class Bullet extends cc.Component {
         this.speed = playerFacing * this.speed
         this.node.scaleX = -playerFacing
         this.node.x = playerPos + playerFacing * 30;
-        cc.director.getCollisionManager().enabled = true;
     }
 
     putInPool() {
         PoolManager.instance.removeObjectByName("bullet", this.node)
     }
 
-    onCollisionEnter(other, self) {
-        console.log("from bullet");
+    onCollisionEnter() {
+        this.putInPool();
     }
 
 }
