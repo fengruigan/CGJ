@@ -73,12 +73,12 @@ export default class UIManager extends cc.Component {
         return (uiComponent.instance && uiComponent.instance.content.active)
     }
 
-    openUI(uiComponent: any, param?, zIndex = UIManager.Z_ORDER_2) {
+    openUI(uiComponent: any, param: { name: string, param?: [] }, zIndex = UIManager.Z_ORDER_2) {
         if (uiComponent.instance) {
-            uiComponent.instance.showUI(...param)
+            uiComponent.instance.showUI(...param.param)
         } else {
             this.loadUIRes('ui/' + param.name, zIndex, () => {
-                uiComponent.instance.showUI(...param)
+                uiComponent.instance.showUI(...param.param)
             })
         }
     }
