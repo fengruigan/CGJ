@@ -6,6 +6,8 @@ import config from "../../config";
 import PoolManager from "../manager/pool_manager";
 import Bullet from "./bullet"
 import AudioManager from "../manager/audio_manager";
+import UIManager from "../manager/ui_manager"
+import FailUIManager from "../ui/fail_ui_manager"
 
 const { ccclass, property } = cc._decorator;
 enum MonsterStatus {
@@ -75,7 +77,8 @@ export default class Zergling extends cc.Component {
                 this.onDie();
                 other.node.getComponent(Bullet).putInPool();
             } else if (other.node.name === "player") {
-                this.endGame();
+                // this.endGame();
+                MainManager.instance.onFail();
             }
         }
     }
@@ -83,8 +86,9 @@ export default class Zergling extends cc.Component {
     putInPool() {
         PoolManager.instance.removeObjectByName('zergling', this.node)
     }
-    endGame() {
-        console.log("ending game")
-        // MainManager.instance.onFail();
-    }
+    // endGame() {
+    //     console.log("ending game")
+    //     UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
+    //     // MainManager.instance.onFail();
+    // }
 }

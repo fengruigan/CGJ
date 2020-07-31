@@ -13,12 +13,13 @@ const { ccclass, property } = cc._decorator;
 export default class MainUIManager extends cc.Component {
 
     static instance: MainUIManager = null;
-    // emitter: Emitter = null;
 
     @property(Player)
     player: Player = null;
-    // @property(cc.Label)
-    // label: cc.Label = null;
+    @property(cc.Node)
+    timer: cc.Node = null;
+    @property(cc.Node)
+    ammoCount: cc.Node = null;
 
     @property(cc.Node)
     monsterContainer: cc.Node = null
@@ -29,13 +30,22 @@ export default class MainUIManager extends cc.Component {
     onLoad() {
         MainUIManager.instance = this;
         this.player.node.setPosition(0, -135);
+        this.timer.getComponent(cc.Label).string = "Survive for: " + Utils.getTimeFormat(MainManager.instance.time);
+        this.ammoCount.getComponent(cc.Label).string = "Ammo left: " + String(this.player.magazineSize);
     }
 
     init() {
-        // this.label.node.active = true;
-        // this.label.string = Utils.getTimeFormat(MainManager.instance.time);
         this.status = GameStatus.running;
     }
+
+    onWin() {
+        this.status = GameStatus.pause;
+    }
+
+    onFail() {
+        this.status = GameStatus.pause;
+    }
+
     createMonster(side: string="right") {
         let monster = PoolManager.instance.createObjectByName('zergling', this.monsterContainer);
         monster.getComponent(Zergling).init(side);
@@ -51,4 +61,10 @@ export default class MainUIManager extends cc.Component {
         flash.getComponent(Flash).init(this.player.node.scaleX, this.player.node.x, this.player.playerStatus);
     }
 
+    update(dt) {
+        if (this.status == GameStatus.running) {
+            this.timer.getComponent(cc.Label).string = "Survive for: " + Utils.getTimeFormat(MainManager.instance.time);
+            this.ammoCount.getComponent(cc.Label).string = "Ammo left: " + String(this.player.ammunition);
+        }
+    }
 }

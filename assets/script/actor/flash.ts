@@ -12,7 +12,6 @@ export default class Flash extends cc.Component {
 
     update (dt) {
         this.node.opacity -= 20;
-        // change opacity
     }
 
     init(playerFacing: number, playerPos: number, playerStatus: number) {

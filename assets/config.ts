@@ -42,6 +42,11 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
                 param: []//调用函数时的参数
             }
         ]
+    },
+    'player_win': {
+        sample:2,
+        speed:2,
+        wrapMode: cc.WrapMode.Loop
     }
 }
 export default { animaParams, uiName, resConfig }

@@ -26,15 +26,26 @@ export default class MainManager extends cc.Component {
 
     // Game timer duration
     @property(cc.Integer)
-    time: number = 120;
-    @property(cc.Integer)
-    monsterSpawnRate: number = 3  // number of monsters per second
+    time: number = 10;
+    // @property(cc.Integer)
+    monsterSpawnRate: number = 2  // number of monsters per second
+
+    status: GameStatus = GameStatus.pause;
 
     onLoad() {
         MainManager.instance = this;
         this.setDesignResolution();
+        
+        // give cushion time for AudioManager to load
+        setTimeout( ()=> {
+            AudioManager.instance.playBGMByID(0)
+        }, 100)
+
+        // Keyboard event listener
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+
+        // turn on collision manager
         cc.director.getCollisionManager().enabled = true;
     }
     //适配
@@ -52,65 +63,86 @@ export default class MainManager extends cc.Component {
     }
 
     startGame() {
-        AudioManager.instance.playBGMByID(0)
         AudioManager.instance.playAudio("marine-start")
         MainUIManager.instance.init();
-        // timer()
+        this.status = GameStatus.running;
         var interval = 200;  // trigger interval for spawning monsters (unit: millisecond)
         setInterval( () =>{
-            var spawnChance = Utils.getRandomNumber(100);
-            if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
-                var side = Utils.getRandomNumber(1);
-                if (side === 1) {
-                    MainUIManager.instance.createMonster("right");
-                } else if (side === 0) {
-                    MainUIManager.instance.createMonster("left");
+            if (this.status == GameStatus.running){
+                var spawnChance = Utils.getRandomNumber(100);
+                if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
+                    var side = Utils.getRandomNumber(1);
+                    if (side === 1) {
+                        MainUIManager.instance.createMonster("right");
+                    } else if (side === 0) {
+                        MainUIManager.instance.createMonster("left");
+                    }
                 }
             }
         }, interval)
+
+        // survival timer
+        setInterval( () => {
+            if (this.time > 0) {
+                this.time -= 1;
+            } else {
+                this.onWin();
+            }
+            // console.log(this.status)
+        }, 1000)
     }
 
     onKeyDown(event) {
-        switch (event.keyCode) {
-            case cc.macro.KEY.right:
-                // console.log("right arrow pressed");
-                Emitter.fire("moveRight");
-                // this.player.moveRight();
-                break;
-            case cc.macro.KEY.left: 
-                // console.log("left arrow pressed");
-                Emitter.fire("moveLeft");
-                // this.player.moveLeft();
-                break;
-            case cc.macro.KEY.a:
-                // Emitter.fire("standStill");
-                Emitter.fire("fireBullet");
-                break;
-            case cc.macro.KEY.r:
-                Emitter.fire("reload");
-                AudioManager.instance.playAudio('reload');
-                break;
-        }
+        if (this.status == GameStatus.running){
+            switch (event.keyCode) {
+                case cc.macro.KEY.right:
+                    // console.log("right arrow pressed");
+                    Emitter.fire("moveRight");
+                    // this.player.moveRight();
+                    break;
+                case cc.macro.KEY.left: 
+                    // console.log("left arrow pressed");
+                    Emitter.fire("moveLeft");
+                    // this.player.moveLeft();
+                    break;
+                case cc.macro.KEY.a:
+                    // Emitter.fire("standStill");
+                    Emitter.fire("fireBullet");
+                    break;
+                case cc.macro.KEY.r:
+                    Emitter.fire("reload");
+                    AudioManager.instance.playAudio('reload');
+                    break;
+            }
+        }   
     }
 
     onKeyUp(event) {
-        switch (event.keyCode) {
-            case cc.macro.KEY.right:
-                Emitter.fire("standStill");
-                // this.player.onStay();
-            case cc.macro.KEY.left:
-                // this.player.onStay();
-                Emitter.fire("standStill");
+        if (this.status == GameStatus.running) {
+            switch (event.keyCode) {
+                case cc.macro.KEY.right:
+                    Emitter.fire("standStill");
+                    // this.player.onStay();
+                case cc.macro.KEY.left:
+                    // this.player.onStay();
+                    Emitter.fire("standStill");
+            }
         }
     }
 
     onWin() {
-        // FailUIManager.instance.node.active = true;
-        UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage })
+        if (this.status == GameStatus.running){
+            console.log("winning game")
+            UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage });
+            this.status = GameStatus.pause
+        }
     }
 
     onFail() {
-        // FailUIManager.instance.node.active = true;
-        UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
+        if (this.status == GameStatus.running) {
+            console.log("ending game")
+            UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
+            this.status = GameStatus.pause
+        }
     }
 }
