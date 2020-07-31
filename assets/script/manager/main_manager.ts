@@ -35,9 +35,9 @@ export default class MainManager extends cc.Component {
     onLoad() {
         MainManager.instance = this;
         this.setDesignResolution();
-        
+
         // give cushion time for AudioManager to load
-        setTimeout( ()=> {
+        setTimeout(() => {
             AudioManager.instance.playBGMByID(0)
         }, 100)
 
@@ -67,8 +67,8 @@ export default class MainManager extends cc.Component {
         MainUIManager.instance.init();
         this.status = GameStatus.running;
         var interval = 200;  // trigger interval for spawning monsters (unit: millisecond)
-        setInterval( () =>{
-            if (this.status == GameStatus.running){
+        setInterval(() => {
+            if (this.status == GameStatus.running) {
                 var spawnChance = Utils.getRandomNumber(100);
                 if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
                     var side = Utils.getRandomNumber(1);
@@ -82,7 +82,7 @@ export default class MainManager extends cc.Component {
         }, interval)
 
         // survival timer
-        setInterval( () => {
+        setInterval(() => {
             if (this.time > 0) {
                 this.time -= 1;
             } else {
@@ -93,14 +93,14 @@ export default class MainManager extends cc.Component {
     }
 
     onKeyDown(event) {
-        if (this.status == GameStatus.running){
+        if (this.status == GameStatus.running) {
             switch (event.keyCode) {
                 case cc.macro.KEY.right:
                     // console.log("right arrow pressed");
                     Emitter.fire("moveRight");
                     // this.player.moveRight();
                     break;
-                case cc.macro.KEY.left: 
+                case cc.macro.KEY.left:
                     // console.log("left arrow pressed");
                     Emitter.fire("moveLeft");
                     // this.player.moveLeft();
@@ -114,7 +114,7 @@ export default class MainManager extends cc.Component {
                     AudioManager.instance.playAudio('reload');
                     break;
             }
-        }   
+        }
     }
 
     onKeyUp(event) {
@@ -122,7 +122,7 @@ export default class MainManager extends cc.Component {
             switch (event.keyCode) {
                 case cc.macro.KEY.right:
                     Emitter.fire("standStill");
-                    // this.player.onStay();
+                // this.player.onStay();
                 case cc.macro.KEY.left:
                     // this.player.onStay();
                     Emitter.fire("standStill");
@@ -131,8 +131,9 @@ export default class MainManager extends cc.Component {
     }
 
     onWin() {
-        if (this.status == GameStatus.running){
+        if (this.status == GameStatus.running) {
             console.log("winning game")
+            Emitter.fire('win')
             UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage });
             this.status = GameStatus.pause
         }

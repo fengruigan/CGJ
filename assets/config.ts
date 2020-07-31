@@ -18,7 +18,7 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
         sample: 2,
         speed: 2,
         wrapMode: cc.WrapMode.Loop,
-        funcs:[
+        funcs: [
             {
                 frame: 2,
                 func: 'onStay',
@@ -30,6 +30,11 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
         sample: 2,
         speed: 3,
         wrapMode: cc.WrapMode.Loop
+    },
+    'monster_fail': {
+        sample: 4,
+        speed: 1.5,
+        wrapMode: cc.WrapMode.LoopReverse
     },
     'monster_die': {
         sample: 3,
@@ -44,8 +49,8 @@ let animaParams = {//填写Resrouce/anima下需要自动加载的动画配置
         ]
     },
     'player_win': {
-        sample:2,
-        speed:2,
+        sample: 2,
+        speed: 2,
         wrapMode: cc.WrapMode.Loop
     }
 }

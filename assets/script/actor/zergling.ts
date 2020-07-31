@@ -28,18 +28,26 @@ export default class Zergling extends cc.Component {
     edge: number = 580
     MonsterStatus: MonsterStatus = null
 
+    onLoad() {
+        Emitter.register('win', () => {
+            this.MonsterStatus = MonsterStatus.dead
+            this.playAnima('monster_fail')
+        }, this)
+    }
     update(dt) {
         // destory on edge (mostly unnecessary)
-        if (this.node.x >= 650 || this.node.x <= -650) {
-            this.putInPool();
+        if (this.MonsterStatus == MonsterStatus.alive) {
+            if (this.node.x >= 650 || this.node.x <= -650) {
+                this.putInPool();
+            }
+            this.node.x += this.speed * dt
         }
-        this.node.x += this.speed * dt
     }
 
-    init(side: string="right") {
+    init(side: string = "right") {
         this.MonsterStatus = MonsterStatus.alive
         this.playAnima('monster_run')
-        switch (side){
+        switch (side) {
             case "right":
                 this.node.x = this.edge
                 this.node.scaleX = -1
@@ -55,7 +63,7 @@ export default class Zergling extends cc.Component {
     }
     onDie() {
         this.speed = 0;
-        this.MonsterStatus = MonsterStatus.dead; 
+        this.MonsterStatus = MonsterStatus.dead;
         AudioManager.instance.playAudio('zergling-death')
         this.playAnima('monster_die');
     }
@@ -72,7 +80,7 @@ export default class Zergling extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        if (this.MonsterStatus == MonsterStatus.alive){
+        if (this.MonsterStatus == MonsterStatus.alive) {
             if (other.node.name === "bullet") {
                 this.onDie();
                 other.node.getComponent(Bullet).putInPool();

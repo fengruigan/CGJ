@@ -33,6 +33,10 @@ export default class Player extends cc.Component {
         Emitter.register("standStill", this.onStay, this);
         Emitter.register("fireBullet", this.onAtk, this);
         Emitter.register("reload", this.onReload, this);
+        Emitter.register('win', () => {
+            this.playerStatus = PlayerStatus.stay
+            this.playAnima('player_win')
+        }, this)
         this.playerStatus = PlayerStatus.stay;
         this.ammunition = this.magazineSize;
     }
@@ -41,7 +45,7 @@ export default class Player extends cc.Component {
             case PlayerStatus.stay:
                 break
             case PlayerStatus.moveLeft:
-                if (this.node.x >= -550){
+                if (this.node.x >= -550) {
                     this.node.x -= dt * this.movementSpeed
                 }
                 break
@@ -95,24 +99,26 @@ export default class Player extends cc.Component {
                 break;
         }
     }
-
+    attTimer: any = null
     onAtk() {
+
+        //TODO: fix throttle
+        //防止用户按键太快
+        if (this.attTimer) return
+        this.attTimer = setTimeout(() => {
+            this.attTimer = null
+        }, 200);
         if (this.ammunition > 0 && this.playerStatus != PlayerStatus.reload) {
             this.ammunition -= 1;
             MainUIManager.instance.createBullet();
             MainUIManager.instance.createMuzzleFlash();
             AudioManager.instance.playAudio("fire");
         }
-        //TODO: fix throttle
-        // Utils.throttle(() => {
-        //     //防止用户按键太快
-        //     MainUIManager.instance.createBullet();
-        //     
-        // }, 100)
+
     }
 
     onReload() {
-        if (this.playerStatus != PlayerStatus.reload){
+        if (this.playerStatus != PlayerStatus.reload) {
             this.playerStatus = PlayerStatus.reload;
             // AudioManager.instance.playAudio('reload');
             this.ammunition = this.magazineSize;
