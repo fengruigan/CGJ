@@ -1,3 +1,5 @@
+import { Emitter } from "../utils/emmiter";
+import MainManager from "../manager/main_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -13,9 +15,14 @@ export default class WinUIManager extends cc.Component {
         WinUIManager.instance = this;
         this.node.active = false
         this.bindEvent()
+        Emitter.register('restart', ()=> {
+            this.node.active = false;
+        }, this)
     }
     bindEvent() {
-        //this.restartBtn.node.on('click', () => { }, this)
+        this.restartBtn.node.on('click', () => { 
+            MainManager.instance.onRestart();
+         }, this)
     }
 
     showUI() {

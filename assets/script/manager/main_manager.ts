@@ -25,13 +25,15 @@ export default class MainManager extends cc.Component {
     static instance: MainManager = null;
 
     // Game timer duration
-    @property(cc.Integer)
-    time: number = 10;
     // @property(cc.Integer)
-    monsterSpawnRate: number = 2  // number of monsters per second
+    time: number = 60;
+    // @property(cc.Integer)
+    monsterSpawnRate: number = 2  // monsterSpawnRate * 10% = % chance of spawning a monster per second
+    spawnTimer: any = null
+    speedBoostTimer: any = null 
+    survivalTimer: any = null
 
     status: GameStatus = GameStatus.pause;
-
     onLoad() {
         MainManager.instance = this;
         this.setDesignResolution();
@@ -63,11 +65,19 @@ export default class MainManager extends cc.Component {
     }
 
     startGame() {
-        AudioManager.instance.playAudio("marine-start")
+        // init
         MainUIManager.instance.init();
+        this.time = 60
+        if (Utils.getRandomNumber(1) === 1){
+            AudioManager.instance.playAudio("TMaPss01")
+        } else {
+            AudioManager.instance.playAudio("marine-start")
+        }
         this.status = GameStatus.running;
-        var interval = 200;  // trigger interval for spawning monsters (unit: millisecond)
-        setInterval(() => {
+        var interval = 100;
+        
+        // spawnTimer for spawning monsters
+        this.spawnTimer = setInterval(() => {
             if (this.status == GameStatus.running) {
                 var spawnChance = Utils.getRandomNumber(100);
                 if (spawnChance < Math.round(this.monsterSpawnRate * 100 * interval / 1000)) {
@@ -81,14 +91,23 @@ export default class MainManager extends cc.Component {
             }
         }, interval)
 
-        // survival timer
-        setInterval(() => {
-            if (this.time > 0) {
-                this.time -= 1;
-            } else {
-                this.onWin();
+        // set zergling speed boost
+        this.speedBoostTimer = setInterval( ()=>{
+            if (this.status === GameStatus.running){
+                Emitter.fire('speedUp');
+                AudioManager.instance.playAudio('gogogo')
             }
-            // console.log(this.status)
+        }, 30000)
+
+        // survival timer
+        this.survivalTimer = setInterval(() => {
+            if (this.status === GameStatus.running){
+                if (this.time > 0) {
+                    this.time -= 1;
+                } else {
+                    this.onWin();
+                }
+            }
         }, 1000)
     }
 
@@ -111,7 +130,6 @@ export default class MainManager extends cc.Component {
                     break;
                 case cc.macro.KEY.r:
                     Emitter.fire("reload");
-                    AudioManager.instance.playAudio('reload');
                     break;
             }
         }
@@ -132,18 +150,32 @@ export default class MainManager extends cc.Component {
 
     onWin() {
         if (this.status == GameStatus.running) {
-            console.log("winning game")
+            AudioManager.instance.playAudio('yay');
             Emitter.fire('win')
             UIManager.instance.openUI(WinUIManager, { name: config.uiName.winPage });
             this.status = GameStatus.pause
         }
     }
 
+    audioInterval: any = null
     onFail() {
         if (this.status == GameStatus.running) {
-            console.log("ending game")
+            AudioManager.instance.playAudio('marine-death')
+            this.audioInterval = setInterval( ()=> {
+                AudioManager.instance.playAudio('zergling-growl')
+            }, 3000)
+            Emitter.fire('fail')
             UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
             this.status = GameStatus.pause
         }
+    }
+
+    onRestart() {
+        Emitter.fire("restart");
+        clearInterval(this.spawnTimer);
+        clearInterval(this.survivalTimer);
+        clearInterval(this.audioInterval);
+        clearInterval(this.speedBoostTimer);
+        this.startGame();
     }
 }

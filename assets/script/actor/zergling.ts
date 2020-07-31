@@ -22,8 +22,7 @@ export default class Zergling extends cc.Component {
     @property(cc.Animation)
     monsterAnima: cc.Animation = null
 
-    // onLoad() {}
-
+    speedBoost: number = 1
     speed: number = 300
     edge: number = 580
     MonsterStatus: MonsterStatus = null
@@ -31,7 +30,14 @@ export default class Zergling extends cc.Component {
     onLoad() {
         Emitter.register('win', () => {
             this.MonsterStatus = MonsterStatus.dead
-            this.playAnima('monster_fail')
+            this.playAnima('monster_die')
+        }, this)
+        Emitter.register('restart', () => {
+            this.putInPool();
+            this.speedBoost = 1;
+        }, this)
+        Emitter.register('speedUp', () => {
+            this.speedBoost *= 1.5 ;
         }, this)
     }
     update(dt) {
@@ -40,7 +46,7 @@ export default class Zergling extends cc.Component {
             if (this.node.x >= 650 || this.node.x <= -650) {
                 this.putInPool();
             }
-            this.node.x += this.speed * dt
+            this.node.x += this.speed * this.speedBoost * dt
         }
     }
 
@@ -85,7 +91,8 @@ export default class Zergling extends cc.Component {
                 this.onDie();
                 other.node.getComponent(Bullet).putInPool();
             } else if (other.node.name === "player") {
-                // this.endGame();
+                this.playAnima('monster_fail')
+                this.MonsterStatus = MonsterStatus.dead
                 MainManager.instance.onFail();
             }
         }
@@ -94,9 +101,4 @@ export default class Zergling extends cc.Component {
     putInPool() {
         PoolManager.instance.removeObjectByName('zergling', this.node)
     }
-    // endGame() {
-    //     console.log("ending game")
-    //     UIManager.instance.openUI(FailUIManager, { name: config.uiName.failPage })
-    //     // MainManager.instance.onFail();
-    // }
 }

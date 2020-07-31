@@ -16,8 +16,8 @@ export default class Flash extends cc.Component {
 
     init(playerFacing: number, playerPos: number, playerStatus: number) {
         if (playerStatus === 2 || playerStatus === 3 ) {
-            this.node.y = 5;
-            this.xOffset = 60;
+            this.node.y = 10;
+            this.xOffset = 65;
         } else {
             this.node.y = 0;
             this.xOffset = 50;

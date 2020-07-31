@@ -24,6 +24,7 @@ export default class Player extends cc.Component {
     playerAnima: cc.Animation = null
     @property(cc.Integer)
     magazineSize: number = 15;
+    atkSpd: number = 10; // shots per sec
 
     playerStatus: PlayerStatus = null
     ammunition: number = this.magazineSize
@@ -34,9 +35,21 @@ export default class Player extends cc.Component {
         Emitter.register("fireBullet", this.onAtk, this);
         Emitter.register("reload", this.onReload, this);
         Emitter.register('win', () => {
-            this.playerStatus = PlayerStatus.stay
-            this.playAnima('player_win')
+            this.playerStatus = PlayerStatus.stay;
+            this.playAnima('player_win');
         }, this)
+        Emitter.register('fail', () => {
+            this.playerStatus = PlayerStatus.stay;
+            this.playerAnima.stop();
+            this.playerSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.common, 'die');
+        }, this)
+        Emitter.register('restart', () => {
+            this.playerStatus = PlayerStatus.stay;
+            this.playerAnima.stop();
+            this.playerSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.common, 'player');
+            this.ammunition = this.magazineSize
+        }, this)
+
         this.playerStatus = PlayerStatus.stay;
         this.ammunition = this.magazineSize;
     }
@@ -99,31 +112,35 @@ export default class Player extends cc.Component {
                 break;
         }
     }
+
     attTimer: any = null
     onAtk() {
-
-        //TODO: fix throttle
         //防止用户按键太快
         if (this.attTimer) return
         this.attTimer = setTimeout(() => {
             this.attTimer = null
-        }, 200);
+        }, 1000 / this.atkSpd);
         if (this.ammunition > 0 && this.playerStatus != PlayerStatus.reload) {
             this.ammunition -= 1;
             MainUIManager.instance.createBullet();
             MainUIManager.instance.createMuzzleFlash();
             AudioManager.instance.playAudio("fire");
-        }
-
+        } else if (this.ammunition <= 0 && this.playerStatus != PlayerStatus.reload) {
+            this.onReload();
+        } 
     }
 
+    reloadTimer: any = null
     onReload() {
+        if (this.reloadTimer) return
+        this.reloadTimer = setTimeout(() => {
+            this.reloadTimer = null
+        }, 500)
         if (this.playerStatus != PlayerStatus.reload) {
             this.playerStatus = PlayerStatus.reload;
-            // AudioManager.instance.playAudio('reload');
             this.ammunition = this.magazineSize;
             this.playAnima('player_reload')
-            // console.log('reload complete')
+            AudioManager.instance.playAudio('reload');
         }
     }
 

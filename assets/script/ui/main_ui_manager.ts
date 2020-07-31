@@ -36,6 +36,7 @@ export default class MainUIManager extends cc.Component {
 
     init() {
         this.status = GameStatus.running;
+        this.player.node.setPosition(0, -135);
     }
 
     onWin() {
@@ -53,7 +54,7 @@ export default class MainUIManager extends cc.Component {
 
     createBullet() {
         let bullet = PoolManager.instance.createObjectByName('bullet', this.bulletContainer);
-        bullet.getComponent(Bullet).init(this.player.node.scaleX, this.player.node.x);
+        bullet.getComponent(Bullet).init(this.player.node.scaleX, this.player.node.x, this.player.playerStatus);
     }
 
     createMuzzleFlash() {

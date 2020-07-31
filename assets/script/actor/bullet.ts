@@ -8,7 +8,7 @@ const {ccclass, property} = cc._decorator;
 export default class Bullet extends cc.Component {
 
 
-    speed: number = 750;
+    speed: number = 1500;
 
     // onLoad () {}
 
@@ -20,9 +20,13 @@ export default class Bullet extends cc.Component {
         this.node.x += this.speed * dt;
     }
 
-    init(playerFacing: number, playerPos: number) {
-        // console.log('initializing');
-        this.speed = playerFacing * 750
+    init(playerFacing: number, playerPos: number, playerStatus: number) {
+        if (playerStatus === 2 || playerStatus === 3 ) {
+            this.node.y = 10;
+        } else {
+            this.node.y = 0;
+        }
+        this.speed = playerFacing * 1500
         this.node.scaleX = -playerFacing
         this.node.x = playerPos + playerFacing * 30;
     }
