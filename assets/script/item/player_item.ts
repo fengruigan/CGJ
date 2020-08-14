@@ -12,6 +12,8 @@ export default class PlayerItem extends cc.Component {
 
     xSpeed: number = 0;
     ySpeed: number = 0;
+    surrounding: cc.Node = null;
+    holding: cc.Node = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -55,17 +57,43 @@ export default class PlayerItem extends cc.Component {
     }
 
     pickUp() {
-        console.log("picking up")
-    }
-
-    dropDown() {
-        console.log("dropping down")
-    }
-
-    onCollisionEnter(self, other) {
-        if (other.node.name == "player") {
-            MainManager.instance.onFail();
+        if (this.surrounding != null) {
+            switch(this.surrounding.name) {
+                case "box":
+                    Emitter.fire("pickUpBox");
+                    this.holding = this.surrounding;
+                    // console.log("picking up box");
+                case "turret":
+                    // Emitter.fire("pickUpTurret");
+            }
         }
     }
 
+    dropDown() {
+        if (this.holding != null) {
+            this.holding.setParent(cc.find("Canvas/gamePage"))
+            this.holding.setPosition(this.node.x, this.node.y - 50);
+            this.holding = null;
+            console.log("dropping down");
+        }
+    }
+
+    onCollisionEnter(other, self) {
+        this.surrounding = other.node;
+        if (other.node.name == "ant") {
+            // this.surroundings = "ant";
+            MainManager.instance.onFail();
+        } else if (other.node.name == "box") {
+            // console.log("box detected");
+            // this.surroundings = "box";
+        } else if (other.node.name == "turret") {
+            // console.log("turret detected");
+            // this.surroundings = "turret";
+        } 
+    }
+
+    onCollisionExit(self, other) {
+        console.log("nothing around")
+        this.surrounding = null;
+    }
 }
