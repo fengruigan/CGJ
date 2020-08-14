@@ -1,3 +1,4 @@
+import MainUIManager from "../ui/main_ui_manager"
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -17,6 +18,7 @@ export default class MainManager extends cc.Component {
     onLoad() {
         MainManager.instance = this
         this.setDesignResolution()
+        
     }
     //适配
     setDesignResolution() {
@@ -31,4 +33,10 @@ export default class MainManager extends cc.Component {
         //     canvas.fitHeight = false
         // }
     }
+
+    startGame() {
+        MainUIManager.instance.init();
+    }
+
+
 }
