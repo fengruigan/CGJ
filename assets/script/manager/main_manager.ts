@@ -1,4 +1,5 @@
 import MainUIManager from "../ui/main_ui_manager"
+import { Emitter } from "../utils/emmiter"
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -18,7 +19,10 @@ export default class MainManager extends cc.Component {
     onLoad() {
         MainManager.instance = this
         this.setDesignResolution()
-        
+
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
+        cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
+
     }
     //适配
     setDesignResolution() {
@@ -38,5 +42,58 @@ export default class MainManager extends cc.Component {
         MainUIManager.instance.init();
     }
 
+    onKeyDown(event) {
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
+                // console.log("right arrow pressed");
+                Emitter.fire("moveRight");
+                // this.player.moveRight();
+                break;
+            case cc.macro.KEY.left:
+                console.log("left arrow pressed");
+                Emitter.fire("moveLeft");
+                // this.player.moveLeft();
+                break;
+            case cc.macro.KEY.up:
+                console.log("up arrow pressed");
+                Emitter.fire("moveUp");
+                // this.player.moveLeft();
+                break;
+            case cc.macro.KEY.down:
+                console.log("down arrow pressed");
+                Emitter.fire("moveDown");
+                // this.player.moveLeft();
+                break;
+            // case cc.macro.KEY.a:
+            //     // Emitter.fire("standStill");
+            //     Emitter.fire("fireBullet");
+            //     break;
+            // case cc.macro.KEY.r:
+            //     Emitter.fire("reload");
+            //     break;
+        }
+    }
+
+    onKeyUp(event) {
+        // switch (event.keyCode) {
+        //     case cc.macro.KEY.right:
+        //         // console.log("right arrow pressed");
+        //         Emitter.fire("moveRight");
+        //         // this.player.moveRight();
+        //         break;
+        //     case cc.macro.KEY.left:
+        //         // console.log("left arrow pressed");
+        //         Emitter.fire("moveLeft");
+        //         // this.player.moveLeft();
+        //         break;
+        //     case cc.macro.KEY.a:
+        //         // Emitter.fire("standStill");
+        //         Emitter.fire("fireBullet");
+        //         break;
+        //     case cc.macro.KEY.r:
+        //         Emitter.fire("reload");
+        //         break;
+        // }
+    }
 
 }
