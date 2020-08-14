@@ -21,22 +21,33 @@ export default class WayPointManager extends cc.Component {
     onLoad() {
         this.wayPointData = []
         WayPointManager.instance = this
+        this.init()
     }
     init() {
-        let nodes: cc.Node[] = []
-        for (let i = 0; i < nodes.length; i++) {
-            let wayPointScript = nodes[i].getComponent(WayPointItem)
-            wayPointScript.index = i
-        }
-        for (let i = 0; i < nodes.length; i++) {
-            let wayPointScript = nodes[i].getComponent(WayPointItem)
-            let data: WayPoint = { pos: nodes[i].getPosition(), around: [], index: i }
-            for (let j = 0; j < wayPointScript.aroundPointNode.length; j++) {
-                let aroundPointScript = nodes[j].getComponent(WayPointItem)
-                data.around.push(aroundPointScript.index)
-            }
-            this.wayPointData.push(data)
-        }
+        // let nodes: cc.Node[] = []
+        // for (let i = 0; i < nodes.length; i++) {
+        //     let wayPointScript = nodes[i].getComponent(WayPointItem)
+        //     wayPointScript.index = i
+        // }
+        // for (let i = 0; i < nodes.length; i++) {
+        //     let wayPointScript = nodes[i].getComponent(WayPointItem)
+        //     let data: WayPoint = { pos: nodes[i].getPosition(), around: [], index: i }
+        //     for (let j = 0; j < wayPointScript.aroundPointNode.length; j++) {
+        //         let aroundPointScript = nodes[j].getComponent(WayPointItem)
+        //         data.around.push(aroundPointScript.index)
+        //     }
+        //     this.wayPointData.push(data)
+        // }
+        // 测试
+        this.wayPointData = [
+            { pos: cc.v2(0, 0), around: [1, 2], index: 0 },
+            { pos: cc.v2(0, 0), around: [0, 2], index: 1 },
+            { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
+        ]
+
+        setTimeout(() => {
+            this.findWay(0)
+        }, 1000);
     }
     //蚂蚁最终要接近玩家
     //蚂蚁会出现在裂缝
@@ -50,10 +61,31 @@ export default class WayPointManager extends cc.Component {
     //攻击完箱子之后蚂蚁会继续判断能否回到上一个路径点 持续上述步骤
     findWay(curIndex) {
         //找到一条通往玩家最近路径点的路
-        let target = this.findPlayerNearPoint()
+        let target = this.findPlayerNearPoint() as WayPoint
+        let cur = this.wayPointData[curIndex]
+        // let ways = [...]
+        this.wayPointFind(cur, target, [cur.index])
+        //  console.log('找到路径', ways)
     }
     findPlayerNearPoint() {
-        return {}
+        return { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
     }
-
+    wayPointFind(cur: WayPoint, target: WayPoint, way) {
+        if (cur.index == target.index) {
+            console.log('找到路:', way)
+            //  return [way]
+        } else {
+            for (let i = 0; i < cur.around.length; i++) {
+                if (way.some(item => {
+                    return item == cur.around[i]
+                })) {
+                    // return [null]
+                    console.log('走了经过的路', way, cur.around[i])
+                } else {
+                    way = [...way, cur.around[i]]
+                    this.wayPointFind(this.wayPointData[cur.around[i]], target, way)
+                }
+            }
+        }
+    }
 }
