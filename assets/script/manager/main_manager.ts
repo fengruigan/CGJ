@@ -88,6 +88,7 @@ export default class MainManager extends cc.Component {
                 // console.log("down arrow pressed");
                 Emitter.fire("downArrowUp");
                 break;
+        }
     }
 
 }
