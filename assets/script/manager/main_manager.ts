@@ -46,23 +46,19 @@ export default class MainManager extends cc.Component {
         switch (event.keyCode) {
             case cc.macro.KEY.right:
                 // console.log("right arrow pressed");
-                Emitter.fire("moveRight");
-                // this.player.moveRight();
+                Emitter.fire("rightArrowDown");
                 break;
             case cc.macro.KEY.left:
-                console.log("left arrow pressed");
-                Emitter.fire("moveLeft");
-                // this.player.moveLeft();
+                // console.log("left arrow pressed");
+                Emitter.fire("leftArrowDown");
                 break;
             case cc.macro.KEY.up:
-                console.log("up arrow pressed");
-                Emitter.fire("moveUp");
-                // this.player.moveLeft();
+                // console.log("up arrow pressed");
+                Emitter.fire("upArrowDown");
                 break;
             case cc.macro.KEY.down:
-                console.log("down arrow pressed");
-                Emitter.fire("moveDown");
-                // this.player.moveLeft();
+                // console.log("down arrow pressed");
+                Emitter.fire("downArrowDown");
                 break;
             // case cc.macro.KEY.a:
             //     // Emitter.fire("standStill");
@@ -75,25 +71,23 @@ export default class MainManager extends cc.Component {
     }
 
     onKeyUp(event) {
-        // switch (event.keyCode) {
-        //     case cc.macro.KEY.right:
-        //         // console.log("right arrow pressed");
-        //         Emitter.fire("moveRight");
-        //         // this.player.moveRight();
-        //         break;
-        //     case cc.macro.KEY.left:
-        //         // console.log("left arrow pressed");
-        //         Emitter.fire("moveLeft");
-        //         // this.player.moveLeft();
-        //         break;
-        //     case cc.macro.KEY.a:
-        //         // Emitter.fire("standStill");
-        //         Emitter.fire("fireBullet");
-        //         break;
-        //     case cc.macro.KEY.r:
-        //         Emitter.fire("reload");
-        //         break;
-        // }
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
+                // console.log("right arrow pressed");
+                Emitter.fire("rightArrowUp");
+                break;
+            case cc.macro.KEY.left:
+                // console.log("left arrow pressed");
+                Emitter.fire("leftArrowUp");
+                break;
+            case cc.macro.KEY.up:
+                // console.log("up arrow pressed");
+                Emitter.fire("upArrowUp");
+                break;
+            case cc.macro.KEY.down:
+                // console.log("down arrow pressed");
+                Emitter.fire("downArrowUp");
+                break;
     }
 
 }
