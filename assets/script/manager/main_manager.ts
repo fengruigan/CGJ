@@ -23,6 +23,8 @@ export default class MainManager extends cc.Component {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
 
+        // turn on collision manager
+        cc.director.getCollisionManager().enabled = true;
     }
     //适配
     setDesignResolution() {
@@ -42,58 +44,71 @@ export default class MainManager extends cc.Component {
         MainUIManager.instance.init();
     }
 
+    onFail() {
+        console.log("GGWP")
+    }
+
+    // Keyboard event listener
     onKeyDown(event) {
         switch (event.keyCode) {
+            /*
+            * Movement
+            */
             case cc.macro.KEY.right:
                 // console.log("right arrow pressed");
-                Emitter.fire("moveRight");
-                // this.player.moveRight();
+                Emitter.fire("rightArrowDown");
                 break;
             case cc.macro.KEY.left:
-                console.log("left arrow pressed");
-                Emitter.fire("moveLeft");
-                // this.player.moveLeft();
+                // console.log("left arrow pressed");
+                Emitter.fire("leftArrowDown");
                 break;
             case cc.macro.KEY.up:
-                console.log("up arrow pressed");
-                Emitter.fire("moveUp");
-                // this.player.moveLeft();
+                // console.log("up arrow pressed");
+                Emitter.fire("upArrowDown");
                 break;
             case cc.macro.KEY.down:
-                console.log("down arrow pressed");
-                Emitter.fire("moveDown");
-                // this.player.moveLeft();
+                // console.log("down arrow pressed");
+                Emitter.fire("downArrowDown");
                 break;
-            // case cc.macro.KEY.a:
+            /*
+            * Pick up and drop down
+            */
+            case cc.macro.KEY.a:
+                // Emitter.fire("standStill");
+                Emitter.fire("pickUp");
+                break;
+            case cc.macro.KEY.s:
+                Emitter.fire("dropDown");
+                break;
+            /*
+            * Item selection
+            */
+            // case cc.macro.KEY.space:
             //     // Emitter.fire("standStill");
-            //     Emitter.fire("fireBullet");
-            //     break;
-            // case cc.macro.KEY.r:
-            //     Emitter.fire("reload");
+            //     Emitter.fire("pickUp");
             //     break;
         }
     }
 
     onKeyUp(event) {
-        // switch (event.keyCode) {
-        //     case cc.macro.KEY.right:
-        //         // console.log("right arrow pressed");
-        //         Emitter.fire("moveRight");
-        //         // this.player.moveRight();
-        //         break;
-        //     case cc.macro.KEY.left:
-        //         // console.log("left arrow pressed");
-        //         Emitter.fire("moveLeft");
-        //         // this.player.moveLeft();
-        //         break;
-        //     case cc.macro.KEY.a:
-        //         // Emitter.fire("standStill");
-        //         Emitter.fire("fireBullet");
-        //         break;
-        //     case cc.macro.KEY.r:
-        //         Emitter.fire("reload");
-        //         break;
-        // }
+        switch (event.keyCode) {
+            case cc.macro.KEY.right:
+                // console.log("right arrow pressed");
+                Emitter.fire("rightArrowUp");
+                break;
+            case cc.macro.KEY.left:
+                // console.log("left arrow pressed");
+                Emitter.fire("leftArrowUp");
+                break;
+            case cc.macro.KEY.up:
+                // console.log("up arrow pressed");
+                Emitter.fire("upArrowUp");
+                break;
+            case cc.macro.KEY.down:
+                // console.log("down arrow pressed");
+                Emitter.fire("downArrowUp");
+                break;
+        }
     }
 
 }

@@ -1,13 +1,14 @@
 import { Emitter } from "../utils/emmiter"
+import MainManager from "../manager/main_manager"
 
 const {ccclass, property} = cc._decorator;
 
-enum PlayerStatus {
+// enum PlayerStatus {
 
-}
+// }
 
 @ccclass
-export default class Player extends cc.Component {
+export default class PlayerItem extends cc.Component {
 
     xSpeed: number = 0;
     ySpeed: number = 0;
@@ -20,20 +21,21 @@ export default class Player extends cc.Component {
         Emitter.register("leftArrowDown", this.moveLeft, this)
         Emitter.register("upArrowDown", this.moveUp, this)
         Emitter.register("downArrowDown", this.moveDown, this)
-
+        Emitter.register("rightArrowUp", this.xOnStay, this)
+        Emitter.register("leftArrowUp", this.xOnStay, this)
+        Emitter.register("upArrowUp", this.yOnStay, this)
+        Emitter.register("downArrowUp", this.yOnStay, this)
+        // Pick up drop down
         Emitter.register("pickUp", this.pickUp, this)
         Emitter.register("dropDown", this.dropDown, this)
-
     }
 
-    
     update (dt) {
         this.node.x += this.xSpeed * dt;
         this.node.y += this.ySpeed * dt;
     }
 
     moveRight(){
-        console.log("right arrow pressed");
         this.xSpeed = 100;
     }
     moveLeft(){
@@ -45,6 +47,12 @@ export default class Player extends cc.Component {
     moveDown(){
         this.ySpeed = -100;
     }
+    xOnStay() {
+        this.xSpeed = 0;
+    }
+    yOnStay() {
+        this.ySpeed = 0;
+    }
 
     pickUp() {
         console.log("picking up")
@@ -52,6 +60,12 @@ export default class Player extends cc.Component {
 
     dropDown() {
         console.log("dropping down")
+    }
+
+    onCollisionEnter(self, other) {
+        if (other.node.name == "player") {
+            MainManager.instance.onFail();
+        }
     }
 
 }
