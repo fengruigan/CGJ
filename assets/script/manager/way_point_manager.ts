@@ -40,7 +40,7 @@ export default class WayPointManager extends cc.Component {
         // }
         // 测试
         this.wayPointData = [
-            { pos: cc.v2(0, 0), around: [1, 2], index: 0 },
+            { pos: cc.v2(0, 0), around: [2, 1], index: 0 },
             { pos: cc.v2(0, 0), around: [0, 2], index: 1 },
             { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
         ]
@@ -64,56 +64,56 @@ export default class WayPointManager extends cc.Component {
         let target = this.findPlayerNearPoint() as WayPoint
         let cur = this.wayPointData[curIndex]
         // let ways = [...]
-        this.wayPointFind(cur, target, [cur.index])
+        this.wayPointFind(cur, target.index, [cur.index])
         //  console.log('找到路径', ways)
     }
     findPlayerNearPoint() {
         return { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
     }
-    // wayPointFind(cur: WayPoint, target: WayPoint, way) {
-    //     if (cur.index == target.index) {
-    //         console.log('找到路:', way)
-    //         //  return [way]
-    //     } else {
-    //         for (let i = 0; i < cur.around.length; i++) {
-    //             if (way.some(item => {
-    //                 return item == cur.around[i]
-    //             })) {
-    //                 // return [null]
-    //                 console.log('走了经过的路', way, cur.around[i])
-    //             } else {
-    //                 way = [...way, cur.around[i]]
-    //                 this.wayPointFind(this.wayPointData[cur.around[i]], target, way)
-    //             }
-    //         }
-    //     }
-    // }
-
-    wayPointFind(cur: WayPoint, target: WayPoint, way) {
-        let queue: WayPoint[] = [];
-        queue.push(cur)
-        let step: number = 0
-        while (queue.length != 0) {
-            // search by level
-            let size = queue.length;
-            for (let i = 0; i < size; i++) {
-                let curPoint = queue.shift();
-                if (curPoint.index == target.index) {
-                    console.log('找到路:', way)
-                    console.log("found in " + String(step) + " steps")
-                    break;
-                }
-                step += 1;
-                for (let j = 0; j < curPoint.around.length; j++){
-                    if (way.some(item => {
-                        return item == curPoint.around[j]
-                    })) {
-                        console.log('走了经过的路', way)
-                    } else {
-                        queue.push(this.wayPointData[curPoint.around[j]])
-                    }
+    wayPointFind(cur: WayPoint, target: number, way) {
+        console.log('当前寻路', cur, target, way)
+        if (cur.index == target) {
+            console.log('找到路:', way)
+            return
+        } else {
+            let newWay = JSON.parse(JSON.stringify(way))
+            for (let i = 0; i < cur.around.length; i++) {
+                console.log('当前循环', i)
+                if (way.some(item => { return item == cur.around[i] })) {
+                    console.log('走了经过的路', way, cur.around[i])
+                    continue
+                } else {
+                    WayPointManager.instance.wayPointFind(this.wayPointData[cur.around[i]], target, [...way, cur.around[i]])
                 }
             }
         }
     }
+
+    // wayPointFind(cur: WayPoint, target: WayPoint, way) {
+    //     let queue: WayPoint[] = [];
+    //     queue.push(cur)
+    //     let step: number = 0
+    //     while (queue.length != 0) {
+    //         // search by level
+    //         let size = queue.length;
+    //         for (let i = 0; i < size; i++) {
+    //             let curPoint = queue.shift();
+    //             if (curPoint.index == target.index) {
+    //                 console.log('找到路:', way)
+    //                 console.log("found in " + String(step) + " steps")
+    //             }
+    //             step += 1;
+    //             for (let j = 0; j < curPoint.around.length; j++) {
+    //                 if (way.some(item => {
+    //                     return item == curPoint.around[j]
+    //                 })) {
+    //                     console.log('走了经过的路', way)
+    //                 } else {
+    //                     this.wayPointFind(this.wayPointData[curPoint.around[j]], target, queue)
+    //                     //  queue.push(this.wayPointData[curPoint.around[j]])
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
