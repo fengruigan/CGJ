@@ -37,6 +37,10 @@ export default class MainManager extends cc.Component {
 
         // turn on collision manager
         cc.director.getCollisionManager().enabled = true;
+
+        setTimeout( () => {
+            AudioManager.instance.loadBGMClip("bgm", 0.4)
+        }, 100)
     }
     //适配
     setDesignResolution() {
@@ -82,7 +86,6 @@ export default class MainManager extends cc.Component {
     startGame() {
         MainUIManager.instance.init();
         this.gameStatus = GameStatus.start
-        AudioManager.instance.loadBGMClip("bgm", 0.3)
     }
 
     onFail() {

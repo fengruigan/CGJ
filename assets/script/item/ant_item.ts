@@ -10,6 +10,8 @@ import BulletItem from "./bullet_item";
 import JsonManager from "../manager/json_manager";
 import { Utils } from "../utils/utils";
 import config from "../../config";
+import AudioManager from "../manager/audio_manager";
+import HeadItem from "./head_item"
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,6 +27,8 @@ export default class AntItem extends cc.Component {
     isDie: boolean = false
     _hp: number = null
     _freeze: boolean = false
+    @property(HeadItem)
+    head: HeadItem = null
     @property(cc.Sprite)
     sp: cc.Sprite = null
     get freeze() {
@@ -100,6 +104,11 @@ export default class AntItem extends cc.Component {
             this.node.x += this.heading.x * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.node.y += this.heading.y * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.spNode.angle = (this.heading.y > 0 ? 1 : -1) * this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
+            this.head.node.angle = this.spNode.angle
+            let headOffsetY = -30 * (this.heading.y > 0 ? 1 : -1) * Math.sin(this.heading.angle(cc.v2(1,0)))
+            let headOffsetX = -30 * Math.cos(this.heading.angle(cc.v2(1,0)))
+            this.head.node.x = headOffsetX
+            this.head.node.y = headOffsetY
         }
     }
 
@@ -111,6 +120,7 @@ export default class AntItem extends cc.Component {
             //       PoolManager.instance.removeObjectByName('bulletItem', other.node)
             this.hp -= JsonManager.instance.getDataByName('tower')[1]['damage']
         } else if (other.node.name == 'player') {
+            AudioManager.instance.playAudio('蚂蚁咬人', 0.5)
             PoolManager.instance.removeObjectByName('antItem', this.node)
         }
     }
