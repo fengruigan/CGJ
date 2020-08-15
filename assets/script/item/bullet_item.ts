@@ -17,14 +17,14 @@ export default class BulletItem extends cc.Component {
     speed: number = 200
     arr: cc.Vec2 = null
     @property(cc.ParticleSystem)
-    particel: cc.ParticleSystem = null
+    particle: cc.ParticleSystem = null
     onLoad() {
     }
     init(pos, arr: cc.Vec2) {
         this.speed = JsonManager.instance.getDataByName('tower')[1].bulletSpd
         this.node.position = pos
         this.arr = arr.normalize()
-        this.particel.resetSystem()
+        this.particle.resetSystem()
         this.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI
         this.node.getComponent(cc.BoxCollider).enabled = true
     }
@@ -42,7 +42,7 @@ export default class BulletItem extends cc.Component {
     }
     onRemove() {
         this.node.getComponent(cc.BoxCollider).enabled = false
-        this.particel.stopSystem()
+        this.particle.stopSystem()
         setTimeout(() => {
             PoolManager.instance.removeObjectByName('bulletItem', this.node)
         }, 500);

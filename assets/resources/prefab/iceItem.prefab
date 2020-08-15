@@ -260,9 +260,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "e73e08d5-9c8e-4122-919d-6ab5dfa0e4f1"
+      "__id__": 0
     },
-    "fileId": "9fZU/V5alChY8A7QTQLYtA",
+    "fileId": "177ftpo71JYKzFkYajNgC3",
     "sync": false
   },
   {
@@ -329,6 +329,9 @@
     "particle": {
       "__id__": 3
     },
+    "iceSprite": {
+      "__id__": 5
+    },
     "towerSp": null,
     "_id": ""
   },
@@ -338,9 +341,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "e73e08d5-9c8e-4122-919d-6ab5dfa0e4f1"
+      "__id__": 0
     },
-    "fileId": "d3vQlJhUdIRaWW3n2iGPWA",
+    "fileId": "65xQcYggpEJLmzOcVTFRk/",
     "sync": false
   }
 ]

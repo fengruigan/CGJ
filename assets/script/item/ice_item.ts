@@ -3,10 +3,11 @@ import MainUIManager from "../ui/main_ui_manager";
 import PoolManager from "../manager/pool_manager";
 import BulletItem from "./bullet_item";
 import MainManager from "../manager/main_manager";
-import { GameStatus } from "../utils/enum";
+import { GameStatus, ResType } from "../utils/enum";
 import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
+import ResourceManager from "../manager/resouce_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -18,12 +19,15 @@ export default class IceItem extends cc.Component {
     @property(cc.ParticleSystem)
     particle: cc.ParticleSystem = null
     @property(cc.Sprite)
+    iceSprite: cc.Sprite = null
+    @property(cc.Sprite)
     towerSp: cc.Sprite = null
     onLoad() {
         this.init()
     }
     attTimer: any = null
     init() {
+        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice1")
         clearInterval(this.attTimer)
         let range = JsonManager.instance.getConfig('itemGenerateRange')
         let anchor = JsonManager.instance.getConfig('playerPosition')
@@ -37,6 +41,16 @@ export default class IceItem extends cc.Component {
                     this.particle.resetSystem()
                     let arr = this.node.position.sub(target.position)
                     this.particle.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
+                    console.log(this.particle.node.angle)
+                    if (this.particle.node.angle < 315 && this.particle.node.angle >= 225) {
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice1")
+                    } else if (this.particle.node.angle < 135 && this.particle.node.angle >= 45) {
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice2")
+                    } else if (this.particle.node.angle < 225 && this.particle.node.angle >= 135) {
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice3")
+                    } else {
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice4")
+                    }
                     let group = this.findTargetRangeAnt(target.position)
                     group.map((item) => {
                         item.getComponent(AntItem).antFreeze()
