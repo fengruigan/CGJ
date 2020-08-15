@@ -18,7 +18,27 @@ export default class AntItem extends cc.Component {
     // player: PlayerItem = null;
 
     lastWayPoint: WayPoint = null
+    isDie: boolean = false
+    _hp: number = null
+    @property(cc.Node)
+    spNode: cc.Node = null
+    @property(cc.ProgressBar)
+    hpProgress: cc.ProgressBar = null
+    set hp(val: number) {
+        this._hp = val
+        this.hpProgress.progress = val / 3
 
+        if (val <= 0) {
+            this.isDie = true
+            let ani = cc.tween(this.node).to(1, { scaleY: 0 }, null).call(() => {
+                PoolManager.instance.removeObjectByName('antItem', this.node)
+            }).start()
+
+        }
+    }
+    get hp() {
+        return this._hp
+    }
     onLoad() {
         // WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
         // setTimeout(() => {
@@ -26,7 +46,10 @@ export default class AntItem extends cc.Component {
         // });
     }
     init(pos: cc.Vec2) {
+        this.hp = 3
+        this.node.scaleY = 1
         this.node.setPosition(pos.x, pos.y - 50)
+        this.isDie = false
         //   WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
     }
     // findWayTimer: any = null
@@ -45,20 +68,20 @@ export default class AntItem extends cc.Component {
     // change to wayPoint method
     // constant running towards player
     update(dt) {
-        if (MainManager.instance.gameStatus == GameStatus.start) {
+        if (MainManager.instance.gameStatus == GameStatus.start && !this.isDie) {
             this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
             this.node.x += this.heading.x * this.speed * dt
             this.node.y += this.heading.y * this.speed * dt
-
-            //  this.node.angle = this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI - 90
+            this.spNode.angle = (this.heading.y > 0 ? 1 : -1) * this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
         }
     }
 
     onCollisionEnter(other, self) {
+        if (this.isDie) return
         if (other.node.name == "bulletItem") {
             //被子弹射中
-            PoolManager.instance.removeObjectByName('antItem', this.node)
             PoolManager.instance.removeObjectByName('bulletItem', other.node)
+            this.hp--
         } else if (other.node.name == 'player') {
             PoolManager.instance.removeObjectByName('antItem', this.node)
         }

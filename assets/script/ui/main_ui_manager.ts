@@ -5,6 +5,7 @@ import PlayerItem from "../item/player_item";
 import BoxItem from "../item/box_item";
 import { Utils } from "../utils/utils";
 import TurretItem from "../item/turret_item";
+import FailUIManager from "./fail_ui_manager";
 
 
 const { ccclass, property } = cc._decorator;
@@ -67,11 +68,12 @@ export default class MainUIManager extends cc.Component {
         this.removeAllItem()
         clearInterval(this.growGapTimer)
         clearInterval(this.itemGapTimer)
-
+        FailUIManager.instance.onFail()
     }
     removeAllItem() {
         let gapChild = this.gapParent.children
         for (let i = gapChild.length - 1; i >= 0; i--) {
+            gapChild[i].getComponent(GapItem).isOn = false
             PoolManager.instance.removeObjectByName('gapItem', gapChild[i])
         }
 
@@ -91,7 +93,7 @@ export default class MainUIManager extends cc.Component {
         }
         let tullentChild = this.tulletParent.children
         for (let i = tullentChild.length - 1; i >= 0; i--) {
-            PoolManager.instance.removeObjectByName('tullentItem', tullentChild[i])
+            PoolManager.instance.removeObjectByName('turrentItem', tullentChild[i])
         }
     }
 

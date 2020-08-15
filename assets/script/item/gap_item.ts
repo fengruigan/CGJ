@@ -17,11 +17,13 @@ export default class GapItem extends cc.Component {
     onLoad() {
     }
     antGrowTimer: any = null
+    isOn: boolean = false
     init() {
         this.node.setPosition(Utils.getRandomNumber(1000) - 500, Utils.getRandomNumber(600) - 300)
+        this.isOn = true
         clearInterval(this.antGrowTimer)
         this.antGrowTimer = setInterval(() => {
-            if (MainManager.instance.gameStatus == GameStatus.start) {
+            if (MainManager.instance.gameStatus == GameStatus.start && this.isOn) {
                 let ant = PoolManager.instance.createObjectByName('antItem', MainUIManager.instance.antParent)
                 ant.getComponent(AntItem).init(this.node.position)
             }
@@ -31,6 +33,7 @@ export default class GapItem extends cc.Component {
 
     onCollisionEnter(other, self) {
         if (other.node.name == 'boxItem') {
+            this.isOn = false
             PoolManager.instance.removeObjectByName('gapItem', this.node)
             PoolManager.instance.removeObjectByName('boxItem', other.node)
         }

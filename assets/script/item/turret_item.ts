@@ -5,6 +5,7 @@ import BulletItem from "./bullet_item";
 import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
 import { Utils } from "../utils/utils";
+import AntItem from "./ant_item";
 
 const { ccclass, property } = cc._decorator;
 
@@ -36,7 +37,7 @@ export default class TurretItem extends cc.Component {
         for (let i = 0; i < MainUIManager.instance.antParent.children.length; i++) {
             let antNode = MainUIManager.instance.antParent.children[i]
             let mag = antNode.position.sub(this.node.position).mag()
-            if (mag < this.range) {
+            if (mag < this.range && !antNode.getComponent(AntItem).isDie) {
                 if (!nearst) {
                     nearst = antNode
                 } else {
