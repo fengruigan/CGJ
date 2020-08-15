@@ -3,15 +3,19 @@ import MainUIManager from "../ui/main_ui_manager";
 import PoolManager from "../manager/pool_manager";
 import BulletItem from "./bullet_item";
 import MainManager from "../manager/main_manager";
-import { GameStatus } from "../utils/enum";
+import { GameStatus, ResType } from "../utils/enum";
 import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
+import ResourceManager from "../manager/resouce_manager"
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class TurretItem extends cc.Component {
+
+    @property(cc.Sprite)
+    turretSprite: cc.Sprite = null
 
     // LIFE-CYCLE CALLBACKS:
     range: number = 200
@@ -21,6 +25,8 @@ export default class TurretItem extends cc.Component {
     }
     attTimer: any = null
     init() {
+        this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent1")
+        this.node.scaleX = 1;
         clearInterval(this.attTimer)
         let range = JsonManager.instance.getConfig('itemGenerateRange')
         let anchor = JsonManager.instance.getConfig('playerPosition')
@@ -32,7 +38,26 @@ export default class TurretItem extends cc.Component {
                 let target = this.findAnt()
                 if (target) {
                     let bullet = PoolManager.instance.createObjectByName('bulletItem', MainUIManager.instance.bulletParent)
-                    bullet.getComponent(BulletItem).init(this.node.position, target.position.sub(this.node.position))
+                    let arr = target.position.sub(this.node.position)
+                    bullet.getComponent(BulletItem).init(this.node.position, arr)
+                    arr = arr.normalize()
+                    let ang = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI
+                    console.log(ang)
+                    if (ang <= 45 && ang >= -45 ) {
+                        // facing right, the angle is rotated 90 degs
+                        this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent2")
+                        this.node.scaleX = -1;
+                    } else if (ang <= 135 && ang >= 45) {
+                        // facing up
+                        this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent3")
+                    } else if (ang <= -45 && ang >= -135) {
+                        // facing down
+                        this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent1")
+                    } else {
+                        // facing left
+                        this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent2")
+                        this.node.scaleX = 1;
+                    }
                 }
             }
         }, 500)

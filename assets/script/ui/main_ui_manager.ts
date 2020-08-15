@@ -64,7 +64,7 @@ export default class MainUIManager extends cc.Component {
                 let item = PoolManager.instance.createObjectByName('boxItem', this.boxParent)
                 item.getComponent(BoxItem).init()
             } else {
-                let towerRandom = Utils.getRandomNumber(3)
+                let towerRandom = Utils.getRandomNumber(0)
                 if (towerRandom == 0) {
                     let item = PoolManager.instance.createObjectByName('turrentItem', this.towerParent)
                     item.getComponent(TurretItem).init()

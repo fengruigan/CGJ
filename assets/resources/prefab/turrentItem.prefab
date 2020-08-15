@@ -140,6 +140,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "turretSprite": {
+      "__id__": 2
+    },
     "_id": ""
   },
   {
@@ -148,9 +151,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "e8e66e52-b4b6-459f-a54c-80b675c3248e"
+      "__id__": 0
     },
-    "fileId": "d3vQlJhUdIRaWW3n2iGPWA",
+    "fileId": "5bBpy+xj1NXI2YC1kixVWC",
     "sync": false
   }
 ]

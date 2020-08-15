@@ -41,15 +41,18 @@ export default class IceItem extends cc.Component {
                     this.particle.resetSystem()
                     let arr = this.node.position.sub(target.position)
                     this.particle.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
-                    console.log(this.particle.node.angle)
-                    if (this.particle.node.angle < 315 && this.particle.node.angle >= 225) {
-                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice1")
-                    } else if (this.particle.node.angle < 135 && this.particle.node.angle >= 45) {
-                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice2")
-                    } else if (this.particle.node.angle < 225 && this.particle.node.angle >= 135) {
-                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice3")
-                    } else {
+                    if (this.particle.node.angle <= 315 && this.particle.node.angle >= 225) {
+                        // facing right, the angle is rotated 90 degs
                         this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice4")
+                    } else if (this.particle.node.angle <= 135 && this.particle.node.angle >= 45) {
+                        // facing left
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice3")
+                    } else if (this.particle.node.angle <= 225 && this.particle.node.angle >= 135) {
+                        // facing down
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice1")
+                    } else {
+                        // facing up
+                        this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice2")
                     }
                     let group = this.findTargetRangeAnt(target.position)
                     group.map((item) => {

@@ -169,7 +169,7 @@
     "_texture": {
       "__uuid__": "6603dd13-3dcc-4d4c-89a5-89099daa0d1f"
     },
-    "_stopped": false,
+    "_stopped": true,
     "playOnLoad": true,
     "autoRemoveOnFinish": false,
     "totalParticles": 80,
@@ -255,9 +255,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8275f8c0-95ca-459b-b579-0d5743030aef"
+      "__id__": 0
     },
-    "fileId": "b9Iisd9QdIjJn++jqdndia",
+    "fileId": "910davHM5DWLxpV6X6EHdE",
     "sync": false
   },
   {
@@ -268,7 +268,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "particel": {
+    "particle": {
       "__id__": 3
     },
     "_id": ""
@@ -300,9 +300,9 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8275f8c0-95ca-459b-b579-0d5743030aef"
+      "__id__": 0
     },
-    "fileId": "f7KqzBLCFKp6Wdr9yUiot/",
+    "fileId": "11HhGyKJBC5Ymd1Gz8jwqc",
     "sync": false
   }
 ]
