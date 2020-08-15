@@ -20,6 +20,7 @@ export default class MainManager extends cc.Component {
         MainManager.instance = this
         this.setDesignResolution()
 
+        // keyboard event listener
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this);
 

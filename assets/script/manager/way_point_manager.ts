@@ -70,20 +70,48 @@ export default class WayPointManager extends cc.Component {
     findPlayerNearPoint() {
         return { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
     }
+    // wayPointFind(cur: WayPoint, target: WayPoint, way) {
+    //     if (cur.index == target.index) {
+    //         console.log('找到路:', way)
+    //         //  return [way]
+    //     } else {
+    //         for (let i = 0; i < cur.around.length; i++) {
+    //             if (way.some(item => {
+    //                 return item == cur.around[i]
+    //             })) {
+    //                 // return [null]
+    //                 console.log('走了经过的路', way, cur.around[i])
+    //             } else {
+    //                 way = [...way, cur.around[i]]
+    //                 this.wayPointFind(this.wayPointData[cur.around[i]], target, way)
+    //             }
+    //         }
+    //     }
+    // }
+
     wayPointFind(cur: WayPoint, target: WayPoint, way) {
-        if (cur.index == target.index) {
-            console.log('找到路:', way)
-            //  return [way]
-        } else {
-            for (let i = 0; i < cur.around.length; i++) {
-                if (way.some(item => {
-                    return item == cur.around[i]
-                })) {
-                    // return [null]
-                    console.log('走了经过的路', way, cur.around[i])
-                } else {
-                    way = [...way, cur.around[i]]
-                    this.wayPointFind(this.wayPointData[cur.around[i]], target, way)
+        let queue: WayPoint[] = [];
+        queue.push(cur)
+        let step: number = 0
+        while (queue.length != 0) {
+            // search by level
+            let size = queue.length;
+            for (let i = 0; i < size; i++) {
+                let curPoint = queue.shift();
+                if (curPoint.index == target.index) {
+                    console.log('找到路:', way)
+                    console.log("found in " + String(step) + " steps")
+                    break;
+                }
+                step += 1;
+                for (let j = 0; j < curPoint.around.length; j++){
+                    if (way.some(item => {
+                        return item == curPoint.around[j]
+                    })) {
+                        console.log('走了经过的路', way)
+                    } else {
+                        queue.push(this.wayPointData[curPoint.around[j]])
+                    }
                 }
             }
         }

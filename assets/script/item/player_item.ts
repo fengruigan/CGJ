@@ -3,9 +3,13 @@ import MainManager from "../manager/main_manager"
 
 const {ccclass, property} = cc._decorator;
 
-// enum PlayerStatus {
-
-// }
+enum PlayerStatus {
+    movingRight = 1,
+    movingLeft = 2,
+    movingUp = 3,
+    movingDown = 4,
+    onStay = 5,
+}
 
 @ccclass
 export default class PlayerItem extends cc.Component {
@@ -63,8 +67,11 @@ export default class PlayerItem extends cc.Component {
                     Emitter.fire("pickUpBox");
                     this.holding = this.surrounding;
                     // console.log("picking up box");
+                    break;
                 case "turret":
-                    // Emitter.fire("pickUpTurret");
+                    Emitter.fire("pickUpTurret");
+                    this.holding = this.surrounding;
+                    break;
             }
         }
     }
@@ -74,7 +81,7 @@ export default class PlayerItem extends cc.Component {
             this.holding.setParent(cc.find("Canvas/gamePage"))
             this.holding.setPosition(this.node.x, this.node.y - 50);
             this.holding = null;
-            console.log("dropping down");
+            // console.log("dropping down");
         }
     }
 
@@ -84,16 +91,18 @@ export default class PlayerItem extends cc.Component {
             // this.surroundings = "ant";
             MainManager.instance.onFail();
         } else if (other.node.name == "box") {
+            this.surrounding.opacity = 200;
             // console.log("box detected");
             // this.surroundings = "box";
         } else if (other.node.name == "turret") {
+            this.surrounding.opacity = 200;
             // console.log("turret detected");
             // this.surroundings = "turret";
         } 
     }
 
     onCollisionExit(self, other) {
-        console.log("nothing around")
+        this.surrounding.opacity = 255;
         this.surrounding = null;
     }
 }

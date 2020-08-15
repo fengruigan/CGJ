@@ -21,9 +21,5 @@ export default class StartUIManager extends cc.Component {
         MainManager.instance.startGame();
     }
 
-    // start () {
-
-    // }
-
     // update (dt) {}
 }
