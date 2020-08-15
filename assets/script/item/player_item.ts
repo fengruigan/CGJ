@@ -2,7 +2,7 @@ import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager"
 import MainUIManager from "../ui/main_ui_manager";
 import ResourceManager from "../manager/resouce_manager";
-import { ResType } from "../utils/enum";
+import { ResType, GameStatus } from "../utils/enum";
 import config from "../../config";
 
 const { ccclass, property } = cc._decorator;
@@ -28,6 +28,8 @@ export default class PlayerItem extends cc.Component {
     @property(cc.Animation)
     playerAnima: cc.Animation = null
     _hp: number = 3
+    @property(cc.Node)
+    camara: cc.Node = null
     set hp(val: number) {
         this._hp = val
         MainUIManager.instance.showHp(val)
@@ -51,12 +53,12 @@ export default class PlayerItem extends cc.Component {
         Emitter.register("leftArrowUp", this.xOnStay, this)
         Emitter.register("upArrowUp", this.yOnStay, this)
         Emitter.register("downArrowUp", this.yOnStay, this)
-        // Pick up drop down
-        Emitter.register("pickUp", this.pickUp, this)
-        Emitter.register("dropDown", this.dropDown, this)
 
         setTimeout(() => {
             ResourceManager.instance.getAnimation('player_silder_run', config.aniConfig['player_silder_run']).then((res: cc.AnimationClip) => {
+                this.playerAnima.addClip(res)
+            })
+            ResourceManager.instance.getAnimation('player_idle', config.aniConfig['player_idle']).then((res: cc.AnimationClip) => {
                 this.playerAnima.addClip(res)
             })
         });
@@ -67,18 +69,24 @@ export default class PlayerItem extends cc.Component {
         this.hp = 3
     }
     update(dt) {
+        if (MainManager.instance.gameStatus != GameStatus.start) return
         this.node.x += this.xSpeed * dt;
         this.node.y += this.ySpeed * dt;
-        if (this.node.x < -500) this.node.x = -500
-        if (this.node.y > 180) this.node.y = 180
-        if (this.node.x > 500) this.node.x = 500
-        if (this.node.y < -217) this.node.y = -217
+        if (this.node.x < -1000) this.node.x = -1000
+        if (this.node.y > 360) this.node.y = 360
+        if (this.node.x > 1000) this.node.x = 1000
+        if (this.node.y < -434) this.node.y = -434
         if (this.xSpeed != 0 || this.ySpeed != 0) {
             if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
                 this.playerAnima.play('player_silder_run')
             }
         }
-
+        if (this.xSpeed == 0 && this.ySpeed == 0) {
+            if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
+                this.playerAnima.play('player_idle')
+            }
+        }
+        this.camara.setPosition(this.node.position)
     }
 
     moveRight() {
@@ -101,30 +109,30 @@ export default class PlayerItem extends cc.Component {
     }
     xOnStay() {
         this.xSpeed = 0;
-        this.playerAnima.stop('player_silder_run')
-        this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
+        // this.playerAnima.stop('player_silder_run')
+        //  this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
     yOnStay() {
         this.ySpeed = 0;
-        this.playerAnima.stop('player_silder_run')
-        this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
+        //  this.playerAnima.stop('player_silder_run')
+        // this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
 
     }
 
     pickUp() {
-        if (this.surrounding != null) {
-            switch (this.surrounding.name) {
-                case "box":
-                    Emitter.fire("pickUpBox");
-                    this.holding = this.surrounding;
-                    // console.log("picking up box");
-                    break;
-                case "turret":
-                    Emitter.fire("pickUpTurret");
-                    this.holding = this.surrounding;
-                    break;
-            }
-        }
+        // if (this.surrounding != null) {
+        //     switch (this.surrounding.name) {
+        //         case "box":
+        //             Emitter.fire("pickUpBox");
+        //             this.holding = this.surrounding;
+        //             // console.log("picking up box");
+        //             break;
+        //         case "turret":
+        //             Emitter.fire("pickUpTurret");
+        //             this.holding = this.surrounding;
+        //             break;
+        //     }
+        // }
     }
 
     dropDown() {

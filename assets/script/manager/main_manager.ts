@@ -79,12 +79,9 @@ export default class MainManager extends cc.Component {
             /*
             * Pick up and drop down
             */
-            case cc.macro.KEY.a:
+            case cc.macro.KEY.z:
                 // Emitter.fire("standStill");
                 Emitter.fire("pickUp");
-                break;
-            case cc.macro.KEY.s:
-                Emitter.fire("dropDown");
                 break;
             /*
             * Item selection

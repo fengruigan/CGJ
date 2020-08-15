@@ -42,15 +42,6 @@ export default class AntItem extends cc.Component {
     //         }
     //     }, 500);
     // }
-    /**
-     * 获取方向
-     */
-    getArr() {
-        //WayPointManager.instance.getArr()
-    }
-    setArr(arr: cc.Vec2) {
-        this.heading = this.node.position.sub(arr).normalize()
-    }
     // change to wayPoint method
     // constant running towards player
     update(dt) {
@@ -58,6 +49,8 @@ export default class AntItem extends cc.Component {
             this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
             this.node.x += this.heading.x * this.speed * dt
             this.node.y += this.heading.y * this.speed * dt
+
+            //  this.node.angle = this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI - 90
         }
     }
 
@@ -80,7 +73,6 @@ export default class AntItem extends cc.Component {
                         this.node.y = other.node.y - other.node.height / 2 - this.node.height / 2
                     } else {
                         this.node.y = other.node.y + other.node.height / 2 + this.node.height / 2
-
                     }
                 }
             } else {
@@ -91,9 +83,7 @@ export default class AntItem extends cc.Component {
                         this.node.x = other.node.x + other.node.width / 2 + this.node.width / 2
                     }
                 }
-
             }
-
         }
     }
 }

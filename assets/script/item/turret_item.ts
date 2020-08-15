@@ -4,6 +4,7 @@ import PoolManager from "../manager/pool_manager";
 import BulletItem from "./bullet_item";
 import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
+import { Utils } from "../utils/utils";
 
 const { ccclass, property } = cc._decorator;
 
@@ -19,8 +20,9 @@ export default class TurretItem extends cc.Component {
     attTimer: any = null
     init() {
         clearInterval(this.attTimer)
+        this.node.setPosition(Utils.getRandomNumber(2000) - 1000, Utils.getRandomNumber(1400) - 700)
         this.attTimer = setInterval(() => {
-            if (MainManager.instance.gameStatus == GameStatus.start) {
+            if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled) {
                 let target = this.findAnt()
                 if (target) {
                     let bullet = PoolManager.instance.createObjectByName('bulletItem', MainUIManager.instance.bulletParent)

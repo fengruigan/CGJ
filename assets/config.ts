@@ -8,6 +8,7 @@ let uiName = {
 }
 
 let aniConfig = {
-    'player_silder_run': { sample: 5, speed: 1, wrapMode: cc.WrapMode.Loop }
+    'player_silder_run': { sample: 5, speed: 1, wrapMode: cc.WrapMode.Loop },
+    'player_idle': { sample: 2, speed: 0.5, wrapMode: cc.WrapMode.Loop }
 }
 export default { uiName, resConfig, aniConfig }

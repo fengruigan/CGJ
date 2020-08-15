@@ -29,5 +29,11 @@ export default class GapItem extends cc.Component {
         }, 10000)
     }
 
+    onCollisionEnter(other, self) {
+        if (other.node.name == 'boxItem') {
+            PoolManager.instance.removeObjectByName('gapItem', this.node)
+            PoolManager.instance.removeObjectByName('boxItem', other.node)
+        }
+    }
     // update (dt) {}
 }
