@@ -6,6 +6,7 @@ import { ResType, GameStatus } from "../utils/enum";
 import config from "../../config";
 import JsonManager from "../manager/json_manager";
 import { instance } from "../joystick/Joystick";
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,8 +24,7 @@ enum arrEnum {
 @ccclass
 export default class PlayerItem extends cc.Component {
 
-    // xSpeed: number = 0;
-    // ySpeed: number = 0;
+    walkSoundTimer = null
     speed: number = 0;
     xHat: number = 0;
     yHat: number = 0;
@@ -146,20 +146,36 @@ export default class PlayerItem extends cc.Component {
     moveRight() {
         this.xHat = 1;
         this.node.scaleX = -1;
-
+        if (this.walkSoundTimer) return
+        this.walkSoundTimer = setTimeout( () => {
+            this.walkSoundTimer = null
+        }, 1500)
+        AudioManager.instance.playAudio('脚步声', 0.3)
     }
     moveLeft() {
         this.xHat = -1;
         this.node.scaleX = 1
-
+        if (this.walkSoundTimer) return
+        this.walkSoundTimer = setTimeout( () => {
+            this.walkSoundTimer = null
+        }, 1500)
+        AudioManager.instance.playAudio('脚步声', 0.3)
     }
     moveUp() {
         this.yHat = 1;
-
+        if (this.walkSoundTimer) return
+        this.walkSoundTimer = setTimeout( () => {
+            this.walkSoundTimer = null
+        }, 1500)
+        AudioManager.instance.playAudio('脚步声', 0.3)
     }
     moveDown() {
         this.yHat = -1;
-
+        if (this.walkSoundTimer) return
+        this.walkSoundTimer = setTimeout( () => {
+            this.walkSoundTimer = null
+        }, 1500)
+        AudioManager.instance.playAudio('脚步声', 0.3)
     }
     xOnStay() {
         this.xHat = 0;
@@ -170,7 +186,6 @@ export default class PlayerItem extends cc.Component {
         this.yHat = 0;
         //  this.playerAnima.stop('player_silder_run')
         // this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
-
     }
 
     pickUp() {

@@ -7,12 +7,13 @@ import { GameStatus } from "../utils/enum";
 import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
+import AudioManager from "../manager/audio_manager"
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class GrassItem extends cc.Component {
-
+    soundTimer = null
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
         this.init()
@@ -28,6 +29,13 @@ export default class GrassItem extends cc.Component {
         if (other.node.name == "ant") {
             other.node.getComponent(AntItem).speed *= JsonManager.instance.getDataByName('tower')[4]['effect']
         }
+    }
+    onCollisionStay(other, self) {
+        if (this.soundTimer) return
+        this.soundTimer = setTimeout( () => {
+            this.soundTimer = null
+        }, 500)
+        AudioManager.instance.playAudio('杂草', 0.2)
     }
     onCollisionExit(other, self) {
         if (other.node.name == "ant") {

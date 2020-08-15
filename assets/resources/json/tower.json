@@ -44,7 +44,7 @@
     "range2": -1,
     "atkSpd": 500,
     "bulletSpd": -1,
-    "effect": 25,
+    "effect": 0.5,
     "age": 1000
   }
 }

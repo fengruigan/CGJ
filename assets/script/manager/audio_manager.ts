@@ -52,7 +52,7 @@ export default class AudioManager extends cc.Component {
             cc.audioEngine.setEffectsVolume(volume)
             cc.audioEngine.playEffect(audioClip, false)
         } else {
-            this.loadAudioClip(name)
+            this.loadAudioClip(name, volume)
         }
     }
     playBGMByID(id: number, volume: number = this.BGM_VOLUME) {
@@ -66,7 +66,7 @@ export default class AudioManager extends cc.Component {
             cc.audioEngine.setMusicVolume(volume)
             cc.audioEngine.playMusic(music, true)
         } else {
-            this.loadBGMClip(name)
+            this.loadBGMClip(name, volume)
         }
     }
     stopBGM() {

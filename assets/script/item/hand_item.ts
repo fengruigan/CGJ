@@ -7,6 +7,7 @@ import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
 import PoolManager from "../manager/pool_manager";
 import MainUIManager from "../ui/main_ui_manager";
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -53,11 +54,23 @@ export default class AntItem extends cc.Component {
                 this.targetItem.parent = this.node
                 this.targetItem.setPosition(0, 0)
                 this.targetItem.getComponent(cc.BoxCollider).enabled = false
-
+                if(this.node.children[0].name == "boxItem") {
+                    // AudioManager.instance.playAudio('拿起箱子')
+                    console.log('拿起箱子')
+                } else {
+                    AudioManager.instance.playAudio('防御塔收起来', 0.5)
+                }
+                
             }
         } else if (this.node.children.length == 1) {
             this.node.children[0].setPosition(MainUIManager.instance.player.node.x - 50 * MainUIManager.instance.player.node.scaleX, MainUIManager.instance.player.node.y - 30)
             this.node.children[0].getComponent(cc.BoxCollider).enabled = true
+            if (this.node.children[0].name == 'boxItem') {
+                // AudioManager.instance.playAudio('放下箱子')
+                console.log('放下箱子')
+            } else {
+                AudioManager.instance.playAudio('防御塔放下来', 0.5)
+            }
             this.node.children[0].parent = this.node.children[0].name == 'boxItem' ? MainUIManager.instance.boxParent : MainUIManager.instance.towerParent
         }
     }

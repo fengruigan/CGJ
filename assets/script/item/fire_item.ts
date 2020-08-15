@@ -7,6 +7,7 @@ import { GameStatus } from "../utils/enum";
 import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -38,6 +39,7 @@ export default class FireItem extends cc.Component {
                     group.map(item => {
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[2].damage
                     })
+                    AudioManager.instance.playAudio('火枪', 0.5)
                 }
             }
         }, 1000)

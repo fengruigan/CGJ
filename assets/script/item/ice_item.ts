@@ -8,6 +8,7 @@ import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
 import ResourceManager from "../manager/resouce_manager";
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -59,6 +60,7 @@ export default class IceItem extends cc.Component {
                         item.getComponent(AntItem).antFreeze()
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[3]['damage']
                     })
+                    AudioManager.instance.playAudio('水枪', 0.2)
                 }
             }
         }, JsonManager.instance.getDataByName('tower')[3]['atkSpd'])

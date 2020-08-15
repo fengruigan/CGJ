@@ -1,6 +1,7 @@
 import MainUIManager from "../ui/main_ui_manager"
 import { Emitter } from "../utils/emmiter"
 import { GameStatus } from "../utils/enum";
+import AudioManager from "./audio_manager";
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -81,12 +82,14 @@ export default class MainManager extends cc.Component {
     startGame() {
         MainUIManager.instance.init();
         this.gameStatus = GameStatus.start
+        AudioManager.instance.loadBGMClip("bgm", 0.3)
     }
 
     onFail() {
         console.log("游戏结束")
         this.gameStatus = GameStatus.fail
         MainUIManager.instance.endGame()
+        AudioManager.instance.playAudio('游戏失败')
     }
 
     // Keyboard event listener

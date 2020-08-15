@@ -42,7 +42,6 @@ export default class TurretItem extends cc.Component {
                     bullet.getComponent(BulletItem).init(this.node.position, arr)
                     arr = arr.normalize()
                     let ang = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI
-                    console.log(ang)
                     if (ang <= 45 && ang >= -45 ) {
                         // facing right, the angle is rotated 90 degs
                         this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent2")
