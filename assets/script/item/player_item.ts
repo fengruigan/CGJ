@@ -5,6 +5,7 @@ import ResourceManager from "../manager/resouce_manager";
 import { ResType, GameStatus } from "../utils/enum";
 import config from "../../config";
 import JsonManager from "../manager/json_manager";
+import { instance } from "../joystick/Joystick";
 
 const { ccclass, property } = cc._decorator;
 
@@ -58,7 +59,8 @@ export default class PlayerItem extends cc.Component {
         Emitter.register("leftArrowUp", this.xOnStay, this)
         Emitter.register("upArrowUp", this.yOnStay, this)
         Emitter.register("downArrowUp", this.yOnStay, this)
-
+        instance.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        instance.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
         setTimeout(() => {
             ResourceManager.instance.getAnimation('player_silder_run', config.aniConfig['player_silder_run']).then((res: cc.AnimationClip) => {
                 this.playerAnima.addClip(res)
@@ -69,6 +71,27 @@ export default class PlayerItem extends cc.Component {
 
         });
 
+    }
+    onTouchMove(event: cc.Event.EventTouch, data) {
+        // console.log('data', data)
+        if (data.moveDistance.x > 0.7) {
+            this.moveRight()
+        }
+        if (data.moveDistance.x < -0.7) {
+            this.moveLeft()
+        }
+        if (data.moveDistance.y > 0.7) {
+            this.moveUp()
+        }
+        if (data.moveDistance.y < -0.7) {
+            this.moveDown()
+        }
+
+    }
+    onTouchEnd(event: cc.Event.EventTouch, data) {
+        //console.log('data', data)
+        this.xOnStay()
+        this.yOnStay()
     }
     init() {
         this.node.setPosition(JsonManager.instance.getConfig('playerPosition')[0], JsonManager.instance.getConfig('playerPosition')[1])
