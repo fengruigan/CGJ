@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "turrentItem",
+    "_name": "grassItem",
     "_objFlags": 0,
     "_parent": null,
     "_children": [],
@@ -35,15 +35,15 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
+      "r": 31,
       "g": 255,
-      "b": 255,
+      "b": 0,
       "a": 255
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 88,
-      "height": 44
+      "width": 200,
+      "height": 200
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -75,8 +75,8 @@
     "_skewX": 0,
     "_skewY": 0,
     "_is3DNode": false,
-    "_groupIndex": 0,
-    "groupIndex": 0,
+    "_groupIndex": 3,
+    "groupIndex": 3,
     "_id": ""
   },
   {
@@ -127,13 +127,13 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 88,
-      "height": 44
+      "width": 200,
+      "height": 200
     },
     "_id": ""
   },
   {
-    "__type__": "2fb7c1OfZBDBINjCMHZhW7i",
+    "__type__": "10a80RnAXdAjo/FLSxyQh9o",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -148,7 +148,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "e8e66e52-b4b6-459f-a54c-80b675c3248e"
+      "__uuid__": "f5d14feb-6493-4e89-9a2e-092e3d9ada7c"
     },
     "fileId": "d3vQlJhUdIRaWW3n2iGPWA",
     "sync": false

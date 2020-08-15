@@ -10,12 +10,11 @@ import AntItem from "./ant_item";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class TurretItem extends cc.Component {
+export default class IceItem extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
-    range: number = 200
+    range: number = 150
     onLoad() {
-        Emitter.register("pickUpTurret", this.onPickUp, this)
         this.init()
     }
     attTimer: any = null
@@ -26,8 +25,7 @@ export default class TurretItem extends cc.Component {
             if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled && this.node.parent == MainUIManager.instance.towerParent) {
                 let target = this.findAnt()
                 if (target) {
-                    let bullet = PoolManager.instance.createObjectByName('bulletItem', MainUIManager.instance.bulletParent)
-                    bullet.getComponent(BulletItem).init(this.node.position, target.position.sub(this.node.position))
+                    //TODO喷会爆炸的冰
                 }
             }
         }, 1000)
@@ -48,10 +46,6 @@ export default class TurretItem extends cc.Component {
             }
         }
         return nearst
-    }
-    onPickUp() {
-        this.node.setParent(MainUIManager.instance.player.hand);
-        this.node.setPosition(0, 0);
     }
 
     // update (dt) {}

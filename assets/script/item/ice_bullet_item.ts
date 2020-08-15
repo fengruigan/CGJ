@@ -9,7 +9,7 @@ import { GameStatus } from "../utils/enum";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class BulletItem extends cc.Component {
+export default class IceBulletItem extends cc.Component {
 
 
     // LIFE-CYCLE CALLBACKS:
@@ -22,7 +22,6 @@ export default class BulletItem extends cc.Component {
     init(pos, arr: cc.Vec2) {
         this.node.position = pos
         this.arr = arr.normalize()
-        this.particel.resetSystem()
         this.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI
         this.node.getComponent(cc.BoxCollider).enabled = true
     }
@@ -39,10 +38,10 @@ export default class BulletItem extends cc.Component {
         // }
     }
     onRemove() {
-        this.node.getComponent(cc.BoxCollider).enabled = false
-        this.particel.stopSystem()
+        // this.node.getComponent(cc.BoxCollider).enabled = false
+        // this.particel.stopSystem()
         setTimeout(() => {
-            PoolManager.instance.removeObjectByName('bulletItem', this.node)
+            // PoolManager.instance.removeObjectByName('bulletItem', this.node)
         }, 500);
     }
     // update (dt) {}

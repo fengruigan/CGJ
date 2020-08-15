@@ -6,6 +6,7 @@ import WayPointManager from "../manager/way_point_manager";
 import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
 import PoolManager from "../manager/pool_manager";
+import BulletItem from "./bullet_item";
 
 const { ccclass, property } = cc._decorator;
 
@@ -80,7 +81,8 @@ export default class AntItem extends cc.Component {
         if (this.isDie) return
         if (other.node.name == "bulletItem") {
             //被子弹射中
-            PoolManager.instance.removeObjectByName('bulletItem', other.node)
+            other.node.getComponent(BulletItem).onRemove()
+            //       PoolManager.instance.removeObjectByName('bulletItem', other.node)
             this.hp--
         } else if (other.node.name == 'player') {
             PoolManager.instance.removeObjectByName('antItem', this.node)

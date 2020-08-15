@@ -6,6 +6,9 @@ import BoxItem from "../item/box_item";
 import { Utils } from "../utils/utils";
 import TurretItem from "../item/turret_item";
 import FailUIManager from "./fail_ui_manager";
+import IceItem from "../item/ice_item";
+import FireItem from "../item/fire_item";
+import GrassItem from "../item/grass_item";
 
 
 const { ccclass, property } = cc._decorator;
@@ -23,7 +26,7 @@ export default class MainUIManager extends cc.Component {
     @property(cc.Node)
     bulletParent: cc.Node = null
     @property(cc.Node)
-    tulletParent: cc.Node = null
+    towerParent: cc.Node = null
     @property(cc.Label)
     hpLabel: cc.Label = null
     @property(PlayerItem)
@@ -53,10 +56,23 @@ export default class MainUIManager extends cc.Component {
                 let item = PoolManager.instance.createObjectByName('boxItem', this.boxParent)
                 item.getComponent(BoxItem).init()
             } else {
-                let item = PoolManager.instance.createObjectByName('turrentItem', this.tulletParent)
-                item.getComponent(TurretItem).init()
+                let towerRandom = Utils.getRandomNumber(3)
+                if (towerRandom == 0) {
+                    let item = PoolManager.instance.createObjectByName('turrentItem', this.towerParent)
+                    item.getComponent(TurretItem).init()
+                } else if (towerRandom == 1) {
+                    let item = PoolManager.instance.createObjectByName('iceItem', this.towerParent)
+                    item.getComponent(IceItem).init()
+                } else if (towerRandom == 2) {
+                    let item = PoolManager.instance.createObjectByName('fireItem', this.towerParent)
+                    item.getComponent(FireItem).init()
+                } else if (towerRandom == 3) {
+                    let item = PoolManager.instance.createObjectByName('grassItem', this.towerParent)
+                    item.getComponent(GrassItem).init()
+                }
+
             }
-        }, 10000)
+        }, 1000)
     }
     showHp(num) {
 
@@ -91,9 +107,9 @@ export default class MainUIManager extends cc.Component {
         for (let i = boxChild.length - 1; i >= 0; i--) {
             PoolManager.instance.removeObjectByName('boxItem', boxChild[i])
         }
-        let tullentChild = this.tulletParent.children
+        let tullentChild = this.towerParent.children
         for (let i = tullentChild.length - 1; i >= 0; i--) {
-            PoolManager.instance.removeObjectByName('turrentItem', tullentChild[i])
+            PoolManager.instance.removeObjectByName(tullentChild[i].name, tullentChild[i])
         }
     }
 

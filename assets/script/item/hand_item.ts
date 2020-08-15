@@ -59,16 +59,18 @@ export default class AntItem extends cc.Component {
         } else if (this.node.children.length == 1) {
             this.node.children[0].setPosition(MainUIManager.instance.player.node.x - 50 * MainUIManager.instance.player.node.scaleX, MainUIManager.instance.player.node.y - 30)
             this.node.children[0].getComponent(cc.BoxCollider).enabled = true
-            this.node.children[0].parent = this.node.children[0].name == 'boxItem' ? MainUIManager.instance.boxParent : MainUIManager.instance.bulletParent
+            this.node.children[0].parent = this.node.children[0].name == 'boxItem' ? MainUIManager.instance.boxParent : MainUIManager.instance.towerParent
         }
     }
 
     onCollisionEnter(other, self) {
-        if (other.node.name == "boxItem") {
-            this.canTouchGroup.push(other.node)
-        } else if (other.node.name == 'turrentItem') {
-            this.canTouchGroup.push(other.node)
-        }
+        this.canTouchGroup.push(other.node)
+
+        // if (other.node.name == "boxItem") {
+        //     this.canTouchGroup.push(other.node)
+        // } else if (other.node.name == 'turrentItem') {
+        //     this.canTouchGroup.push(other.node)
+        // }
         this.showTouchTarget()
     }
     onCollisionStay(other, self) {
@@ -76,12 +78,14 @@ export default class AntItem extends cc.Component {
     }
     onCollisionExit(other, self) {
         other.node.opacity = 255
-        if (other.node.name == "boxItem") {
-            //判断角度往哪个方向阻挡 
-            this.canTouchGroup.splice(this.canTouchGroup.indexOf(other.node), 1)
-        } else if (other.node.name == 'turrentItem') {
-            this.canTouchGroup.splice(this.canTouchGroup.indexOf(other.node), 1)
-        }
+        this.canTouchGroup.splice(this.canTouchGroup.indexOf(other.node), 1)
+
+        // if (other.node.name == "boxItem") {
+        //     //判断角度往哪个方向阻挡 
+        //     this.canTouchGroup.splice(this.canTouchGroup.indexOf(other.node), 1)
+        // } else if (other.node.name == 'turrentItem') {
+        //     this.canTouchGroup.splice(this.canTouchGroup.indexOf(other.node), 1)
+        // }
         this.showTouchTarget()
     }
 }
