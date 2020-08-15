@@ -24,6 +24,16 @@ export default class AntItem extends cc.Component {
     lastWayPoint: WayPoint = null
     isDie: boolean = false
     _hp: number = null
+    _freeze: boolean = false
+    @property(cc.Sprite)
+    sp: cc.Sprite = null
+    get freeze() {
+        return this._freeze
+    }
+    set freeze(val: boolean) {
+        this._freeze = val
+        this.sp.node.color = val ? new cc.Color(0, 224, 255) : cc.Color.WHITE
+    }
     @property(cc.Node)
     spNode: cc.Node = null
     @property(cc.ProgressBar)
@@ -51,10 +61,12 @@ export default class AntItem extends cc.Component {
         }, 3000)
     }
     init(pos: cc.Vec2) {
+        this.sp.node.color = cc.Color.WHITE
         this.hp = JsonManager.instance.getConfig('antHp')
         this.node.scaleY = 1
         this.node.setPosition(pos.x, pos.y - 50)
         this.isDie = false
+        this.freeze = false
         let configSpd = JsonManager.instance.getConfig('antSpeed')
         this.speed = -configSpd[0] + Utils.getRandomNumber(configSpd[1]) - 10
         //   WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
@@ -77,8 +89,8 @@ export default class AntItem extends cc.Component {
     update(dt) {
         if (MainManager.instance.gameStatus == GameStatus.start && !this.isDie) {
             this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
-            this.node.x += this.heading.x * this.speed * dt
-            this.node.y += this.heading.y * this.speed * dt
+            this.node.x += this.heading.x * this.speed * dt * (this.freeze ? 0.75 : 1)
+            this.node.y += this.heading.y * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.spNode.angle = (this.heading.y > 0 ? 1 : -1) * this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
         }
     }

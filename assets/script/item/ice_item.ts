@@ -15,6 +15,10 @@ export default class IceItem extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
     range: number = 150
+    @property(cc.ParticleSystem)
+    particle: cc.ParticleSystem = null
+    @property(cc.Sprite)
+    towerSp: cc.Sprite = null
     onLoad() {
         this.init()
     }
@@ -30,10 +34,33 @@ export default class IceItem extends cc.Component {
             if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled && this.node.parent == MainUIManager.instance.towerParent) {
                 let target = this.findAnt()
                 if (target) {
-                    //TODO喷会爆炸的冰
+                    this.particle.resetSystem()
+                    let arr = this.node.position.sub(target.position)
+                    this.particle.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
+                    let group = this.findTargetRangeAnt(target.position)
+                    group.map((item) => {
+                        item.getComponent(AntItem).freeze = true
+                        item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[3]['damage']
+                    })
+                    setTimeout(() => {
+                        group.map((item) => {
+                            item.getComponent(AntItem).freeze = false
+                        })
+                    }, 3000);
                 }
             }
-        }, 1000)
+        }, JsonManager.instance.getDataByName('tower')[3]['atkSpd'])
+    }
+    findTargetRangeAnt(pos: cc.Vec2) {
+        let group: cc.Node[] = []
+        for (let i = 0; i < MainUIManager.instance.antParent.children.length; i++) {
+            let antNode = MainUIManager.instance.antParent.children[i]
+            let mag = antNode.position.sub(pos).mag()
+            if (mag < JsonManager.instance.getDataByName('tower')[3]['range2'] && !antNode.getComponent(AntItem).isDie) {
+                group.push(antNode)
+            }
+        }
+        return group
     }
     findAnt() {
         let nearst: cc.Node = null

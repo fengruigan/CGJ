@@ -33,7 +33,7 @@ export default class FireItem extends cc.Component {
             if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled && this.node.parent == MainUIManager.instance.towerParent) {
                 let group = this.findAllAnt()
                 if (group.length > 0) {
-                    // this.firePartic.resetSystem()
+                    this.firePartic.resetSystem()
                     //TODO喷火
                     group.map(item => {
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[2].damage
