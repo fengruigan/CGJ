@@ -3,6 +3,8 @@ import { Emitter } from "../utils/emmiter";
 import PlayerItem from "./player_item";
 import { WayPoint } from "../interface/way_point";
 import WayPointManager from "../manager/way_point_manager";
+import MainManager from "../manager/main_manager";
+import { GameStatus } from "../utils/enum";
 
 const { ccclass, property } = cc._decorator;
 
@@ -22,7 +24,8 @@ export default class AntItem extends cc.Component {
         //     this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
         // });
     }
-    init() {
+    init(pos: cc.Vec2) {
+        this.node.setPosition(pos.x, pos.y - 50)
         //   WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
     }
     // findWayTimer: any = null
@@ -50,9 +53,11 @@ export default class AntItem extends cc.Component {
     // change to wayPoint method
     // constant running towards player
     update(dt) {
-        this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
-        this.node.x += this.heading.x * this.speed * dt
-        this.node.y += this.heading.y * this.speed * dt
+        if (MainManager.instance.gameStatus == GameStatus.start) {
+            this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
+            this.node.x += this.heading.x * this.speed * dt
+            this.node.y += this.heading.y * this.speed * dt
+        }
     }
 
     onCollisionEnter(other, self) {

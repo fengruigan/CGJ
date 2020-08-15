@@ -1,7 +1,8 @@
 import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager"
+import MainUIManager from "../ui/main_ui_manager";
 
-const {ccclass, property} = cc._decorator;
+const { ccclass, property } = cc._decorator;
 
 enum PlayerStatus {
     movingRight = 1,
@@ -19,9 +20,19 @@ export default class PlayerItem extends cc.Component {
     surrounding: cc.Node = null;
     holding: cc.Node = null;
 
+    _hp: number = 3
+    set hp(val: number) {
+        this._hp = val
+        MainUIManager.instance.showHp(val)
+        this.checkDie()
+    }
+    get hp() {
+        return this._hp
+    }
+
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    onLoad() {
         // Movement control
         Emitter.register("rightArrowDown", this.moveRight, this)
         Emitter.register("leftArrowDown", this.moveLeft, this)
@@ -35,22 +46,29 @@ export default class PlayerItem extends cc.Component {
         Emitter.register("pickUp", this.pickUp, this)
         Emitter.register("dropDown", this.dropDown, this)
     }
-
-    update (dt) {
+    init() {
+        this.node.setPosition(0, -100)
+        this.hp = 3
+    }
+    update(dt) {
         this.node.x += this.xSpeed * dt;
         this.node.y += this.ySpeed * dt;
+        if (this.node.x < -500) this.node.x = -500
+        if (this.node.y > 180) this.node.y = 180
+        if (this.node.x > 500) this.node.x = 500
+        if (this.node.y < -217) this.node.y = -217
     }
 
-    moveRight(){
+    moveRight() {
         this.xSpeed = 100;
     }
-    moveLeft(){
+    moveLeft() {
         this.xSpeed = -100;
     }
-    moveUp(){
+    moveUp() {
         this.ySpeed = 100;
     }
-    moveDown(){
+    moveDown() {
         this.ySpeed = -100;
     }
     xOnStay() {
@@ -62,7 +80,7 @@ export default class PlayerItem extends cc.Component {
 
     pickUp() {
         if (this.surrounding != null) {
-            switch(this.surrounding.name) {
+            switch (this.surrounding.name) {
                 case "box":
                     Emitter.fire("pickUpBox");
                     this.holding = this.surrounding;
@@ -86,23 +104,29 @@ export default class PlayerItem extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        this.surrounding = other.node;
+        // this.surrounding = other.node;
         if (other.node.name == "ant") {
             // this.surroundings = "ant";
-            MainManager.instance.onFail();
-        } else if (other.node.name == "box") {
-            this.surrounding.opacity = 200;
-            // console.log("box detected");
-            // this.surroundings = "box";
-        } else if (other.node.name == "turret") {
-            this.surrounding.opacity = 200;
-            // console.log("turret detected");
-            // this.surroundings = "turret";
-        } 
+            this.hp--
+        }
+        //  else if (other.node.name == "box") {
+        //     this.surrounding.opacity = 200;
+        //     // console.log("box detected");
+        //     // this.surroundings = "box";
+        // } else if (other.node.name == "turret") {
+        //     this.surrounding.opacity = 200;
+        //     // console.log("turret detected");
+        //     // this.surroundings = "turret";
+        // }
     }
 
     onCollisionExit(self, other) {
-        this.surrounding.opacity = 255;
-        this.surrounding = null;
+        // this.surrounding.opacity = 255;
+        // this.surrounding = null;
+    }
+    checkDie() {
+        if (this.hp <= 0) {
+            MainManager.instance.onFail()
+        }
     }
 }

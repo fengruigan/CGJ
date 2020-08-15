@@ -11,3 +11,9 @@ export enum ResType {
     common = 0,
     bg = 1
 }
+export enum GameStatus {
+    unStart = 0,
+    start = 1,
+    success = 2,
+    fail = 3
+}

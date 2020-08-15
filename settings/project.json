@@ -7,6 +7,7 @@
       false,
       false,
       true,
+      true,
       true
     ],
     [
@@ -20,6 +21,13 @@
       true,
       true,
       false
+    ],
+    [
+      false,
+      true,
+      false,
+      false,
+      false
     ]
   ],
   "excluded-modules": [],
@@ -27,7 +35,8 @@
     "default",
     "player",
     "ant",
-    "box"
+    "box",
+    "gap"
   ],
   "start-scene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
   "design-resolution-width": 960,
@@ -36,7 +45,7 @@
   "fit-height": true,
   "use-project-simulator-setting": false,
   "simulator-orientation": false,
-  "use-customize-simulator": false,
+  "use-customize-simulator": true,
   "simulator-resolution": {
     "height": 640,
     "width": 960

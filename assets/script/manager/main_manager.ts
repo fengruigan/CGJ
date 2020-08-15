@@ -1,5 +1,6 @@
 import MainUIManager from "../ui/main_ui_manager"
 import { Emitter } from "../utils/emmiter"
+import { GameStatus } from "../utils/enum";
 
 const { ccclass, property } = cc._decorator;
 declare global {
@@ -16,6 +17,7 @@ export default class MainManager extends cc.Component {
 
     static instance: MainManager = null
 
+    gameStatus: GameStatus = GameStatus.unStart
     onLoad() {
         MainManager.instance = this
         this.setDesignResolution()
@@ -43,10 +45,12 @@ export default class MainManager extends cc.Component {
 
     startGame() {
         MainUIManager.instance.init();
+        this.gameStatus = GameStatus.start
     }
 
     onFail() {
         console.log("GGWP")
+        MainUIManager.instance.endGame()
     }
 
     // Keyboard event listener
