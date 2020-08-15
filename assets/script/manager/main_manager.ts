@@ -49,7 +49,8 @@ export default class MainManager extends cc.Component {
     }
 
     onFail() {
-        console.log("GGWP")
+        console.log("游戏结束")
+        this.gameStatus = GameStatus.fail
         MainUIManager.instance.endGame()
     }
 

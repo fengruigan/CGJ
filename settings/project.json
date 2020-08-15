@@ -1,7 +1,7 @@
 {
   "collision-matrix": [
     [
-      true
+      false
     ],
     [
       false,
@@ -14,6 +14,8 @@
       false,
       true,
       false,
+      true,
+      null,
       true
     ],
     [
@@ -23,6 +25,14 @@
       false
     ],
     [
+      false,
+      true,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
       false,
       true,
       false,
@@ -32,11 +42,12 @@
   ],
   "excluded-modules": [],
   "group-list": [
-    "default",
+    "turret",
     "player",
     "ant",
     "box",
-    "gap"
+    "gap",
+    "bullet"
   ],
   "start-scene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
   "design-resolution-width": 960,

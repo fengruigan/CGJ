@@ -3,6 +3,8 @@ import PoolManager from "../manager/pool_manager";
 import MainUIManager from "../ui/main_ui_manager";
 import AntItem from "./ant_item";
 import MainManager from "../manager/main_manager";
+import { Utils } from "../utils/utils";
+import { GameStatus } from "../utils/enum";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,10 +18,14 @@ export default class GapItem extends cc.Component {
     }
     antGrowTimer: any = null
     init() {
-        this.node.setPosition(cc.v2(0, 0))
+        this.node.setPosition(Utils.getRandomNumber(1000) - 500, Utils.getRandomNumber(600) - 300)
+        clearInterval(this.antGrowTimer)
         this.antGrowTimer = setInterval(() => {
-            let ant = PoolManager.instance.createObjectByName('antItem', MainUIManager.instance.antParent)
-            ant.getComponent(AntItem).init(this.node.position)
+            if (MainManager.instance.gameStatus == GameStatus.start) {
+                let ant = PoolManager.instance.createObjectByName('antItem', MainUIManager.instance.antParent)
+                ant.getComponent(AntItem).init(this.node.position)
+            }
+
         }, 10000)
     }
 

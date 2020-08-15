@@ -5,6 +5,7 @@ import { WayPoint } from "../interface/way_point";
 import WayPointManager from "../manager/way_point_manager";
 import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
+import PoolManager from "../manager/pool_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -61,30 +62,33 @@ export default class AntItem extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        if (other.node.name == "bullet") {
+        if (other.node.name == "bulletItem") {
             //被子弹射中
+            PoolManager.instance.removeObjectByName('antItem', this.node)
+            PoolManager.instance.removeObjectByName('bulletItem', other.node)
+        } else if (other.node.name == 'player') {
+            PoolManager.instance.removeObjectByName('antItem', this.node)
         }
     }
     onCollisionStay(other, self) {
-        if (other.node.name == "box") {
+        if (other.node.name == "boxItem") {
             //判断角度往哪个方向阻挡 
             let angle = other.node.getPosition().sub(self.node.getPosition()).angle(cc.v2(1, 0)) * 180 / Math.PI
-            console.log('角度', angle)
             if (angle > 45 && angle < 135) {
                 if (this.node.y - other.node.y < other.node.height / 2 + this.node.height / 2) {
                     if (this.node.y < other.node.y) {
-                        this.node.y = other.node.y - other.node.height / 2 - this.node.height / 2 - 1
+                        this.node.y = other.node.y - other.node.height / 2 - this.node.height / 2
                     } else {
-                        this.node.y = other.node.y + other.node.height / 2 + this.node.height / 2 + 1
+                        this.node.y = other.node.y + other.node.height / 2 + this.node.height / 2
 
                     }
                 }
             } else {
                 if (this.node.x - other.node.x < other.node.width / 2 + this.node.width / 2) {
                     if (this.node.x < other.node.x) {
-                        this.node.x = other.node.x - other.node.width / 2 - this.node.width / 2 - 1
+                        this.node.x = other.node.x - other.node.width / 2 - this.node.width / 2
                     } else {
-                        this.node.x = other.node.x + other.node.width / 2 + this.node.width / 2 + 1
+                        this.node.x = other.node.x + other.node.width / 2 + this.node.width / 2
                     }
                 }
 

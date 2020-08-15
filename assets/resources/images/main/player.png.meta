@@ -1,6 +1,6 @@
 {
   "ver": "2.3.3",
-  "uuid": "c259767d-dd1a-4454-ab18-5cd862b686c7",
+  "uuid": "062377da-a1d6-4bfd-a155-1e636e449782",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -9,10 +9,10 @@
   "packable": true,
   "platformSettings": {},
   "subMetas": {
-    "小女孩": {
+    "player": {
       "ver": "1.0.4",
-      "uuid": "a517e3df-f78b-4468-92b8-2e98c1f67a13",
-      "rawTextureUuid": "c259767d-dd1a-4454-ab18-5cd862b686c7",
+      "uuid": "b2f33ca8-a616-41d1-bdbf-9d5b71c602d5",
+      "rawTextureUuid": "062377da-a1d6-4bfd-a155-1e636e449782",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,

@@ -8,7 +8,7 @@ export enum ResLoadStatus {
 }
 
 export enum ResType {
-    common = 0,
+    main = 0,
     bg = 1
 }
 export enum GameStatus {

@@ -1,17 +1,23 @@
 import { Emitter } from "../utils/emmiter"
 import MainManager from "../manager/main_manager"
 import MainUIManager from "../ui/main_ui_manager";
+import ResourceManager from "../manager/resouce_manager";
+import { ResType } from "../utils/enum";
+import config from "../../config";
 
 const { ccclass, property } = cc._decorator;
 
-enum PlayerStatus {
-    movingRight = 1,
-    movingLeft = 2,
-    movingUp = 3,
-    movingDown = 4,
-    onStay = 5,
+enum arrEnum {
+    none = 0,
+    up = 1,
+    down = 2,
+    left = 3,
+    right = 4,
+    upLeft = 5,
+    upRight = 6,
+    downRight = 8,
+    downLeft = 7,
 }
-
 @ccclass
 export default class PlayerItem extends cc.Component {
 
@@ -19,7 +25,8 @@ export default class PlayerItem extends cc.Component {
     ySpeed: number = 0;
     surrounding: cc.Node = null;
     holding: cc.Node = null;
-
+    @property(cc.Animation)
+    playerAnima: cc.Animation = null
     _hp: number = 3
     set hp(val: number) {
         this._hp = val
@@ -30,6 +37,8 @@ export default class PlayerItem extends cc.Component {
         return this._hp
     }
 
+    @property(cc.Node)
+    hand: cc.Node = null
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
@@ -45,6 +54,13 @@ export default class PlayerItem extends cc.Component {
         // Pick up drop down
         Emitter.register("pickUp", this.pickUp, this)
         Emitter.register("dropDown", this.dropDown, this)
+
+        setTimeout(() => {
+            ResourceManager.instance.getAnimation('player_silder_run', config.aniConfig['player_silder_run']).then((res: cc.AnimationClip) => {
+                this.playerAnima.addClip(res)
+            })
+        });
+
     }
     init() {
         this.node.setPosition(0, -100)
@@ -57,25 +73,42 @@ export default class PlayerItem extends cc.Component {
         if (this.node.y > 180) this.node.y = 180
         if (this.node.x > 500) this.node.x = 500
         if (this.node.y < -217) this.node.y = -217
+        if (this.xSpeed != 0 || this.ySpeed != 0) {
+            if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
+                this.playerAnima.play('player_silder_run')
+            }
+        }
+
     }
 
     moveRight() {
         this.xSpeed = 100;
+        this.node.scaleX = -1
+
     }
     moveLeft() {
         this.xSpeed = -100;
+        this.node.scaleX = 1
+
     }
     moveUp() {
         this.ySpeed = 100;
+
     }
     moveDown() {
         this.ySpeed = -100;
+
     }
     xOnStay() {
         this.xSpeed = 0;
+        this.playerAnima.stop('player_silder_run')
+        this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
     yOnStay() {
         this.ySpeed = 0;
+        this.playerAnima.stop('player_silder_run')
+        this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
+
     }
 
     pickUp() {
@@ -108,6 +141,8 @@ export default class PlayerItem extends cc.Component {
         if (other.node.name == "ant") {
             // this.surroundings = "ant";
             this.hp--
+        } else if (other.node.name == "boxItem") {
+            console.log('碰到箱子')
         }
         //  else if (other.node.name == "box") {
         //     this.surrounding.opacity = 200;
@@ -119,7 +154,33 @@ export default class PlayerItem extends cc.Component {
         //     // this.surroundings = "turret";
         // }
     }
+    onCollisionStay(other, self) {
+        if (other.node.name == "boxItem") {
+            //判断角度往哪个方向阻挡 
+            let angle = other.node.getPosition().sub(self.node.getPosition()).angle(cc.v2(1, 0)) * 180 / Math.PI
+            //     console.log('角度', angle)
+            if (angle > 45 && angle < 135) {
+                if (this.node.y - other.node.y < other.node.height / 2 + this.node.height / 2) {
+                    if (this.node.y < other.node.y) {
+                        this.node.y = other.node.y - other.node.height / 2
+                    } else {
+                        this.node.y = other.node.y + other.node.height / 2 + this.node.height / 2
 
+                    }
+                }
+            } else {
+                if (this.node.x - other.node.x < other.node.width / 2 + this.node.width / 2) {
+                    if (this.node.x < other.node.x) {
+                        this.node.x = other.node.x - other.node.width / 2 - this.node.width / 2
+                    } else {
+                        this.node.x = other.node.x + other.node.width / 2 + this.node.width / 2
+                    }
+                }
+
+            }
+
+        }
+    }
     onCollisionExit(self, other) {
         // this.surrounding.opacity = 255;
         // this.surrounding = null;

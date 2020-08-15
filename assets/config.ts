@@ -1,9 +1,13 @@
 let resConfig = {
-    altasArr: ['main', 'bg'],
-    jsonArr: ['global'],
-    prefabArr: ['antItem', 'boxItem', 'turrentItem', 'gapItem'],
+    altasArr: ['main'],
+    jsonArr: [],
+    prefabArr: ['antItem', 'boxItem', 'turrentItem', 'gapItem', 'bulletItem'],
 }
 let uiName = {
     messageBox: 'messagebox_ui'
 }
-export default { uiName, resConfig }
+
+let aniConfig = {
+    'player_silder_run': { sample: 5, speed: 1, wrapMode: cc.WrapMode.Loop }
+}
+export default { uiName, resConfig, aniConfig }
