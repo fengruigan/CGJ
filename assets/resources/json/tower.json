@@ -27,12 +27,12 @@
     "id": "3",
     "name": "冻冻枪",
     "type": 2,
-    "damage": 15,
-    "range1": 150,
-    "range2": 60,
+    "damage": 5,
+    "range1": 400,
+    "range2": 200,
     "atkSpd": 1500,
     "bulletSpd": -1,
-    "effect": 15,
+    "effect": 0.45,
     "age": 2000
   },
   "4": {
@@ -44,7 +44,7 @@
     "range2": -1,
     "atkSpd": 500,
     "bulletSpd": -1,
-    "effect": 0.5,
+    "effect": 25,
     "age": 1000
   }
 }

@@ -33,9 +33,15 @@ export default class MainUIManager extends cc.Component {
     hpLabel: cc.Label = null
     @property(PlayerItem)
     player: PlayerItem = null
+
+    @property(cc.Button)
+    useBtn: cc.Button = null
     onLoad() {
         MainUIManager.instance = this;
         this.player = cc.find("Canvas/gamePage/player").getComponent(PlayerItem)
+        this.useBtn.node.on('click', () => {
+            Emitter.fire("pickUp")
+        }, this)
     }
 
     growGapTimer: any = null
