@@ -1,12 +1,8 @@
 import { WayPoint } from "../interface/way_point";
 import WayPointItem from "../item/way_point_item";
+import PlayerItem from "../item/player_item";
 
 const { ccclass, property } = cc._decorator;
-declare global {
-    interface Window {
-        winSize: any
-    }
-}
 /**
  * 全局控制
  */
@@ -18,9 +14,11 @@ export default class WayPointManager extends cc.Component {
 
     wayPointData: WayPoint[] = []
 
+    player: PlayerItem = null
     onLoad() {
         this.wayPointData = []
         WayPointManager.instance = this
+        this.player = cc.find("Canvas/gamePage/player").getComponent(PlayerItem)
         this.init()
     }
     init() {
@@ -40,15 +38,13 @@ export default class WayPointManager extends cc.Component {
         // }
         // 测试
         this.wayPointData = [
-            { pos: cc.v2(0, 0), around: [2, 1], index: 0 },
+            { pos: cc.v2(300, -100), around: [2, 1], index: 0 },
             { pos: cc.v2(0, 0), around: [0, 2], index: 1 },
-            { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
+            { pos: cc.v2(0, -100), around: [0, 1], index: 2 }
         ]
 
-        setTimeout(() => {
-            this.findWay(0)
-        }, 1000);
     }
+
     //蚂蚁最终要接近玩家
     //蚂蚁会出现在裂缝
     //被箱子堵住的裂缝会慢慢被蚂蚁攻击
@@ -59,61 +55,53 @@ export default class WayPointManager extends cc.Component {
     //如果移动期间蚂蚁受到任何来自墙或者箱子的阻碍 系统会判断如果回到上一个路径点之后是否有其他路线到达玩家身边 
     //如果无法回到上一个路径点或者没有其他路线到达玩家或者上一个路径点已经是离玩家最近的路径点 蚂蚁会攻击最近的箱子
     //攻击完箱子之后蚂蚁会继续判断能否回到上一个路径点 持续上述步骤
-    findWay(curIndex) {
+
+    /**
+     * 只需要告诉蚂蚁下一步去哪即可
+     * @param curPos 蚂蚁当前位置
+     * @param findCB 寻路完成回调
+     */
+    findWay(curPos, findCB) {
         //找到一条通往玩家最近路径点的路
-        let target = this.findPlayerNearPoint() as WayPoint
-        let cur = this.wayPointData[curIndex]
-        // let ways = [...]
-        this.wayPointFind(cur, target.index, [cur.index])
-        //  console.log('找到路径', ways)
-    }
-    findPlayerNearPoint() {
-        return { pos: cc.v2(0, 0), around: [0, 1], index: 2 }
-    }
-    wayPointFind(cur: WayPoint, target: number, way) {
-        console.log('当前寻路', cur, target, way)
-        if (cur.index == target) {
-            console.log('找到路:', way)
-            return
+        let target = this.findNearPoint(this.player.node.position) as WayPoint
+        let cur = this.findNearPoint(curPos) as WayPoint
+        if (target == cur) {
+            findCB(null)
         } else {
-            let newWay = JSON.parse(JSON.stringify(way))
+            this.wayPointFind(cur, target.index, [cur.index], findCB)
+        }
+    }
+
+    /**
+     * 找到位置下的最近路径点
+     * @param curPos 当前位置
+     */
+    findNearPoint(curPos) {
+        let nearest: WayPoint = null
+        for (let i = 0; i < this.wayPointData.length; i++) {
+            if (!nearest) {
+                nearest = this.wayPointData[i]
+            } else {
+                //TODO: 新增判断两点之间连线是否有阻碍
+                if (nearest.pos.sub(curPos).mag() > this.wayPointData[i].pos.sub(curPos).mag()) {
+                    nearest = this.wayPointData[i]
+                }
+            }
+        }
+        return nearest
+    }
+    wayPointFind(cur: WayPoint, target: number, way: any, findCB: any) {
+        if (cur.index == target) {
+            findCB(way)
+        } else {
             for (let i = 0; i < cur.around.length; i++) {
-                console.log('当前循环', i)
                 if (way.some(item => { return item == cur.around[i] })) {
                     console.log('走了经过的路', way, cur.around[i])
                     continue
                 } else {
-                    WayPointManager.instance.wayPointFind(this.wayPointData[cur.around[i]], target, [...way, cur.around[i]])
+                    WayPointManager.instance.wayPointFind(this.wayPointData[cur.around[i]], target, [...way, cur.around[i]], findCB)
                 }
             }
         }
     }
-
-    // wayPointFind(cur: WayPoint, target: WayPoint, way) {
-    //     let queue: WayPoint[] = [];
-    //     queue.push(cur)
-    //     let step: number = 0
-    //     while (queue.length != 0) {
-    //         // search by level
-    //         let size = queue.length;
-    //         for (let i = 0; i < size; i++) {
-    //             let curPoint = queue.shift();
-    //             if (curPoint.index == target.index) {
-    //                 console.log('找到路:', way)
-    //                 console.log("found in " + String(step) + " steps")
-    //             }
-    //             step += 1;
-    //             for (let j = 0; j < curPoint.around.length; j++) {
-    //                 if (way.some(item => {
-    //                     return item == curPoint.around[j]
-    //                 })) {
-    //                     console.log('走了经过的路', way)
-    //                 } else {
-    //                     this.wayPointFind(this.wayPointData[curPoint.around[j]], target, queue)
-    //                     //  queue.push(this.wayPointData[curPoint.around[j]])
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
