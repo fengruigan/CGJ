@@ -37,7 +37,7 @@
     <key>gravityx</key>
     <integer>0</integer>
     <key>gravityy</key>
-    <integer>-440</integer>
+    <integer>-500</integer>
     <key>maxParticles</key>
     <integer>200</integer>
     <key>maxRadius</key>
@@ -75,7 +75,7 @@
     <key>sourcePositiony</key>
     <real>89.21212121212122</real>
     <key>speed</key>
-    <integer>400</integer>
+    <integer>600</integer>
     <key>speedVariance</key>
     <integer>20</integer>
     <key>startColorAlpha</key>
