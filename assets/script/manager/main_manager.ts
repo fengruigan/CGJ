@@ -11,11 +11,19 @@ declare global {
 /**
  * 全局控制
  */
+enum keyStatus {
+    up = 0,
+    down = 1
+}
 
 @ccclass
 export default class MainManager extends cc.Component {
 
     static instance: MainManager = null
+    rightArrowState:keyStatus = keyStatus.up;
+    leftArrowState:keyStatus = keyStatus.up;
+    upArrowState:keyStatus = keyStatus.up;
+    downArrowState:keyStatus = keyStatus.up;
 
     gameStatus: GameStatus = GameStatus.unStart
     onLoad() {
@@ -43,6 +51,34 @@ export default class MainManager extends cc.Component {
         // }
     }
 
+    update(dt) {
+        console.log(this.rightArrowState);
+        if (this.rightArrowState == keyStatus.down && this.leftArrowState == keyStatus.up) {
+            Emitter.fire("rightArrowDown");
+        }
+        if (this.leftArrowState == keyStatus.down && this.rightArrowState == keyStatus.up) {
+            Emitter.fire("leftArrowDown");
+        }
+        if (this.upArrowState == keyStatus.down && this.downArrowState == keyStatus.up) {
+            Emitter.fire("upArrowDown");
+        }
+        if (this.downArrowState == keyStatus.down && this.upArrowState == keyStatus.up) {
+            Emitter.fire("downArrowDown");
+        }
+        if (this.rightArrowState == keyStatus.up && this.leftArrowState != keyStatus.down) {
+            Emitter.fire("rightArrowUp");
+        }
+        if (this.leftArrowState == keyStatus.up && this.rightArrowState != keyStatus.down) {
+            Emitter.fire("leftArrowUp");
+        }
+        if (this.upArrowState == keyStatus.up && this.downArrowState != keyStatus.down) {
+            Emitter.fire("upArrowUp");
+        }
+        if (this.downArrowState == keyStatus.up && this.upArrowState != keyStatus.down) {
+            Emitter.fire("downArrowUp");
+        }        
+    }
+
     startGame() {
         MainUIManager.instance.init();
         this.gameStatus = GameStatus.start
@@ -62,19 +98,23 @@ export default class MainManager extends cc.Component {
             */
             case cc.macro.KEY.right:
                 // console.log("right arrow pressed");
-                Emitter.fire("rightArrowDown");
+                // Emitter.fire("rightArrowDown");
+                this.rightArrowState = keyStatus.down;
                 break;
             case cc.macro.KEY.left:
                 // console.log("left arrow pressed");
-                Emitter.fire("leftArrowDown");
+                // Emitter.fire("leftArrowDown");
+                this.leftArrowState = keyStatus.down;
                 break;
             case cc.macro.KEY.up:
                 // console.log("up arrow pressed");
-                Emitter.fire("upArrowDown");
+                // Emitter.fire("upArrowDown");
+                this.upArrowState = keyStatus.down;
                 break;
             case cc.macro.KEY.down:
                 // console.log("down arrow pressed");
-                Emitter.fire("downArrowDown");
+                // Emitter.fire("downArrowDown");
+                this.downArrowState = keyStatus.down;
                 break;
             /*
             * Pick up and drop down
@@ -97,19 +137,23 @@ export default class MainManager extends cc.Component {
         switch (event.keyCode) {
             case cc.macro.KEY.right:
                 // console.log("right arrow pressed");
-                Emitter.fire("rightArrowUp");
+                // Emitter.fire("rightArrowUp");
+                this.rightArrowState = keyStatus.up;
                 break;
             case cc.macro.KEY.left:
                 // console.log("left arrow pressed");
-                Emitter.fire("leftArrowUp");
+                // Emitter.fire("leftArrowUp");
+                this.leftArrowState = keyStatus.up;
                 break;
             case cc.macro.KEY.up:
                 // console.log("up arrow pressed");
-                Emitter.fire("upArrowUp");
+                // Emitter.fire("upArrowUp");
+                this.upArrowState = keyStatus.up;
                 break;
             case cc.macro.KEY.down:
                 // console.log("down arrow pressed");
-                Emitter.fire("downArrowUp");
+                // Emitter.fire("downArrowUp");
+                this.downArrowState = keyStatus.up;
                 break;
         }
     }
