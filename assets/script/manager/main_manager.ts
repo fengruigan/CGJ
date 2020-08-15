@@ -52,7 +52,6 @@ export default class MainManager extends cc.Component {
     }
 
     update(dt) {
-        console.log(this.rightArrowState);
         if (this.rightArrowState == keyStatus.down && this.leftArrowState == keyStatus.up) {
             Emitter.fire("rightArrowDown");
         }
