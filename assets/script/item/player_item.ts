@@ -49,6 +49,8 @@ export default class PlayerItem extends cc.Component {
     hand: cc.Node = null
     // LIFE-CYCLE CALLBACKS:
     react: number[] = []
+
+    isWechat: boolean = cc.sys.platform == cc.sys.WECHAT_GAME
     onLoad() {
         // Movement control
         Emitter.register("rightArrowDown", this.moveRight, this)
@@ -72,26 +74,16 @@ export default class PlayerItem extends cc.Component {
         });
 
     }
+    moveDir: cc.Vec2 = cc.v2(0, 0)
+    moveType: number = 0
     onTouchMove(event: cc.Event.EventTouch, data) {
-        // console.log('data', data)
-        if (data.moveDistance.x > 0.7) {
-            this.moveRight()
-        }
-        if (data.moveDistance.x < -0.7) {
-            this.moveLeft()
-        }
-        if (data.moveDistance.y > 0.7) {
-            this.moveUp()
-        }
-        if (data.moveDistance.y < -0.7) {
-            this.moveDown()
-        }
-
+        this.moveType = data.speedType
+        this.moveDir = data.moveDistance
     }
     onTouchEnd(event: cc.Event.EventTouch, data) {
         //console.log('data', data)
-        this.xOnStay()
-        this.yOnStay()
+        this.moveType = data.speedType
+        this.moveDir = cc.v2(0, 0)
     }
     init() {
         this.node.setPosition(JsonManager.instance.getConfig('playerPosition')[0], JsonManager.instance.getConfig('playerPosition')[1])
@@ -111,28 +103,43 @@ export default class PlayerItem extends cc.Component {
     }
     update(dt) {
         if (MainManager.instance.gameStatus != GameStatus.start) return
-        this.node.x += this.xHat * this.speed * dt;
-        this.node.y += this.yHat * this.speed * dt;
-
+        if (this.isWechat && this.moveDir != null) {
+            this.node.x += this.moveDir.x * dt * this.speed;
+            this.node.y += this.moveDir.y * dt * this.speed;
+            this.node.scaleX = this.moveDir.x > 0 ? 1 : -1
+            if (this.moveDir.x != 0 || this.moveDir.y != 0) {
+                if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
+                    this.playerAnima.play('player_silder_run')
+                }
+            }
+            if (this.moveType == 0) {
+                if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
+                    this.playerAnima.play('player_idle')
+                }
+            }
+        } else {
+            this.node.x += this.xHat * this.speed * dt;
+            this.node.y += this.yHat * this.speed * dt;
+            if (this.xHat != 0 || this.yHat != 0) {
+                if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
+                    this.playerAnima.play('player_silder_run')
+                }
+            }
+            if (this.xHat == 0 && this.yHat == 0) {
+                if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
+                    this.playerAnima.play('player_idle')
+                }
+            }
+            if (this.xHat != 0 && this.yHat != 0) {
+                this.speed = this.normalSpd / Math.sqrt(2);
+            } else {
+                this.speed = this.normalSpd;
+            }
+        }
         if (this.node.x < this.react[3]) this.node.x = this.react[3]
         if (this.node.y > this.react[0]) this.node.y = this.react[0]
         if (this.node.x > this.react[2]) this.node.x = this.react[2]
         if (this.node.y < this.react[1]) this.node.y = this.react[1]
-        if (this.xHat != 0 || this.yHat != 0) {
-            if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
-                this.playerAnima.play('player_silder_run')
-            }
-        }
-        if (this.xHat == 0 && this.yHat == 0) {
-            if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
-                this.playerAnima.play('player_idle')
-            }
-        }
-        if (this.xHat != 0 && this.yHat != 0) {
-            this.speed = this.normalSpd / Math.sqrt(2);
-        } else {
-            this.speed = this.normalSpd;
-        }
         this.camara.setPosition(this.node.position)
     }
 

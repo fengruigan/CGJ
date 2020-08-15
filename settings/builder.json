@@ -8,7 +8,7 @@
   },
   "packageName": "org.cocos2d.helloworld",
   "startScene": "2b111a7c-3d21-4d03-ad01-1babcec038cd",
-  "title": "hello_world",
+  "title": "cgj",
   "webOrientation": "auto",
   "includeSDKBox": false,
   "inlineSpriteFrames": true,
@@ -40,5 +40,5 @@
     "skipRecord": false
   },
   "appBundle": false,
-  "includeAnySDK": false
+  "includeAnySDK": null
 }
