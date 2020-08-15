@@ -9,6 +9,8 @@ import FailUIManager from "./fail_ui_manager";
 import IceItem from "../item/ice_item";
 import FireItem from "../item/fire_item";
 import GrassItem from "../item/grass_item";
+import config from "../../config";
+import JsonManager from "../manager/json_manager";
 
 
 const { ccclass, property } = cc._decorator;
@@ -46,7 +48,7 @@ export default class MainUIManager extends cc.Component {
         this.growGapTimer = setInterval(() => {
             let gap = PoolManager.instance.createObjectByName('gapItem', this.gapParent)
             gap.getComponent(GapItem).init()
-        }, 10000)
+        }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
 
         clearInterval(this.itemGapTimer)
         //每秒生成箱子和炮塔
@@ -72,7 +74,7 @@ export default class MainUIManager extends cc.Component {
                 }
 
             }
-        }, 1000)
+        }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
     }
     showHp(num) {
 

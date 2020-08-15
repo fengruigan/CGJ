@@ -31,4 +31,7 @@ export default class JsonManager extends cc.Component {
         }
         return this._Data[index]
     }
+    getConfig(name: string) {
+        return this._Data[0][1][name]
+    }
 }

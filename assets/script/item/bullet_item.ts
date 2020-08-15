@@ -5,6 +5,7 @@ import AntItem from "./ant_item";
 import MainManager from "../manager/main_manager";
 import { Utils } from "../utils/utils";
 import { GameStatus } from "../utils/enum";
+import JsonManager from "../manager/json_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -13,13 +14,14 @@ export default class BulletItem extends cc.Component {
 
 
     // LIFE-CYCLE CALLBACKS:
-    speed: number = 100
+    speed: number = 200
     arr: cc.Vec2 = null
     @property(cc.ParticleSystem)
     particel: cc.ParticleSystem = null
     onLoad() {
     }
     init(pos, arr: cc.Vec2) {
+        this.speed = JsonManager.instance.getDataByName('tower')[1].bulletSpd
         this.node.position = pos
         this.arr = arr.normalize()
         this.particel.resetSystem()

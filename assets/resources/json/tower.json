@@ -1,0 +1,50 @@
+{
+  "1": {
+    "id": "1",
+    "name": "普通塔",
+    "type": 0,
+    "damage": 35,
+    "range1": 200,
+    "range2": -1,
+    "atkSpd": 500,
+    "bulletSpd": 200,
+    "effect": -1,
+    "age": -1
+  },
+  "2": {
+    "id": "2",
+    "name": "炽热塔",
+    "type": 1,
+    "damage": 20,
+    "range1": 150,
+    "range2": -1,
+    "atkSpd": 1000,
+    "bulletSpd": -1,
+    "effect": -1,
+    "age": -1
+  },
+  "3": {
+    "id": "3",
+    "name": "冻冻枪",
+    "type": 2,
+    "damage": 15,
+    "range1": 150,
+    "range2": 60,
+    "atkSpd": 1500,
+    "bulletSpd": -1,
+    "effect": 15,
+    "age": 2000
+  },
+  "4": {
+    "id": "4",
+    "name": "草丛",
+    "type": 3,
+    "damage": 0,
+    "range1": -1,
+    "range2": -1,
+    "atkSpd": 500,
+    "bulletSpd": -1,
+    "effect": 25,
+    "age": 1000
+  }
+}

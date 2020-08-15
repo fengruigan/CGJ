@@ -4,6 +4,7 @@ import MainUIManager from "../ui/main_ui_manager";
 import ResourceManager from "../manager/resouce_manager";
 import { ResType, GameStatus } from "../utils/enum";
 import config from "../../config";
+import JsonManager from "../manager/json_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,6 +24,7 @@ export default class PlayerItem extends cc.Component {
 
     xSpeed: number = 0;
     ySpeed: number = 0;
+    normalSpd: number = 100
     surrounding: cc.Node = null;
     holding: cc.Node = null;
     @property(cc.Animation)
@@ -42,7 +44,7 @@ export default class PlayerItem extends cc.Component {
     @property(cc.Node)
     hand: cc.Node = null
     // LIFE-CYCLE CALLBACKS:
-
+    react: number[] = []
     onLoad() {
         // Movement control
         Emitter.register("rightArrowDown", this.moveRight, this)
@@ -61,21 +63,34 @@ export default class PlayerItem extends cc.Component {
             ResourceManager.instance.getAnimation('player_idle', config.aniConfig['player_idle']).then((res: cc.AnimationClip) => {
                 this.playerAnima.addClip(res)
             })
+
         });
 
     }
     init() {
-        this.node.setPosition(0, -100)
-        this.hp = 3
+        this.node.setPosition(JsonManager.instance.getConfig('playerPosition')[0], JsonManager.instance.getConfig('playerPosition')[1])
+        // this.node.setPosition(0, -100)
+        this.hp = 3// JsonManager.instance.getConfig('playerHp')
+        this.normalSpd = JsonManager.instance.getConfig('playerSpd')
+        let playerPos = JsonManager.instance.getConfig('playerPosition')
+        let range = JsonManager.instance.getConfig('canMoveRange')
+        this.react = [//上下左右
+            range[1] / 2 + playerPos[1] / 2 - 93,
+            -range[1] / 2 + playerPos[1] / 2 + 62,
+            range[0] / 2 + playerPos[0] / 2 - 120,
+            -range[0] / 2 + playerPos[0] / 2 + 120
+        ]
+        console.log(this.react)
     }
     update(dt) {
         if (MainManager.instance.gameStatus != GameStatus.start) return
         this.node.x += this.xSpeed * dt;
         this.node.y += this.ySpeed * dt;
-        if (this.node.x < -1000) this.node.x = -1000
-        if (this.node.y > 360) this.node.y = 360
-        if (this.node.x > 1000) this.node.x = 1000
-        if (this.node.y < -434) this.node.y = -434
+
+        if (this.node.x < this.react[3]) this.node.x = this.react[3]
+        if (this.node.y > this.react[0]) this.node.y = this.react[0]
+        if (this.node.x > this.react[2]) this.node.x = this.react[2]
+        if (this.node.y < this.react[1]) this.node.y = this.react[1]
         if (this.xSpeed != 0 || this.ySpeed != 0) {
             if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
                 this.playerAnima.play('player_silder_run')
@@ -90,21 +105,21 @@ export default class PlayerItem extends cc.Component {
     }
 
     moveRight() {
-        this.xSpeed = 100;
+        this.xSpeed = this.normalSpd;
         this.node.scaleX = -1
 
     }
     moveLeft() {
-        this.xSpeed = -100;
+        this.xSpeed = -this.normalSpd;
         this.node.scaleX = 1
 
     }
     moveUp() {
-        this.ySpeed = 100;
+        this.ySpeed = this.normalSpd;
 
     }
     moveDown() {
-        this.ySpeed = -100;
+        this.ySpeed = -this.normalSpd;
 
     }
     xOnStay() {
@@ -135,14 +150,6 @@ export default class PlayerItem extends cc.Component {
         // }
     }
 
-    dropDown() {
-        if (this.holding != null) {
-            this.holding.setParent(cc.find("Canvas/gamePage"))
-            this.holding.setPosition(this.node.x, this.node.y - 50);
-            this.holding = null;
-            // console.log("dropping down");
-        }
-    }
 
     onCollisionEnter(other, self) {
         // this.surrounding = other.node;
@@ -150,7 +157,7 @@ export default class PlayerItem extends cc.Component {
             // this.surroundings = "ant";
             this.hp--
         } else if (other.node.name == "boxItem") {
-            console.log('碰到箱子')
+            //  console.log('碰到箱子')
         }
         //  else if (other.node.name == "box") {
         //     this.surrounding.opacity = 200;

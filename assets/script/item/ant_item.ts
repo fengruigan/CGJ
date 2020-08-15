@@ -7,6 +7,9 @@ import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
 import PoolManager from "../manager/pool_manager";
 import BulletItem from "./bullet_item";
+import JsonManager from "../manager/json_manager";
+import { Utils } from "../utils/utils";
+import config from "../../config";
 
 const { ccclass, property } = cc._decorator;
 
@@ -27,14 +30,12 @@ export default class AntItem extends cc.Component {
     hpProgress: cc.ProgressBar = null
     set hp(val: number) {
         this._hp = val
-        this.hpProgress.progress = val / 3
-
+        this.hpProgress.progress = val / JsonManager.instance.getConfig('antHp')
         if (val <= 0) {
             this.isDie = true
             let ani = cc.tween(this.node).to(1, { scaleY: 0 }, null).call(() => {
                 PoolManager.instance.removeObjectByName('antItem', this.node)
             }).start()
-
         }
     }
     get hp() {
@@ -45,12 +46,17 @@ export default class AntItem extends cc.Component {
         // setTimeout(() => {
         //     this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
         // });
+        setInterval(() => {
+
+        }, 3000)
     }
     init(pos: cc.Vec2) {
-        this.hp = 3
+        this.hp = JsonManager.instance.getConfig('antHp')
         this.node.scaleY = 1
         this.node.setPosition(pos.x, pos.y - 50)
         this.isDie = false
+        let configSpd = JsonManager.instance.getConfig('antSpeed')
+        this.speed = -configSpd[0] + Utils.getRandomNumber(configSpd[1]) - 10
         //   WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
     }
     // findWayTimer: any = null
@@ -83,7 +89,7 @@ export default class AntItem extends cc.Component {
             //被子弹射中
             other.node.getComponent(BulletItem).onRemove()
             //       PoolManager.instance.removeObjectByName('bulletItem', other.node)
-            this.hp--
+            this.hp -= JsonManager.instance.getDataByName('tower')[1]['damage']
         } else if (other.node.name == 'player') {
             PoolManager.instance.removeObjectByName('antItem', this.node)
         }

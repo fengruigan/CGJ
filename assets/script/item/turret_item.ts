@@ -6,6 +6,7 @@ import MainManager from "../manager/main_manager";
 import { GameStatus } from "../utils/enum";
 import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
+import JsonManager from "../manager/json_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -21,7 +22,11 @@ export default class TurretItem extends cc.Component {
     attTimer: any = null
     init() {
         clearInterval(this.attTimer)
-        this.node.setPosition(Utils.getRandomNumber(2000) - 1000, Utils.getRandomNumber(1400) - 700)
+        let range = JsonManager.instance.getConfig('itemGenerateRange')
+        let anchor = JsonManager.instance.getConfig('playerPosition')
+        this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
+        this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+        this.range = JsonManager.instance.getDataByName('tower')[1]['range1']
         this.attTimer = setInterval(() => {
             if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled && this.node.parent == MainUIManager.instance.towerParent) {
                 let target = this.findAnt()
@@ -30,7 +35,7 @@ export default class TurretItem extends cc.Component {
                     bullet.getComponent(BulletItem).init(this.node.position, target.position.sub(this.node.position))
                 }
             }
-        }, 1000)
+        }, 500)
     }
     findAnt() {
         let nearst: cc.Node = null

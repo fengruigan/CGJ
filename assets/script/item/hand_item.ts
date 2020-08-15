@@ -13,8 +13,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class AntItem extends cc.Component {
 
-    // testing
-    speed: number = -50;
+
     heading: cc.Vec2 = cc.Vec2.ZERO;
     // player: PlayerItem = null;
 
