@@ -25,8 +25,8 @@ export default class PlayerItem extends cc.Component {
     // xSpeed: number = 0;
     // ySpeed: number = 0;
     speed: number = 0;
-    xScalar: number = 0;
-    yScalar: number = 0;
+    xHat: number = 0;
+    yHat: number = 0;
     normalSpd: number = 100;
     surrounding: cc.Node = null;
     holding: cc.Node = null;
@@ -88,24 +88,24 @@ export default class PlayerItem extends cc.Component {
     }
     update(dt) {
         if (MainManager.instance.gameStatus != GameStatus.start) return
-        this.node.x += this.xScalar * this.speed * dt;
-        this.node.y += this.yScalar * this.speed * dt;
+        this.node.x += this.xHat * this.speed * dt;
+        this.node.y += this.yHat * this.speed * dt;
 
         if (this.node.x < this.react[3]) this.node.x = this.react[3]
         if (this.node.y > this.react[0]) this.node.y = this.react[0]
         if (this.node.x > this.react[2]) this.node.x = this.react[2]
         if (this.node.y < this.react[1]) this.node.y = this.react[1]
-        if (this.xScalar != 0 || this.yScalar != 0) {
+        if (this.xHat != 0 || this.yHat != 0) {
             if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
                 this.playerAnima.play('player_silder_run')
             }
         }
-        if (this.xScalar == 0 && this.yScalar == 0) {
+        if (this.xHat == 0 && this.yHat == 0) {
             if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
                 this.playerAnima.play('player_idle')
             }
         }
-        if (this.xScalar != 0 && this.yScalar != 0) {
+        if (this.xHat != 0 && this.yHat != 0) {
             this.speed = this.normalSpd / Math.sqrt(2);
         } else {
             this.speed = this.normalSpd;
@@ -114,30 +114,30 @@ export default class PlayerItem extends cc.Component {
     }
 
     moveRight() {
-        this.xScalar = 1;
+        this.xHat = 1;
         this.node.scaleX = -1;
 
     }
     moveLeft() {
-        this.xScalar = -1;
+        this.xHat = -1;
         this.node.scaleX = 1
 
     }
     moveUp() {
-        this.yScalar = 1;
+        this.yHat = 1;
 
     }
     moveDown() {
-        this.yScalar = -1;
+        this.yHat = -1;
 
     }
     xOnStay() {
-        this.xScalar = 0;
+        this.xHat = 0;
         // this.playerAnima.stop('player_silder_run')
         //  this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
     yOnStay() {
-        this.yScalar = 0;
+        this.yHat = 0;
         //  this.playerAnima.stop('player_silder_run')
         // this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
 
