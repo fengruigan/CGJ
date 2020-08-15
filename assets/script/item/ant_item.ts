@@ -71,6 +71,14 @@ export default class AntItem extends cc.Component {
         this.speed = -configSpd[0] + Utils.getRandomNumber(configSpd[1]) - 10
         //   WayPointManager.instance.findWay(this.node.position, this.getFindWay.bind(this))
     }
+    freezeTimer: any = null
+    antFreeze() {
+        clearInterval(this.freezeTimer)
+        this.freeze = true
+        this.freezeTimer = setTimeout(() => {
+            this.freeze = false
+        }, 3000);
+    }
     // findWayTimer: any = null
     // findWayCB: Function = null
     // ways: any[] = []

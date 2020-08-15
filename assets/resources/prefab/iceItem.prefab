@@ -236,9 +236,9 @@
     "gravity": {
       "__type__": "cc.Vec2",
       "x": 0,
-      "y": -440
+      "y": -500
     },
-    "speed": 400,
+    "speed": 600,
     "speedVar": 20,
     "tangentialAccel": 0,
     "tangentialAccelVar": 371,
@@ -281,7 +281,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "1a36f31c-8cfe-4e8d-a1c4-30dc280a2fe4"
+      "__uuid__": "fb942a38-d211-4999-a002-eff849cb375e"
     },
     "_type": 1,
     "_sizeMode": 1,

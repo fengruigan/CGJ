@@ -39,14 +39,9 @@ export default class IceItem extends cc.Component {
                     this.particle.node.angle = (arr.y > 0 ? 1 : -1) * arr.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
                     let group = this.findTargetRangeAnt(target.position)
                     group.map((item) => {
-                        item.getComponent(AntItem).freeze = true
+                        item.getComponent(AntItem).antFreeze()
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[3]['damage']
                     })
-                    setTimeout(() => {
-                        group.map((item) => {
-                            item.getComponent(AntItem).freeze = false
-                        })
-                    }, 3000);
                 }
             }
         }, JsonManager.instance.getDataByName('tower')[3]['atkSpd'])
