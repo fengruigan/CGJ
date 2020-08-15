@@ -22,9 +22,12 @@ enum arrEnum {
 @ccclass
 export default class PlayerItem extends cc.Component {
 
-    xSpeed: number = 0;
-    ySpeed: number = 0;
-    normalSpd: number = 100
+    // xSpeed: number = 0;
+    // ySpeed: number = 0;
+    speed: number = 0;
+    xScalar: number = 0;
+    yScalar: number = 0;
+    normalSpd: number = 100;
     surrounding: cc.Node = null;
     holding: cc.Node = null;
     @property(cc.Animation)
@@ -72,6 +75,7 @@ export default class PlayerItem extends cc.Component {
         // this.node.setPosition(0, -100)
         this.hp = 3// JsonManager.instance.getConfig('playerHp')
         this.normalSpd = JsonManager.instance.getConfig('playerSpd')
+        this.speed = this.normalSpd
         let playerPos = JsonManager.instance.getConfig('playerPosition')
         let range = JsonManager.instance.getConfig('canMoveRange')
         this.react = [//上下左右
@@ -84,51 +88,56 @@ export default class PlayerItem extends cc.Component {
     }
     update(dt) {
         if (MainManager.instance.gameStatus != GameStatus.start) return
-        this.node.x += this.xSpeed * dt;
-        this.node.y += this.ySpeed * dt;
+        this.node.x += this.xScalar * this.speed * dt;
+        this.node.y += this.yScalar * this.speed * dt;
 
         if (this.node.x < this.react[3]) this.node.x = this.react[3]
         if (this.node.y > this.react[0]) this.node.y = this.react[0]
         if (this.node.x > this.react[2]) this.node.x = this.react[2]
         if (this.node.y < this.react[1]) this.node.y = this.react[1]
-        if (this.xSpeed != 0 || this.ySpeed != 0) {
+        if (this.xScalar != 0 || this.yScalar != 0) {
             if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
                 this.playerAnima.play('player_silder_run')
             }
         }
-        if (this.xSpeed == 0 && this.ySpeed == 0) {
+        if (this.xScalar == 0 && this.yScalar == 0) {
             if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
                 this.playerAnima.play('player_idle')
             }
+        }
+        if (this.xScalar != 0 && this.yScalar != 0) {
+            this.speed = this.normalSpd / Math.sqrt(2);
+        } else {
+            this.speed = this.normalSpd;
         }
         this.camara.setPosition(this.node.position)
     }
 
     moveRight() {
-        this.xSpeed = this.normalSpd;
-        this.node.scaleX = -1
+        this.xScalar = 1;
+        this.node.scaleX = -1;
 
     }
     moveLeft() {
-        this.xSpeed = -this.normalSpd;
+        this.xScalar = -1;
         this.node.scaleX = 1
 
     }
     moveUp() {
-        this.ySpeed = this.normalSpd;
+        this.yScalar = 1;
 
     }
     moveDown() {
-        this.ySpeed = -this.normalSpd;
+        this.yScalar = -1;
 
     }
     xOnStay() {
-        this.xSpeed = 0;
+        this.xScalar = 0;
         // this.playerAnima.stop('player_silder_run')
         //  this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
     yOnStay() {
-        this.ySpeed = 0;
+        this.yScalar = 0;
         //  this.playerAnima.stop('player_silder_run')
         // this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
 
