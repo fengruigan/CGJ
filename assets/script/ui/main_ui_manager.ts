@@ -11,6 +11,7 @@ import FireItem from "../item/fire_item";
 import GrassItem from "../item/grass_item";
 import config from "../../config";
 import JsonManager from "../manager/json_manager";
+import EffectItem from "../item/effect_item";
 
 
 const { ccclass, property } = cc._decorator;
@@ -35,6 +36,8 @@ export default class MainUIManager extends cc.Component {
     hpNode: cc.Node = null
     @property(cc.Button)
     useBtn: cc.Button = null
+    @property(cc.Node)
+    effectParent: cc.Node = null
     onLoad() {
         MainUIManager.instance = this;
         this.player = cc.find("Canvas/gamePage/player").getComponent(PlayerItem)
@@ -64,25 +67,47 @@ export default class MainUIManager extends cc.Component {
                 item.getComponent(BoxItem).init()
             } else {
                 let towerRandom = Utils.getRandomNumber(3)
+                let range = JsonManager.instance.getConfig('itemGenerateRange')
+                let anchor = JsonManager.instance.getConfig('playerPosition')
+                let pos: cc.Vec2 = cc.v2(0, 0)
+                pos.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
+                pos.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+                let effect = PoolManager.instance.createObjectByName('effectItem', this.effectParent)
                 if (towerRandom == 0) {
-                    let item = PoolManager.instance.createObjectByName('turrentItem', this.towerParent)
-                    item.getComponent(TurretItem).init()
+                    effect.getComponent(EffectItem).init(pos, () => {
+                        let item = PoolManager.instance.createObjectByName('turrentItem', this.towerParent)
+                        item.getComponent(TurretItem).init(pos)
+                    }, 'bag_turrentItem')
                 } else if (towerRandom == 1) {
-                    let item = PoolManager.instance.createObjectByName('iceItem', this.towerParent)
-                    item.getComponent(IceItem).init()
+                    effect.getComponent(EffectItem).init(pos, () => {
+                        let item = PoolManager.instance.createObjectByName('iceItem', this.towerParent)
+                        item.getComponent(IceItem).init(pos)
+                    }, 'bag_iceItem')
                 } else if (towerRandom == 2) {
-                    let item = PoolManager.instance.createObjectByName('fireItem', this.towerParent)
-                    item.getComponent(FireItem).init()
+                    effect.getComponent(EffectItem).init(pos, () => {
+
+                        let item = PoolManager.instance.createObjectByName('fireItem', this.towerParent)
+                        item.getComponent(FireItem).init(pos)
+                    }, 'bag_fireItem')
+
                 } else if (towerRandom == 3) {
-                    let item = PoolManager.instance.createObjectByName('grassItem', this.towerParent)
-                    item.getComponent(GrassItem).init()
+                    effect.getComponent(EffectItem).init(pos, () => {
+                        let item = PoolManager.instance.createObjectByName('grassItem', this.towerParent)
+                        item.getComponent(GrassItem).init(pos)
+                    }, 'bag_grassItem')
+
                 }
 
             }
         }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
     }
     showHp(num) {
-        this.hpNode.children.map((item, index) => { if (index < num) { item.active = true } })
+        this.hpNode.children.map((item, index) => {
+            item.active = false
+            if (index < num) {
+                item.active = true
+            }
+        })
         // this.hpLabel.string = '当前血量:' + num
     }
     endGame() {
@@ -113,6 +138,10 @@ export default class MainUIManager extends cc.Component {
         let boxChild = this.boxParent.children
         for (let i = boxChild.length - 1; i >= 0; i--) {
             PoolManager.instance.removeObjectByName('boxItem', boxChild[i])
+        }
+        let effectChild = this.effectParent.children
+        for (let i = effectChild.length - 1; i >= 0; i--) {
+            PoolManager.instance.removeObjectByName('effectItem', effectChild[i])
         }
         let tullentChild = this.towerParent.children
         for (let i = tullentChild.length - 1; i >= 0; i--) {

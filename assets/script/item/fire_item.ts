@@ -19,15 +19,11 @@ export default class FireItem extends cc.Component {
     firePartic: cc.ParticleSystem = null
     range: number = 150
     onLoad() {
-        this.init()
     }
     attTimer: any = null
-    init() {
+    init(pos) {
         clearInterval(this.attTimer)
-        let range = JsonManager.instance.getConfig('itemGenerateRange')
-        let anchor = JsonManager.instance.getConfig('playerPosition')
-        this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
-        this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+        this.node.setPosition(pos)
         this.range = JsonManager.instance.getDataByName('tower')[2]['range1']
 
         this.attTimer = setInterval(() => {

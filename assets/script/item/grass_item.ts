@@ -16,13 +16,11 @@ export default class GrassItem extends cc.Component {
     soundTimer = null
     // LIFE-CYCLE CALLBACKS:
     onLoad() {
-        this.init()
     }
-    init() {
+    init(pos) {
         let range = JsonManager.instance.getConfig('itemGenerateRange')
-        let anchor = JsonManager.instance.getConfig('playerPosition')
-        this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
-        this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+        this.node.setPosition(pos)
+
     }
 
     onCollisionEnter(other, self) {
@@ -32,7 +30,7 @@ export default class GrassItem extends cc.Component {
     }
     onCollisionStay(other, self) {
         if (this.soundTimer) return
-        this.soundTimer = setTimeout( () => {
+        this.soundTimer = setTimeout(() => {
             this.soundTimer = null
         }, 500)
         AudioManager.instance.playAudio('杂草', 0.2)

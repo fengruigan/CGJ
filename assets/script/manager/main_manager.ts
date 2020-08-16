@@ -21,10 +21,10 @@ enum keyStatus {
 export default class MainManager extends cc.Component {
 
     static instance: MainManager = null
-    rightArrowState:keyStatus = keyStatus.up;
-    leftArrowState:keyStatus = keyStatus.up;
-    upArrowState:keyStatus = keyStatus.up;
-    downArrowState:keyStatus = keyStatus.up;
+    rightArrowState: keyStatus = keyStatus.up;
+    leftArrowState: keyStatus = keyStatus.up;
+    upArrowState: keyStatus = keyStatus.up;
+    downArrowState: keyStatus = keyStatus.up;
 
     gameStatus: GameStatus = GameStatus.unStart
     onLoad() {
@@ -38,7 +38,7 @@ export default class MainManager extends cc.Component {
         // turn on collision manager
         cc.director.getCollisionManager().enabled = true;
 
-        setTimeout( () => {
+        setTimeout(() => {
             AudioManager.instance.loadBGMClip("bgm", 0.4)
         }, 100)
     }
@@ -80,7 +80,7 @@ export default class MainManager extends cc.Component {
         }
         if (this.downArrowState == keyStatus.up && this.upArrowState != keyStatus.down) {
             Emitter.fire("downArrowUp");
-        }        
+        }
     }
 
     startGame() {

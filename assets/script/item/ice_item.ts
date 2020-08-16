@@ -24,17 +24,15 @@ export default class IceItem extends cc.Component {
     @property(cc.Sprite)
     towerSp: cc.Sprite = null
     onLoad() {
-        this.init()
     }
     attTimer: any = null
-    init() {
+    init(pos) {
         this.iceSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "ice1")
         clearInterval(this.attTimer)
-        let range = JsonManager.instance.getConfig('itemGenerateRange')
-        let anchor = JsonManager.instance.getConfig('playerPosition')
+        this.node.setPosition(pos)
+
         this.range = JsonManager.instance.getDataByName('tower')[3]['range1']
-        this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
-        this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+
         this.attTimer = setInterval(() => {
             if (MainManager.instance.gameStatus == GameStatus.start && this.node.getComponent(cc.BoxCollider).enabled && this.node.parent == MainUIManager.instance.towerParent) {
                 let target = this.findAnt()

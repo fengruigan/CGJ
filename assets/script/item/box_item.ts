@@ -18,7 +18,7 @@ export default class BoxItem extends cc.Component {
         this.hpProgress.progress = val / 3
         if (val == 3) {
             this.hpProgress.node.opacity = 0;
-        } else{
+        } else {
             this.hpProgress.node.opacity = 150;
         }
         if (val <= 0) {
@@ -43,8 +43,14 @@ export default class BoxItem extends cc.Component {
         this.hp = 3
         let range = JsonManager.instance.getConfig('itemGenerateRange')
         let anchor = JsonManager.instance.getConfig('playerPosition')
+        let posy = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
         this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
-        this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+        this.node.y = posy + 700
+        this.node.getComponent(cc.BoxCollider).enabled = false
+        cc.tween(this.node).to(2, { y: posy }, cc.easeBounceOut()).call(() => {
+            this.node.getComponent(cc.BoxCollider).enabled = true
+        }).start()
+
     }
     onPickUp() {
         // 看看有没有更好的方法
