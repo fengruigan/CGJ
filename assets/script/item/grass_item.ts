@@ -33,7 +33,7 @@ export default class GrassItem extends cc.Component {
         this.soundTimer = setTimeout(() => {
             this.soundTimer = null
         }, 500)
-        AudioManager.instance.playAudio('杂草', 0.2)
+        AudioManager.instance.playAudio('杂草')
     }
     onCollisionExit(other, self) {
         if (other.node.name == "ant") {

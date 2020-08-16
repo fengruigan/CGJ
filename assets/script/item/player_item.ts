@@ -150,7 +150,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout( () => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveLeft() {
         this.xHat = -1;
@@ -159,7 +159,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout( () => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveUp() {
         this.yHat = 1;
@@ -167,7 +167,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout( () => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveDown() {
         this.yHat = -1;
@@ -175,7 +175,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout( () => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     xOnStay() {
         this.xHat = 0;

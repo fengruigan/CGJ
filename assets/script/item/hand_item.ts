@@ -58,7 +58,7 @@ export default class AntItem extends cc.Component {
                     // AudioManager.instance.playAudio('拿起箱子')
                     console.log('拿起箱子')
                 } else {
-                    AudioManager.instance.playAudio('防御塔收起来', 0.5)
+                    AudioManager.instance.playAudio('防御塔收起来')
                 }
                 
             }
@@ -69,7 +69,7 @@ export default class AntItem extends cc.Component {
                 // AudioManager.instance.playAudio('放下箱子')
                 console.log('放下箱子')
             } else {
-                AudioManager.instance.playAudio('防御塔放下来', 0.5)
+                AudioManager.instance.playAudio('防御塔放下来')
             }
             this.node.children[0].parent = this.node.children[0].name == 'boxItem' ? MainUIManager.instance.boxParent : MainUIManager.instance.towerParent
         }

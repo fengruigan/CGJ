@@ -120,7 +120,7 @@ export default class AntItem extends cc.Component {
             //       PoolManager.instance.removeObjectByName('bulletItem', other.node)
             this.hp -= JsonManager.instance.getDataByName('tower')[1]['damage']
         } else if (other.node.name == 'player') {
-            AudioManager.instance.playAudio('蚂蚁咬人', 0.5)
+            AudioManager.instance.playAudio('蚂蚁咬人')
             PoolManager.instance.removeObjectByName('antItem', this.node)
         }
     }
