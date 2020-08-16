@@ -1,6 +1,7 @@
 import AudioManager from "../manager/audio_manager";
 import PoolManager from "../manager/pool_manager";
 import { Emitter } from "../utils/emmiter";
+import BoxItem from "./box_item";
 
 
 const {ccclass, property} = cc._decorator;
@@ -26,9 +27,9 @@ export default class HeadItem extends cc.Component {
             if (this.atkTimer) return
             this.atkTimer = setTimeout( () => {
                 this.atkTimer = null
-            }, 2000)
+            }, 3000)
             AudioManager.instance.playAudio('蚂蚁咬箱子', 0.5)
-            Emitter.fire('atkBox')
+            other.node.getComponent(BoxItem).onAttacked();
         }
     }
     onCollisionExit(other, self) {

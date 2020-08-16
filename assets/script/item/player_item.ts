@@ -207,7 +207,7 @@ export default class PlayerItem extends cc.Component {
 
     onCollisionEnter(other, self) {
         // this.surrounding = other.node;
-        if (other.node.name == "ant") {
+        if (other.node.name == "antItem") {
             // this.surroundings = "ant";
             this.hp--
         } else if (other.node.name == "boxItem") {

@@ -38,8 +38,6 @@ export default class BoxItem extends cc.Component {
 
     onLoad() {
         Emitter.register("pickUpBox", this.onPickUp, this);
-        Emitter.register("atkBox", this.onAttacked, this);
-        this.hp = 3
     }
     init() {
         this.hp = 3
