@@ -1,5 +1,6 @@
 import AudioManager from "../manager/audio_manager";
 import PoolManager from "../manager/pool_manager";
+import { Emitter } from "../utils/emmiter";
 
 
 const {ccclass, property} = cc._decorator;
@@ -27,8 +28,7 @@ export default class HeadItem extends cc.Component {
                 this.atkTimer = null
             }, 2000)
             AudioManager.instance.playAudio('蚂蚁咬箱子', 0.5)
-            // 如箱子有血量再做修改
-            PoolManager.instance.removeObjectByName('boxItem', other.node)
+            Emitter.fire('atkBox')
         }
     }
     onCollisionExit(other, self) {
