@@ -3,6 +3,7 @@ import MainUIManager from "../ui/main_ui_manager";
 import { Utils } from "../utils/utils";
 import JsonManager from "../manager/json_manager";
 import PoolManager from "../manager/pool_manager";
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -26,6 +27,7 @@ export default class BoxItem extends cc.Component {
             // let ani = cc.tween(this.node).to(1, { scaleY: 0 }, null).call(() => {
             //     PoolManager.instance.removeObjectByName('antItem', this.node)
             // }).start()
+            AudioManager.instance.playAudio('箱子被破坏')
             PoolManager.instance.removeObjectByName('boxItem', this.node);
             // 需要做破坏动画吗
         }

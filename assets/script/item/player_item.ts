@@ -210,6 +210,7 @@ export default class PlayerItem extends cc.Component {
         if (other.node.name == "antItem") {
             // this.surroundings = "ant";
             this.hp--
+            AudioManager.instance.playAudio('女孩受伤')
         } else if (other.node.name == "boxItem") {
             //  console.log('碰到箱子')
         }

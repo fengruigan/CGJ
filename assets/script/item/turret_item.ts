@@ -8,6 +8,7 @@ import { Utils } from "../utils/utils";
 import AntItem from "./ant_item";
 import JsonManager from "../manager/json_manager";
 import ResourceManager from "../manager/resouce_manager"
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -54,6 +55,7 @@ export default class TurretItem extends cc.Component {
                         this.turretSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "turrent2")
                         this.node.scaleX = 1;
                     }
+                    AudioManager.instance.playAudio('普通炮塔')
                 }
             }
         }, 500)

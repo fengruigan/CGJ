@@ -100,7 +100,10 @@ export default class AntItem extends cc.Component {
     // constant running towards player
     update(dt) {
         if (MainManager.instance.gameStatus == GameStatus.start && !this.isDie) {
-            this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).normalize()
+            this.heading = this.node.position.sub(WayPointManager.instance.player.node.getPosition())
+            // let distToPlayer = Math.sqrt(this.heading.x * this.heading.x + this.heading.y * this.heading.y)
+            let distToPlayer = this.heading.mag()
+            this.heading = this.heading.normalize()
             this.node.x += this.heading.x * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.node.y += this.heading.y * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.spNode.angle = (this.heading.y > 0 ? 1 : -1) * this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
@@ -109,6 +112,10 @@ export default class AntItem extends cc.Component {
             let headOffsetX = -30 * Math.cos(this.heading.angle(cc.v2(1,0)))
             this.head.node.x = headOffsetX
             this.head.node.y = headOffsetY
+            // warning if distance is lower than 150
+            if (distToPlayer <= 150) {
+                Emitter.fire('warning');
+            }
         }
     }
 

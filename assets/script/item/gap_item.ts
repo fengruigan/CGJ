@@ -7,6 +7,7 @@ import { Utils } from "../utils/utils";
 import { GameStatus, ResType } from "../utils/enum";
 import JsonManager from "../manager/json_manager";
 import ResourceManager from "../manager/resouce_manager"
+import AudioManager from "../manager/audio_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -52,6 +53,7 @@ export default class GapItem extends cc.Component {
             if (other.node.name == 'boxItem') {
                 this.isOn = false;
                 // PoolManager.instance.removeObjectByName('gapItem', this.node)
+                AudioManager.instance.playAudio('填补裂缝')
                 if (this.spriteNumber == 1) {
                     this.gapSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "gapfull1");
                 } else {
