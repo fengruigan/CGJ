@@ -122,7 +122,7 @@ export default class PlayerItem extends cc.Component {
         if (this.isWechat && this.moveDir != null) {
             this.node.x += this.moveDir.x * dt * this.speed;
             this.node.y += this.moveDir.y * dt * this.speed;
-            this.node.scaleX = this.moveDir.x > 0 ? 1 : -1
+            this.node.scaleX = this.moveDir.x > 0 ? -1 : 1
             if (this.moveDir.x != 0 || this.moveDir.y != 0) {
                 if (!this.playerAnima.getAnimationState(this.animaName[this.isProtect][0]).isPlaying) {
                     this.playerAnima.play(this.animaName[this.isProtect][0])
