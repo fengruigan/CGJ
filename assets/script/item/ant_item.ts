@@ -12,6 +12,8 @@ import { Utils } from "../utils/utils";
 import config from "../../config";
 import AudioManager from "../manager/audio_manager";
 import HeadItem from "./head_item"
+import MainUIManager from "../ui/main_ui_manager";
+import PropItem from "./prop_item";
 
 const { ccclass, property } = cc._decorator;
 
@@ -47,9 +49,16 @@ export default class AntItem extends cc.Component {
         this.hpProgress.progress = val / JsonManager.instance.getConfig('antHp')
         if (val <= 0) {
             this.isDie = true
-            let ani = cc.tween(this.node).to(1, { scaleY: 0 }, null).call(() => {
+            cc.tween(this.node).to(1, { scaleY: 0 }, null).call(() => {
                 PoolManager.instance.removeObjectByName('antItem', this.node)
             }).start()
+            let random = Utils.getRandomNumber(49)
+            if (random == 0) {
+                let prop = PoolManager.instance.createObjectByName('propItem', MainUIManager.instance.propParent)
+                prop.getComponent(PropItem).init(0, this.node.position)
+
+            }
+
         }
     }
     get hp() {
@@ -105,8 +114,8 @@ export default class AntItem extends cc.Component {
             this.node.y += this.heading.y * this.speed * dt * (this.freeze ? 0.75 : 1)
             this.spNode.angle = (this.heading.y > 0 ? 1 : -1) * this.heading.angle(cc.v2(1, 0)) * 180 / Math.PI + 90
             this.head.node.angle = this.spNode.angle
-            let headOffsetY = -30 * (this.heading.y > 0 ? 1 : -1) * Math.sin(this.heading.angle(cc.v2(1,0)))
-            let headOffsetX = -30 * Math.cos(this.heading.angle(cc.v2(1,0)))
+            let headOffsetY = -30 * (this.heading.y > 0 ? 1 : -1) * Math.sin(this.heading.angle(cc.v2(1, 0)))
+            let headOffsetX = -30 * Math.cos(this.heading.angle(cc.v2(1, 0)))
             this.head.node.x = headOffsetX
             this.head.node.y = headOffsetY
         }

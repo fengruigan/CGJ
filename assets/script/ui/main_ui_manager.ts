@@ -12,6 +12,9 @@ import GrassItem from "../item/grass_item";
 import config from "../../config";
 import JsonManager from "../manager/json_manager";
 import EffectItem from "../item/effect_item";
+import PropItem from "../item/prop_item";
+import UIManager from "../manager/ui_manager";
+import MainManager from "../manager/main_manager";
 
 
 const { ccclass, property } = cc._decorator;
@@ -38,6 +41,10 @@ export default class MainUIManager extends cc.Component {
     useBtn: cc.Button = null
     @property(cc.Node)
     effectParent: cc.Node = null
+    @property(cc.Node)
+    propParent: cc.Node = null
+    @property(cc.Label)
+    tipLabel: cc.Label = null
     onLoad() {
         MainUIManager.instance = this;
         this.player = cc.find("Canvas/gamePage/player").getComponent(PlayerItem)
@@ -50,14 +57,20 @@ export default class MainUIManager extends cc.Component {
     itemGapTimer: any = null
     init() {
         //所有位置重置
+        this.tipLabel.string = ''
         this.removeAllItem()
         this.player.init()
         clearInterval(this.growGapTimer)
-        this.growGapTimer = setInterval(() => {
-            let gap = PoolManager.instance.createObjectByName('gapItem', this.gapParent)
-            gap.getComponent(GapItem).init()
-        }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
 
+        this.growGapTimer = setInterval(() => {
+            if (this.gapParent.children.length < 20) {
+                let gap = PoolManager.instance.createObjectByName('gapItem', this.gapParent)
+                gap.getComponent(GapItem).init()
+            } else {
+                clearInterval(this.growGapTimer)
+                this.onProtectiveCloth()
+            }
+        }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
         clearInterval(this.itemGapTimer)
         //每秒生成箱子和炮塔
         this.itemGapTimer = setInterval(() => {
@@ -77,23 +90,28 @@ export default class MainUIManager extends cc.Component {
                     effect.getComponent(EffectItem).init(pos, () => {
                         let item = PoolManager.instance.createObjectByName('turrentItem', this.towerParent)
                         item.getComponent(TurretItem).init(pos)
+                        console.log('turrentItem')
                     }, 'bag_turrentItem')
                 } else if (towerRandom == 1) {
                     effect.getComponent(EffectItem).init(pos, () => {
                         let item = PoolManager.instance.createObjectByName('iceItem', this.towerParent)
                         item.getComponent(IceItem).init(pos)
+                        console.log('iceItem')
+
                     }, 'bag_iceItem')
                 } else if (towerRandom == 2) {
                     effect.getComponent(EffectItem).init(pos, () => {
-
                         let item = PoolManager.instance.createObjectByName('fireItem', this.towerParent)
                         item.getComponent(FireItem).init(pos)
-                    }, 'bag_fireItem')
+                        console.log('fireItem')
 
+                    }, 'bag_fireItem')
                 } else if (towerRandom == 3) {
                     effect.getComponent(EffectItem).init(pos, () => {
                         let item = PoolManager.instance.createObjectByName('grassItem', this.towerParent)
                         item.getComponent(GrassItem).init(pos)
+                        console.log('grassItem')
+
                     }, 'bag_grassItem')
 
                 }
@@ -112,8 +130,7 @@ export default class MainUIManager extends cc.Component {
     }
     endGame() {
         //将物品回收 
-
-        this.removeAllItem()
+        // this.removeAllItem()
         clearInterval(this.growGapTimer)
         clearInterval(this.itemGapTimer)
         FailUIManager.instance.onFail()
@@ -143,13 +160,38 @@ export default class MainUIManager extends cc.Component {
         for (let i = effectChild.length - 1; i >= 0; i--) {
             PoolManager.instance.removeObjectByName('effectItem', effectChild[i])
         }
+        let propChild = this.propParent.children
+        for (let i = propChild.length - 1; i >= 0; i--) {
+            PoolManager.instance.removeObjectByName('propItem', propChild[i])
+        }
         let tullentChild = this.towerParent.children
         for (let i = tullentChild.length - 1; i >= 0; i--) {
             PoolManager.instance.removeObjectByName(tullentChild[i].name, tullentChild[i])
         }
     }
+    onProtectiveCloth() {
+        let effeft = PoolManager.instance.createObjectByName('effectItem', this.effectParent)
+        this.onTip('防护服出现了！穿上它逃出去')
+        effeft.getComponent(EffectItem).init(cc.v2(0, 0), () => {
+            let prop = PoolManager.instance.createObjectByName('propItem', this.propParent)
+            prop.getComponent(PropItem).init(1, cc.v2(0, 0))
+        }, 'bag_success')
+    }
+    tipTimer: any = null
+    onTip(str: string) {
+        this.tipLabel.string = str
+        clearTimeout(this.tipTimer)
+        this.tipTimer = setTimeout(() => {
+            this.tipLabel.string = ''
+        }, 3000);
+    }
 
-
-
-    // update (dt) {}
+    checkRealSuccess() {
+        if (this.gapParent.children.every((item) => {
+            let script = item.getComponent(GapItem)
+            return !script.isOn
+        })) {
+            MainManager.instance.onSuccess(1)
+        }
+    }
 }

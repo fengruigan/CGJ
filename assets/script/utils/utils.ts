@@ -70,7 +70,7 @@ export class Utils {
      * @returns {number}
      */
     static getRandomNumber(max: number): number {
-        return Math.round(Math.random() * max)
+        return Math.floor(Math.random() * (max + 1))
     }
     /**
      * 获取时间 返回一个对象

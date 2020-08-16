@@ -1,32 +1,32 @@
 {
-  "1": {
-    "id": "1",
-    "playerSpd": 100,
-    "antSpeed": [
-      50,
-      20
-    ],
-    "antAtkSpd": 3,
-    "antHp": 100,
-    "playerHp": 3,
-    "playerPosition": [
-      22,
-      -128
-    ],
-    "gapGrowTime": 12,
-    "itemGrowTime": 8,
-    "antGrowTime": 10,
-    "canMoveRange": [
-      2345,
-      1019
-    ],
-    "gapGenerateRange": [
-      2245,
-      919
-    ],
-    "itemGenerateRange": [
-      1645,
-      888
-    ]
-  }
+    "1": {
+        "id": "1",
+        "playerSpd": 100,
+        "antSpeed": [
+            40,
+            20
+        ],
+        "antAtkSpd": 3,
+        "antHp": 100,
+        "playerHp": 3,
+        "playerPosition": [
+            22,
+            -128
+        ],
+        "gapGrowTime": 12,
+        "itemGrowTime": 8,
+        "antGrowTime": 10,
+        "canMoveRange": [
+            2345,
+            1019
+        ],
+        "gapGenerateRange": [
+            2245,
+            919
+        ],
+        "itemGenerateRange": [
+            1645,
+            888
+        ]
+    }
 }

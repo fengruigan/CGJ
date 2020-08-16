@@ -7,6 +7,7 @@ import config from "../../config";
 import JsonManager from "../manager/json_manager";
 import { instance } from "../joystick/Joystick";
 import AudioManager from "../manager/audio_manager";
+import FailUIManager from "../ui/fail_ui_manager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -37,6 +38,7 @@ export default class PlayerItem extends cc.Component {
     @property(cc.Node)
     camara: cc.Node = null
     set hp(val: number) {
+        if (this.isProtect && val < this._hp) return
         this._hp = val
         MainUIManager.instance.showHp(val)
         this.checkDie()
@@ -51,7 +53,15 @@ export default class PlayerItem extends cc.Component {
     react: number[] = []
 
     isWechat: boolean = cc.sys.platform == cc.sys.WECHAT_GAME
+    animaName: string[][] = [
+        [],
+        []
+    ]
     onLoad() {
+        this.animaName = [
+            ['player_silder_run', 'player_idle'],
+            ['player_success_run', 'player_success_idle']
+        ]
         // Movement control
         Emitter.register("rightArrowDown", this.moveRight, this)
         Emitter.register("leftArrowDown", this.moveLeft, this)
@@ -70,7 +80,12 @@ export default class PlayerItem extends cc.Component {
             ResourceManager.instance.getAnimation('player_idle', config.aniConfig['player_idle']).then((res: cc.AnimationClip) => {
                 this.playerAnima.addClip(res)
             })
-
+            ResourceManager.instance.getAnimation('player_success_run', config.aniConfig['player_success_run']).then((res: cc.AnimationClip) => {
+                this.playerAnima.addClip(res)
+            })
+            ResourceManager.instance.getAnimation('player_success_idle', config.aniConfig['player_success_idle']).then((res: cc.AnimationClip) => {
+                this.playerAnima.addClip(res)
+            })
         });
 
     }
@@ -86,6 +101,7 @@ export default class PlayerItem extends cc.Component {
         this.moveDir = cc.v2(0, 0)
     }
     init() {
+        this.isProtect = 0
         this.node.setPosition(JsonManager.instance.getConfig('playerPosition')[0], JsonManager.instance.getConfig('playerPosition')[1])
         // this.node.setPosition(0, -100)
         this.hp = 3// JsonManager.instance.getConfig('playerHp')
@@ -108,26 +124,26 @@ export default class PlayerItem extends cc.Component {
             this.node.y += this.moveDir.y * dt * this.speed;
             this.node.scaleX = this.moveDir.x > 0 ? 1 : -1
             if (this.moveDir.x != 0 || this.moveDir.y != 0) {
-                if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
-                    this.playerAnima.play('player_silder_run')
+                if (!this.playerAnima.getAnimationState(this.animaName[this.isProtect][0]).isPlaying) {
+                    this.playerAnima.play(this.animaName[this.isProtect][0])
                 }
             }
             if (this.moveType == 0) {
-                if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
-                    this.playerAnima.play('player_idle')
+                if (!this.playerAnima.getAnimationState(this.animaName[this.isProtect][1]).isPlaying) {
+                    this.playerAnima.play(this.animaName[this.isProtect][1])
                 }
             }
         } else {
             this.node.x += this.xHat * this.speed * dt;
             this.node.y += this.yHat * this.speed * dt;
             if (this.xHat != 0 || this.yHat != 0) {
-                if (!this.playerAnima.getAnimationState('player_silder_run').isPlaying) {
-                    this.playerAnima.play('player_silder_run')
+                if (!this.playerAnima.getAnimationState(this.animaName[this.isProtect][0]).isPlaying) {
+                    this.playerAnima.play(this.animaName[this.isProtect][0])
                 }
             }
             if (this.xHat == 0 && this.yHat == 0) {
-                if (!this.playerAnima.getAnimationState('player_idle').isPlaying) {
-                    this.playerAnima.play('player_idle')
+                if (!this.playerAnima.getAnimationState(this.animaName[this.isProtect][1]).isPlaying) {
+                    this.playerAnima.play(this.animaName[this.isProtect][1])
                 }
             }
             if (this.xHat != 0 && this.yHat != 0) {
@@ -136,10 +152,22 @@ export default class PlayerItem extends cc.Component {
                 this.speed = this.normalSpd;
             }
         }
-        if (this.node.x < this.react[3]) this.node.x = this.react[3]
-        if (this.node.y > this.react[0]) this.node.y = this.react[0]
-        if (this.node.x > this.react[2]) this.node.x = this.react[2]
-        if (this.node.y < this.react[1]) this.node.y = this.react[1]
+        if (this.node.x < this.react[3]) {
+            if (this.isProtect) MainManager.instance.onSuccess(0)
+            this.node.x = this.react[3]
+        }
+        if (this.node.y > this.react[0]) {
+            if (this.isProtect) MainManager.instance.onSuccess(0)
+            this.node.y = this.react[0]
+        }
+        if (this.node.x > this.react[2]) {
+            if (this.isProtect) MainManager.instance.onSuccess(0)
+            this.node.x = this.react[2]
+        }
+        if (this.node.y < this.react[1]) {
+            if (this.isProtect) MainManager.instance.onSuccess(0)
+            this.node.y = this.react[1]
+        }
         this.camara.setPosition(this.node.position)
     }
 
@@ -147,7 +175,7 @@ export default class PlayerItem extends cc.Component {
         this.xHat = 1;
         this.node.scaleX = -1;
         if (this.walkSoundTimer) return
-        this.walkSoundTimer = setTimeout( () => {
+        this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
         AudioManager.instance.playAudio('脚步声', 0.3)
@@ -156,7 +184,7 @@ export default class PlayerItem extends cc.Component {
         this.xHat = -1;
         this.node.scaleX = 1
         if (this.walkSoundTimer) return
-        this.walkSoundTimer = setTimeout( () => {
+        this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
         AudioManager.instance.playAudio('脚步声', 0.3)
@@ -164,7 +192,7 @@ export default class PlayerItem extends cc.Component {
     moveUp() {
         this.yHat = 1;
         if (this.walkSoundTimer) return
-        this.walkSoundTimer = setTimeout( () => {
+        this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
         AudioManager.instance.playAudio('脚步声', 0.3)
@@ -172,38 +200,17 @@ export default class PlayerItem extends cc.Component {
     moveDown() {
         this.yHat = -1;
         if (this.walkSoundTimer) return
-        this.walkSoundTimer = setTimeout( () => {
+        this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
         AudioManager.instance.playAudio('脚步声', 0.3)
     }
     xOnStay() {
         this.xHat = 0;
-        // this.playerAnima.stop('player_silder_run')
-        //  this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
     yOnStay() {
         this.yHat = 0;
-        //  this.playerAnima.stop('player_silder_run')
-        // this.node.getComponent(cc.Sprite).spriteFrame = ResourceManager.instance.getSprite(ResType.main, 'player')
     }
-
-    pickUp() {
-        // if (this.surrounding != null) {
-        //     switch (this.surrounding.name) {
-        //         case "box":
-        //             Emitter.fire("pickUpBox");
-        //             this.holding = this.surrounding;
-        //             // console.log("picking up box");
-        //             break;
-        //         case "turret":
-        //             Emitter.fire("pickUpTurret");
-        //             this.holding = this.surrounding;
-        //             break;
-        //     }
-        // }
-    }
-
 
     onCollisionEnter(other, self) {
         // this.surrounding = other.node;
@@ -213,15 +220,6 @@ export default class PlayerItem extends cc.Component {
         } else if (other.node.name == "boxItem") {
             //  console.log('碰到箱子')
         }
-        //  else if (other.node.name == "box") {
-        //     this.surrounding.opacity = 200;
-        //     // console.log("box detected");
-        //     // this.surroundings = "box";
-        // } else if (other.node.name == "turret") {
-        //     this.surrounding.opacity = 200;
-        //     // console.log("turret detected");
-        //     // this.surroundings = "turret";
-        // }
     }
     onCollisionStay(other, self) {
         if (other.node.name == "boxItem") {
@@ -258,5 +256,11 @@ export default class PlayerItem extends cc.Component {
         if (this.hp <= 0) {
             MainManager.instance.onFail()
         }
+    }
+    isProtect: number = 0
+    onProtect() {
+        this.isProtect = 1
+        MainUIManager.instance.onTip('走向房间边缘逃出房间')
+        // clearInterval(MainUIManager.instance.itemGapTimer)
     }
 }

@@ -3,6 +3,7 @@ import MainUIManager from "../ui/main_ui_manager";
 import { Utils } from "../utils/utils";
 import JsonManager from "../manager/json_manager";
 import PoolManager from "../manager/pool_manager";
+import PropItem from "./prop_item";
 
 const { ccclass, property } = cc._decorator;
 
@@ -27,7 +28,11 @@ export default class BoxItem extends cc.Component {
             //     PoolManager.instance.removeObjectByName('antItem', this.node)
             // }).start()
             PoolManager.instance.removeObjectByName('boxItem', this.node);
-            // 需要做破坏动画吗
+            let random = Utils.getRandomNumber(49)
+            if (random == 0) {
+                let prop = PoolManager.instance.createObjectByName('propItem', MainUIManager.instance.propParent)
+                prop.getComponent(PropItem).init(0, this.node.position)
+            }
         }
     }
     get hp() {
