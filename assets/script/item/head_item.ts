@@ -29,7 +29,6 @@ export default class HeadItem extends cc.Component {
             this.atkTimer = setTimeout( () => {
                 this.atkTimer = null
             }, JsonManager.instance.getConfig("antAtkSpd") * 1000)
-            AudioManager.instance.playAudio('蚂蚁咬箱子')
             other.node.getComponent(BoxItem).onAttacked();
         }
     }

@@ -29,11 +29,13 @@ export default class GrassItem extends cc.Component {
         }
     }
     onCollisionStay(other, self) {
-        if (this.soundTimer) return
-        this.soundTimer = setTimeout(() => {
-            this.soundTimer = null
-        }, 500)
-        AudioManager.instance.playAudio('杂草')
+        if (other.node.name == "antItem"){
+            if (this.soundTimer) return
+            this.soundTimer = setTimeout(() => {
+                this.soundTimer = null
+            }, 500)
+            AudioManager.instance.playAudio('杂草')
+        }
     }
     onCollisionExit(other, self) {
         if (other.node.name == "ant") {
