@@ -80,9 +80,7 @@ export default class BoxItem extends cc.Component {
         // distance currently set to 500
         if (this.distToPlayer >= 500) {
             this.vulnerable = 0;
-            console.log('box not breakable')
         } else {
-            console.log(this.distToPlayer)
             this.vulnerable = 1;
         }
     }
