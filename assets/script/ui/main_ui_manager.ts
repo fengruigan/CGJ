@@ -150,5 +150,6 @@ export default class MainUIManager extends cc.Component {
     }
 
 
+
     // update (dt) {}
 }
