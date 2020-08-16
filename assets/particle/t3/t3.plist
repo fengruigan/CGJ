@@ -105,7 +105,7 @@
     <key>spriteFrameUuid</key>
     <string>7f30bbcd-0234-46a3-9af2-033634dc2ae3</string>
     <key>positionType</key>
-    <integer>0</integer>
+    <integer>1</integer>
     <key>rotationIsDir</key>
     <false/>
     <key>minRadiusVariance</key>

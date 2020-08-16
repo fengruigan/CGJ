@@ -23,6 +23,7 @@ export default class PropItem extends cc.Component {
     init(type: number, pos: cc.Vec2) {
         this.type = type
         let spName = type == 0 ? 'love' : 'successItem'
+        this.node.scale = type == 0 ? 1 : 0.7
         this.propSp.spriteFrame = ResourceManager.instance.getSprite(ResType.main, spName)
         this.node.setPosition(pos)
     }

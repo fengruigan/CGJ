@@ -187,7 +187,7 @@ export default class MainUIManager extends cc.Component {
     }
 
     checkRealSuccess() {
-        if (this.gapParent.children.every((item) => {
+        if (this.gapParent.children.length == 20 && this.gapParent.children.every((item) => {
             let script = item.getComponent(GapItem)
             return !script.isOn
         })) {

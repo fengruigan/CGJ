@@ -5,12 +5,15 @@ import JsonManager from "../manager/json_manager";
 import PoolManager from "../manager/pool_manager";
 import PropItem from "./prop_item";
 import AudioManager from "../manager/audio_manager";
+import WayPointManager from "../manager/way_point_manager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class BoxItem extends cc.Component {
 
+    vulnerable: number = 0; 
+    distToPlayer: number = 0;
     // isBroken = false;
     @property(cc.ProgressBar)
     hpProgress: cc.ProgressBar = null
@@ -66,7 +69,21 @@ export default class BoxItem extends cc.Component {
     }
 
     onAttacked() {
-        this.hp -= 1;
+        if (this.vulnerable == 1) {
+            this.hp -= 1;
+            AudioManager.instance.playAudio('蚂蚁咬箱子')
+        }
     }
-    // update (dt) {}
+    update (dt) {
+        // check distance to player
+        this.distToPlayer = this.node.position.sub(WayPointManager.instance.player.node.getPosition()).mag()
+        // distance currently set to 500
+        if (this.distToPlayer >= 500) {
+            this.vulnerable = 0;
+            console.log('box not breakable')
+        } else {
+            console.log(this.distToPlayer)
+            this.vulnerable = 1;
+        }
+    }
 }

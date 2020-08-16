@@ -40,7 +40,7 @@ export default class MainManager extends cc.Component {
         cc.director.getCollisionManager().enabled = true;
 
         setTimeout(() => {
-            AudioManager.instance.loadBGMClip("bgm", 0.4)
+            AudioManager.instance.loadBGMClip("bgm更新")
         }, 100)
 
         Emitter.register("warning", this.onWarning, this)

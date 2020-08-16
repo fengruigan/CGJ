@@ -54,6 +54,7 @@ export default class GapItem extends cc.Component {
                 this.isOn = false;
                 // PoolManager.instance.removeObjectByName('gapItem', this.node)
                 AudioManager.instance.playAudio('填补裂缝')
+                MainUIManager.instance.checkRealSuccess()
                 if (this.spriteNumber == 1) {
                     this.gapSprite.spriteFrame = ResourceManager.instance.getSprite(ResType.main, "gapfull1");
                 } else {

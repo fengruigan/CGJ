@@ -54,15 +54,15 @@ export default class AntItem extends cc.Component {
                 this.targetItem.parent = this.node
                 this.targetItem.setPosition(0, 0)
                 this.targetItem.getComponent(cc.BoxCollider).enabled = false
-                if(this.node.children[0].name == "boxItem") {
+                if (this.node.children[0].name == "boxItem") {
                     AudioManager.instance.playAudio('拿起和放下')
                 } else {
                     AudioManager.instance.playAudio('防御塔收起来')
                 }
-                
+
             }
         } else if (this.node.children.length == 1) {
-            this.node.children[0].setPosition(MainUIManager.instance.player.node.x - 50 * MainUIManager.instance.player.node.scaleX, MainUIManager.instance.player.node.y - 30)
+            this.node.children[0].setPosition(MainUIManager.instance.player.node.x - 75 * MainUIManager.instance.player.node.scaleX, MainUIManager.instance.player.node.y - 30)
             this.node.children[0].getComponent(cc.BoxCollider).enabled = true
             if (this.node.children[0].name == 'boxItem') {
                 AudioManager.instance.playAudio('拿起和放下')
