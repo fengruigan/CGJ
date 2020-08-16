@@ -16,7 +16,7 @@ export default class AudioManager extends cc.Component {
     onLoad() {
         AudioManager.instance = this
     }
-    DEFAULT_VOLUME: number = 1
+    DEFAULT_VOLUME: number = 0.6
     BGM_VOLUME: number = 0.8
     /**
      * 加载音频

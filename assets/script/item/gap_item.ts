@@ -35,6 +35,8 @@ export default class GapItem extends cc.Component {
         let anchor = JsonManager.instance.getConfig('playerPosition')
         this.node.x = Utils.getRandomNumber(range[0]) - range[0] / 2 + anchor[0]
         this.node.y = Utils.getRandomNumber(range[1]) - range[1] / 2 + anchor[1]
+        this.node.scale = 0
+        cc.tween(this.node).to(1.5, { scale: 0.5 }, cc.easeCubicActionInOut()).start()
         this.isOn = true
         clearInterval(this.antGrowTimer)
         this.antGrowTimer = setInterval(() => {
