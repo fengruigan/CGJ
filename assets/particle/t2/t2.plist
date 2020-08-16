@@ -47,7 +47,7 @@
     <key>minRadius</key>
     <integer>0</integer>
     <key>particleLifespan</key>
-    <real>0.5</real>
+    <real>0.7</real>
     <key>particleLifespanVariance</key>
     <real>0.1</real>
     <key>radialAccelVariance</key>
@@ -95,13 +95,13 @@
     <key>startColorVarianceRed</key>
     <integer>0</integer>
     <key>startParticleSize</key>
-    <integer>32</integer>
+    <integer>50</integer>
     <key>startParticleSizeVariance</key>
     <integer>10</integer>
     <key>tangentialAccelVariance</key>
     <integer>0</integer>
     <key>tangentialAcceleration</key>
-    <integer>-700</integer>
+    <integer>-1000</integer>
     <key>spriteFrameUuid</key>
     <string>e7f3113f-03f0-4e6a-9051-340f2b9e321b</string>
     <key>positionType</key>
