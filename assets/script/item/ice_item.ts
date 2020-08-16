@@ -58,7 +58,7 @@ export default class IceItem extends cc.Component {
                         item.getComponent(AntItem).antFreeze()
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[3]['damage']
                     })
-                    AudioManager.instance.playAudio('水枪', 0.2)
+                    AudioManager.instance.playAudio('水枪')
                 }
             }
         }, JsonManager.instance.getDataByName('tower')[3]['atkSpd'])

@@ -42,6 +42,8 @@ export default class MainManager extends cc.Component {
         setTimeout(() => {
             AudioManager.instance.loadBGMClip("bgm", 0.4)
         }, 100)
+
+        Emitter.register("warning", this.onWarning, this)
     }
     //适配
     setDesignResolution() {
@@ -168,4 +170,12 @@ export default class MainManager extends cc.Component {
         }
     }
 
+    warnTimer: any = null
+    onWarning() {
+        if (this.warnTimer) return
+        this.warnTimer = setTimeout( () => {
+            this.warnTimer = null
+        }, 1500)
+        AudioManager.instance.playAudio('蚂蚁靠近提示音效')
+    }
 }

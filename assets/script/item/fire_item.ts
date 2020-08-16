@@ -35,7 +35,7 @@ export default class FireItem extends cc.Component {
                     group.map(item => {
                         item.getComponent(AntItem).hp -= JsonManager.instance.getDataByName('tower')[2].damage
                     })
-                    AudioManager.instance.playAudio('火枪', 0.5)
+                    AudioManager.instance.playAudio('火枪')
                 }
             }
         }, 1000)

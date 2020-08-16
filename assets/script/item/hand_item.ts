@@ -55,10 +55,9 @@ export default class AntItem extends cc.Component {
                 this.targetItem.setPosition(0, 0)
                 this.targetItem.getComponent(cc.BoxCollider).enabled = false
                 if(this.node.children[0].name == "boxItem") {
-                    // AudioManager.instance.playAudio('拿起箱子')
-                    console.log('拿起箱子')
+                    AudioManager.instance.playAudio('拿起和放下')
                 } else {
-                    AudioManager.instance.playAudio('防御塔收起来', 0.5)
+                    AudioManager.instance.playAudio('防御塔收起来')
                 }
                 
             }
@@ -66,10 +65,9 @@ export default class AntItem extends cc.Component {
             this.node.children[0].setPosition(MainUIManager.instance.player.node.x - 50 * MainUIManager.instance.player.node.scaleX, MainUIManager.instance.player.node.y - 30)
             this.node.children[0].getComponent(cc.BoxCollider).enabled = true
             if (this.node.children[0].name == 'boxItem') {
-                // AudioManager.instance.playAudio('放下箱子')
-                console.log('放下箱子')
+                AudioManager.instance.playAudio('拿起和放下')
             } else {
-                AudioManager.instance.playAudio('防御塔放下来', 0.5)
+                AudioManager.instance.playAudio('防御塔放下来')
             }
             this.node.children[0].parent = this.node.children[0].name == 'boxItem' ? MainUIManager.instance.boxParent : MainUIManager.instance.towerParent
         }

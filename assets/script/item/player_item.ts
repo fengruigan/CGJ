@@ -178,7 +178,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveLeft() {
         this.xHat = -1;
@@ -187,7 +187,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveUp() {
         this.yHat = 1;
@@ -195,7 +195,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     moveDown() {
         this.yHat = -1;
@@ -203,7 +203,7 @@ export default class PlayerItem extends cc.Component {
         this.walkSoundTimer = setTimeout(() => {
             this.walkSoundTimer = null
         }, 1500)
-        AudioManager.instance.playAudio('脚步声', 0.3)
+        AudioManager.instance.playAudio('脚步声')
     }
     xOnStay() {
         this.xHat = 0;
@@ -217,6 +217,7 @@ export default class PlayerItem extends cc.Component {
         if (other.node.name == "antItem") {
             // this.surroundings = "ant";
             this.hp--
+            AudioManager.instance.playAudio('女孩受伤')
         } else if (other.node.name == "boxItem") {
             //  console.log('碰到箱子')
         }
