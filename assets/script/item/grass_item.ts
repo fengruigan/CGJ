@@ -26,7 +26,7 @@ export default class GrassItem extends cc.Component {
     }
 
     onCollisionEnter(other, self) {
-        if (other.node.name == "ant") {
+        if (other.node.name == "antItem") {
             other.node.getComponent(AntItem).speed *= JsonManager.instance.getDataByName('tower')[4]['effect']
         }
     }
