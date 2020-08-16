@@ -29,11 +29,10 @@ export default class MainUIManager extends cc.Component {
     bulletParent: cc.Node = null
     @property(cc.Node)
     towerParent: cc.Node = null
-    @property(cc.Label)
-    hpLabel: cc.Label = null
     @property(PlayerItem)
     player: PlayerItem = null
-
+    @property(cc.Node)
+    hpNode: cc.Node = null
     @property(cc.Button)
     useBtn: cc.Button = null
     onLoad() {
@@ -83,8 +82,8 @@ export default class MainUIManager extends cc.Component {
         }, JsonManager.instance.getConfig('gapGrowTime') * 1000)
     }
     showHp(num) {
-
-        this.hpLabel.string = '当前血量:' + num
+        this.hpNode.children.map((item, index) => { if (index < num) { item.active = true } })
+        // this.hpLabel.string = '当前血量:' + num
     }
     endGame() {
         //将物品回收 

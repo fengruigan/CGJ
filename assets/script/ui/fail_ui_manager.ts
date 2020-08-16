@@ -11,6 +11,11 @@ export default class FailUIManager extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     @property(cc.Button)
     restartBtn: cc.Button = null
+
+    @property(cc.Node)
+    successNode: cc.Node = null
+    @property(cc.Node)
+    failNode: cc.Node = null
     onLoad() {
         FailUIManager.instance = this;
 
@@ -25,7 +30,13 @@ export default class FailUIManager extends cc.Component {
     }
     onFail() {
         this.node.active = true;
+        this.failNode.active = true
+        this.successNode.active = false
     }
-
+    onSuccess() {
+        this.node.active = true;
+        this.failNode.active = false
+        this.successNode.active = true
+    }
     // update (dt) {}
 }
